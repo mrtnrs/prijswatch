@@ -1,19 +1,64 @@
-const scrapeWebshop1 = require('../scrapers/webshop1Scraper');
+const apiScraper = require('../scrapers/apiScraper');
+const productController = require('./productController');
+const { Price } = require('../models');
 
-const Product = require('../models/Product');
-const Price = require('../models/Price');
-const Webshop = require('../models/Webshop');
 
-exports.scrapeAndStoreData = async (req, res) => {
+exports.runScraper = async (req, res) => {
+  console.log('Running scraper...');
   try {
-    const url = 'https://example-webshop.com/products';
-    const scrapedData = await scrapeWebshop1(url);
+    console.log('hey');
+    const scrapedData = await apiScraper(); // Run the scraper
+    console.log('Products fetched:', scrapedData);
+    const savedProducts = await Promise.all(
+      scrapedData.map(async (data) => {
+        const { price, ...productData } = data;
 
-    // Insert or update the data in the database using your Sequelize models.
-    // This will involve creating or updating records in the Products, Webshops, and Prices tables.
+        // Log the product data to debug
+        console.log('Product Data:', productData);
 
-    res.status(200).json({ message: 'Scraping and storing data completed successfully.' });
+            if (!productData.url) {
+      console.error('Missing URL:', productData);
+      return null;
+    }
+
+
+        const product = await productController.createOrUpdateProduct(productData); // Save the product
+
+         // Fetch the last price associated with the product
+      const lastPrice = await Price.findOne({
+        where: { productId: product.id },
+        order: [['createdAt', 'DESC']],
+      });
+
+    if (!lastPrice || lastPrice.value !== price.value) {
+        const savedPrice = await Price.create({
+        ...price,
+        productId: product.id,
+      });
+
+      return {
+        product,
+        price: savedPrice,
+      };
+
+    }
+
+        // Return the saved product and price data
+        return {
+          product,
+          price: savedPrice,
+        };
+      })
+    );
+
+    res.status(200).json({
+      message: 'Scraper ran successfully',
+      data: savedProducts,
+    });
   } catch (error) {
-    res.status(500).json({ error: 'An error occurred while scraping and storing data.' });
+    res.status(500).json({
+      message: 'An error occurred while running the scraper',
+      error: error.message,
+    });
   }
 };

@@ -1,35 +1,27 @@
-const { Sequelize, DataTypes } = require('sequelize');
-const sequelize = require('../db');
-const Product = require('./Product');
-const Webshop = require('./Webshop');
+const { Model } = require('sequelize');
 
-const Price = sequelize.define('Price', {
-  id: {
-    type: DataTypes.UUID,
-    defaultValue: Sequelize.UUIDV4,
-    primaryKey: true,
-  },
-  price: {
-    type: DataTypes.FLOAT,
-    allowNull: false,
-  },
-  date: {
-    type: DataTypes.DATE,
-    allowNull: false,
-  },
-  createdAt: {
-    type: DataTypes.DATE,
-    allowNull: false,
-  },
-  updatedAt: {
-    type: DataTypes.DATE,
-    allowNull: false,
-  },
-});
+module.exports = (sequelize, DataTypes) => {
+  class Price extends Model {
+    static associate(models) {
+      Price.belongsTo(models.Product, {
+        foreignKey: 'productId',
+        onDelete: 'CASCADE',
+      });
+    }
+  }
 
-Price.belongsTo(Product, { foreignKey: 'productId' });
-Price.belongsTo(Webshop, { foreignKey: 'webshopId' });
-Product.hasMany(Price, { foreignKey: 'productId' });
-Webshop.hasMany(Price, { foreignKey: 'webshopId' });
+  Price.init(
+    {
+      value: DataTypes.DOUBLE,
+      currency: DataTypes.STRING,
+      formattedValue: DataTypes.STRING,
+      productId: DataTypes.UUID,
+    },
+    {
+      sequelize,
+      modelName: 'Price',
+    }
+  );
 
-module.exports = Price;
+  return Price;
+};
