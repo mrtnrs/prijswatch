@@ -1,91 +1,73 @@
-import Image from 'next/image'
-import { Inter } from 'next/font/google'
-import styles from './page.module.css'
-
-const inter = Inter({ subsets: ['latin'] })
+// app/page.js
+'use client'
+import { fetchProducts } from '../lib/api';
+import Link from 'next/link';
+import { useSession, signIn, signOut } from "next-auth/react";
 
 export default function Home() {
+
+  const { data: session } = useSession();
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>app/page.js</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
+          <main>
+            <div>
+              <h1>Home Page</h1>
+              {/* Your other homepage content */}
+            </div>
+            <Link href="/dashboard" />
 
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-        <div className={styles.thirteen}>
-          <Image src="/thirteen.svg" alt="13" width={40} height={31} priority />
-        </div>
-      </div>
+            {!session ? (
+        <>
+          <p>Not signed in</p>
+          <br />
+          <button onClick={() => signIn()}>Sign in</button>
+        </>
+      ) : (
+        <main className={styles.main}>
+          <div className={styles.header}>
+            <h4>Signed in as {session.user.name}</h4>
+            <button onClick={() => signOut()}>Sign out</button>
+          </div>
+          <h1 className={styles.title}>My Blog</h1>
+          <div className={styles.row}>
+            <div className={styles.blogCard}>
+              <Image
+                src="/Getting-Started-with-NextJS-Inside.jpeg"
+                alt="blog1"
+                width={300}
+                height={200}
+              />
+              <div className={styles.blogCardContent}>
+                <h2>Nexjs for Beginers</h2>
+                <p>
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                  Quisquam, quidem.
+                </p>
 
-      <div className={styles.grid}>
-        <a
-          href="https://beta.nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={inter.className}>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p className={inter.className}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
+                <a href="/blog1">Read More</a>
+              </div>
+            </div>
+            <div className={styles.blogCard}>
+              <Image
+                src="/pasted image 0.png"
+                alt="blog1"
+                width={300}
+                height={200}
+              />
+              <div className={styles.blogCardContent}>
+                <h2>Django Full Course</h2>
+                <p>
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                  Quisquam, quidem.
+                </p>
 
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={inter.className}>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p className={inter.className}>Explore the Next.js 13 playground.</p>
-        </a>
+                <a href="/blog1">Read More</a>
+              </div>
+            </div>
+          </div>
+        </main>
+      )}
 
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={inter.className}>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p className={inter.className}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
+          </main>
+  );
 }
