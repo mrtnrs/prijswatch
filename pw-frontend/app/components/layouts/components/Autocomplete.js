@@ -21,7 +21,7 @@ import InputAdornment from '@mui/material/InputAdornment'
 import MuiAutocomplete from '@mui/material/Autocomplete'
 
 // ** Third Party Imports
-import axios from 'axios'
+// import axios from 'axios'
 
 // ** Icon Imports
 import Icon from '@/components/icon'
@@ -348,6 +348,7 @@ const AutocompleteComponent = ({ hidden, settings }) => {
   const wrapper = useRef(null)
   const fullScreenDialog = useMediaQuery(theme.breakpoints.down('sm'))
 
+/*
   // Get all data using API
   useEffect(() => {
     axios
@@ -362,6 +363,8 @@ const AutocompleteComponent = ({ hidden, settings }) => {
         }
       })
   }, [searchValue])
+*/
+
   useEffect(() => {
     if (!openDialog) {
       setSearchValue('')

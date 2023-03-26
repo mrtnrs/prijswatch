@@ -9,9 +9,14 @@ const sequelize = new Sequelize(
   config
 );
 
+console.log(config);
+console.log(sequelize);
+
 const models = {
-  Product: require('./product.js')(sequelize, Sequelize.DataTypes),
-  Price: require('./price.js')(sequelize, Sequelize.DataTypes),
+  Webshop: require('./Webshop.js')(sequelize, Sequelize.DataTypes),
+  Product: require('./Product.js')(sequelize, Sequelize.DataTypes),
+  Price: require('./Price.js')(sequelize, Sequelize.DataTypes),
+  Scraper: require('./Scraper.js')(sequelize, Sequelize.DataTypes),
 };
 
 Object.keys(models).forEach((modelName) => {

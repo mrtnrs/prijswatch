@@ -3,11 +3,16 @@ import './styles/globals.css'
 import Navigation from './components/Navigation';
 import Footer from './components/Footer';
 import { SessionProvider } from "next-auth/react"
-import "./api/auth/[...nextauth]";
+// import "./api/auth/[...nextauth]";
 import UserLayout from '@/components/layouts/UserLayout'
 
 import { SettingsConsumer, SettingsProvider } from '@/core/context/settingsContext'
 import ThemeComponent from '@/core/theme/ThemeComponent'
+import { WebshopProvider } from '@/context/WebshopContext'
+
+import '@/core/configs/i18n'
+import { Toaster } from 'react-hot-toast'
+import ReactHotToast from '@/core/react-hot-toast'
 
 
 // export const metadata = {
@@ -22,16 +27,21 @@ export default function RootLayout({ Component, pageProps, children, session }) 
 
   return (
 <html lang="en">
-      <SessionProvider session={session}>
+      <SessionProvider>
       <SettingsProvider>
             <SettingsConsumer>
               {({ settings }) => {
                 return (
                   <ThemeComponent settings={settings}>
+                  <WebshopProvider>
         <body>
         <UserLayout><div className="container mx-auto px-4">{children}</div></UserLayout>
         <Footer />
         </body>
+        </WebshopProvider>
+                            <ReactHotToast>
+                      <Toaster position={settings.toastPosition} toastOptions={{ className: 'react-hot-toast' }} />
+                    </ReactHotToast>
                           </ThemeComponent>
                 )
               }}

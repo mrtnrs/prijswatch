@@ -1,15 +1,21 @@
 'use client'
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 
 import Button from '@mui/material/Button'
 import { styled } from '@mui/material/styles'
 import Icon from '@/components/icon'
 
-import { webshops } from './dummydata';
-
 import AddWebshop from '@/components/AddWebshop'
+import { getAllWebshops } from '@/api/webshopService';
+import { usePathname } from 'next/navigation';
+
+import { useContext } from 'react';
+import WebshopContext from '@/context/WebshopContext';
+
+import { deleteWebshop } from '@/api/webshopService';
+
 
 // ** MUI Imports
 import Grid from '@mui/material/Grid'
@@ -17,6 +23,8 @@ import Grid from '@mui/material/Grid'
 // ** Custom Components Imports
 import CardStatisticsCharacter from './components/card-stats-with-image'
 import DialogCreateApp from '@/components/dialog-examples/DialogCreateApp'
+
+import WebshopsCard from '@/components/WebshopsCard';
 
 // ** Styled Component Import
 import KeenSliderWrapper from '@/core/styles/libs/keen-slider'
@@ -35,15 +43,59 @@ import EcommerceActivityTimeline from '@/views/dashboards/EcommerceActivityTimel
 import EcommerceImpressionsOrders from '@/views/dashboards/EcommerceImpressionsOrders'
 import EcommerceSalesOverviewWithTabs from '@/views/dashboards/EcommerceSalesOverviewWithTabs'
 
+import toast from 'react-hot-toast'
+
+
 function Dashboard() {
+
+
   const { data: session, status } = useSession();
   const router = useRouter();
+  const [webshops, setWebshops] = useState([]);
+
+  const [isEditing, setIsEditing] = useState(false);
+  const { setSelectedWebshop } = useContext(WebshopContext);
 
   useEffect(() => {
     if (!session || !session.user || session.user.email !== 'raesmaarten@gmail.com') {
      // router.replace('/login');
     }
   }, [session, router]);
+
+  useEffect(() => {
+    const fetchWebshops = async () => {
+      try {
+      	console.log('trying');
+        const fetchedWebshops = await getAllWebshops();
+        console.log(fetchedWebshops);
+        setWebshops(fetchedWebshops);
+      } catch (error) {
+        console.error('Error fetching webshops:', error);
+      }
+    };
+
+    fetchWebshops();
+  }, []);
+
+  const editWebshop = (webshop) => {
+  	console.log('editWebshop');
+  	setIsEditing(true);
+  	setSelectedWebshop(webshop);
+  	router.push('/dashboard/addwebshop');
+  }
+
+  const handleDeleteWebshop = async (id) => {
+  try {
+    await deleteWebshop(id);
+    setWebshops(webshops.filter((webshop) => webshop.id !== id));
+    setSelectedWebshop(null);
+    toast.success('Webshop verwijderd');
+  } catch (error) {
+  	toast.error("Error deleting webshop:", error);
+    console.error('Error deleting webshop:', error);
+  }
+};
+
 
   if (status === 'loading') return <div>Loading...</div>;
 
@@ -53,16 +105,16 @@ function Dashboard() {
 
   	 <ApexChartWrapper>
       <KeenSliderWrapper>
-      <AddWebshop />
-      <DialogCreateApp />
-      <Button 
-      variant='contained' 
-      startIcon={<Icon icon='mdi:plus' fontSize={20} 
-      onClick={() => aFunction()}
-      />}>
-            add webshop
-       </Button>
-        <Grid container spacing={6} className='match-height'>
+<Grid container spacing={6} className='match-height'>
+<Grid item xs={12} md={12}>
+      <WebshopsCard 
+      	webshops={webshops} 
+      	editWebshop={editWebshop}
+      	handleDeleteWebshop={handleDeleteWebshop}
+      />
+      </Grid>
+
+        
           <Grid item xs={12} md={6}>
             <EcommerceSalesOverview />
           </Grid>
@@ -124,64 +176,6 @@ function Dashboard() {
         </Grid>
       </KeenSliderWrapper>
     </ApexChartWrapper>
-
-
-     <div className="space-y-8">
-      <h1 className="text-2xl font-semibold text-gray-900">Dashboard</h1>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {webshops.map((webshop) => (
-          <div key={webshop.id} className="bg-white p-6 rounded-lg shadow">
-            <div className="flex items-center mb-4">
-              <img
-                src={webshop.logo}
-                alt={webshop.name}
-                className="w-12 h-12 object-cover rounded mr-4"
-              />
-              <div>
-                <h2 className="text-xl font-semibold text-gray-900">{webshop.name}</h2>
-                <a href={webshop.url} className="text-gray-600 hover:text-gray-800">
-                  {webshop.url}
-                </a>
-              </div>
-            </div>
-
-            <div className="mb-4">
-              <h3 className="text-lg font-semibold text-gray-900">Scrapers</h3>
-              <ul className="space-y-2 mt-2">
-              {webshop.scrapers.map((scraper) => (
-                  <li key={scraper.id} className="flex items-center justify-between">
-                    <div>
-                      <p className="text-gray-900">{scraper.info}</p>
-                      <p className="text-sm text-gray-600">Last ran: {scraper.lastRan}</p>
-                    </div>
-                    <span
-                      className={`px-2 py-1 text-xs font-semibold rounded ${
-                        scraper.status === 'running' ? 'bg-green-500 text-white' : 'bg-gray-300 text-gray-800'
-                      }`}
-                    >
-                      {scraper.status}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="text-lg font-semibold text-gray-900">Recent Errors</h3>
-              <ul className="space-y-2 mt-2">
-                {webshop.errors.slice(0, 2).map((error) => (
-                  <li key={error.id} className="text-sm text-gray-600">
-                    <p>{error.message}</p>
-                    <p className="text-xs">{error.timestamp}</p>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
 
     </>
   );

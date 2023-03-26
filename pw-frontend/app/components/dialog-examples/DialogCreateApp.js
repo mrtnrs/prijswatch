@@ -60,7 +60,12 @@ const TabLabel = props => {
 }
 const tabsArr = ['detailsTab', 'frameworkTab', 'DatabaseTab', 'paymentTab', 'submitTab']
 
-const DialogCreateApp = () => {
+const DialogCreateApp = (typeOfDialog) => {
+
+  console.log(typeOfDialog);
+  //typeOfDialog='createNewWebshop'
+
+
   // ** States
   const [show, setShow] = useState(false)
   const [activeTab, setActiveTab] = useState('detailsTab')
@@ -105,7 +110,7 @@ const DialogCreateApp = () => {
             }
           }}
         >
-          {activeTab === 'submitTab' ? 'Submit' : 'Next'}
+          {activeTab === 'submitTab' ? 'Submit' : 'Volgende'}
         </Button>
       </Box>
     )
@@ -116,7 +121,7 @@ const DialogCreateApp = () => {
       <CardContent sx={{ textAlign: 'center', '& svg': { mb: 2 } }}>
         <Icon icon='mdi:cube-outline' fontSize='2rem' />
         <Typography variant='h6' sx={{ mb: 4 }}>
-          Create App
+          Webshop toevoegen
         </Typography>
         <Typography sx={{ mb: 3 }}>
           Provide application data with this form to create the app dialog popup example, easy to use in any page.
@@ -148,9 +153,9 @@ const DialogCreateApp = () => {
           </IconButton>
           <Box sx={{ mb: 3, textAlign: 'center' }}>
             <Typography variant='h5' sx={{ mb: 3, lineHeight: '2rem' }}>
-              Create App
+              Webshop toevoegen
             </Typography>
-            <Typography variant='body2'>Provide data with this form to create your app.</Typography>
+            <Typography variant='body2'>Vul de data in om een nieuwe webshop te scrapen.</Typography>
           </Box>
           <Box sx={{ display: 'flex', flexWrap: { xs: 'wrap', md: 'nowrap' } }}>
             <TabContext value={activeTab}>

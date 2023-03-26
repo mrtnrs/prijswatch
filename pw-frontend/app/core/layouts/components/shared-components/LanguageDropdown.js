@@ -15,7 +15,7 @@ const LanguageDropdown = ({ settings, saveSettings }) => {
   const { layout } = settings
 
   const handleLangItemClick = lang => {
-    i18n.changeLanguage(lang)
+   // i18n.changeLanguage(lang)
   }
 
   return (
@@ -43,17 +43,6 @@ const LanguageDropdown = ({ settings, saveSettings }) => {
             onClick: () => {
               handleLangItemClick('fr')
               saveSettings({ ...settings, direction: 'ltr' })
-            }
-          }
-        },
-        {
-          text: 'Arabic',
-          menuItemProps: {
-            sx: { py: 2 },
-            selected: i18n.language === 'ar',
-            onClick: () => {
-              handleLangItemClick('ar')
-              saveSettings({ ...settings, direction: 'rtl' })
             }
           }
         }

@@ -22,7 +22,7 @@ const TabDetails = () => {
 
   return (
     <div>
-      <TextField fullWidth sx={{ mb: 4 }} label='Application Name' placeholder='Materialize Admin' />
+      <TextField fullWidth sx={{ mb: 4 }} label='Naam webshop' placeholder='Coolblue' />
       <Typography variant='h6' sx={{ mb: 4 }}>
         Category
       </Typography>

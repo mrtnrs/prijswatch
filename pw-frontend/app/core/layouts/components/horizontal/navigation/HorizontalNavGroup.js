@@ -91,25 +91,33 @@ const HorizontalNavGroup = props => {
   const [anchorEl, setAnchorEl] = useState(null)
   const [referenceElement, setReferenceElement] = useState(null)
 
+  const [boundaryElement, setBoundaryElement] = useState(null);
+
+useEffect(() => {
+  if (typeof window !== 'undefined') {
+    setBoundaryElement(document.body);
+  }
+}, []);
+
   const { styles, attributes, update } = usePopper(referenceElement, popperElement, {
     placement: hasParent ? popperPlacementSubMenu : popperPlacement,
     modifiers: [
-      {
-        enabled: true,
-        name: 'offset',
-        options: {
-          offset: hasParent ? [-8, 15] : [popperOffsetHorizontal, 5]
-        }
-      },
-      {
-        enabled: true,
-        name: 'flip',
-        options: {
-          boundary: document.body
-        }
+    {
+      enabled: true,
+      name: 'offset',
+      options: {
+        offset: hasParent ? [-8, 15] : [popperOffsetHorizontal, 5]
       }
-    ]
-  })
+    },
+    {
+      enabled: true,
+      name: 'flip',
+      options: {
+        boundary: boundaryElement
+      }
+    }
+  ]
+})
 
   const handleGroupOpen = event => {
     setAnchorEl(event.currentTarget)

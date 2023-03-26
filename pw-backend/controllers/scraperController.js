@@ -2,6 +2,9 @@ const apiScraper = require('../scrapers/apiScraper');
 const productController = require('./productController');
 const { Price } = require('../models');
 
+const ScraperManager = require("../scrapers/scraperManager");
+const scraperManager = new ScraperManager();
+
 
 exports.runScraper = async (req, res) => {
   console.log('Running scraper...');
@@ -61,4 +64,36 @@ exports.runScraper = async (req, res) => {
       error: error.message,
     });
   }
+};
+
+// Add a new scraper
+exports.addScraper = async (req, res) => {
+  const { name, scraper } = req.body;
+  scraperManager.registerScraper(name, scraper);
+  res.status(201).send({ message: "Scraper added successfully." });
+};
+
+// Remove a scraper
+exports.removeScraper = async (req, res) => {
+  const { name } = req.body;
+  scraperManager.unregisterScraper(name);
+  res.status(200).send({ message: "Scraper removed successfully." });
+};
+
+// Get a scraper
+exports.getScraper = async (req, res) => {
+  const { name } = req.params;
+  const scraper = scraperManager.getScraper(name);
+  res.status(200).send(scraper);
+};
+
+// Get all scrapers
+exports.getAllScrapers = async (req, res) => {
+  const scrapers = scraperManager.getAllScrapers();
+  res.status(200).send(scrapers);
+};
+
+// Run a scraper by name
+exports.runScraperByName = async (req, res) => {
+  // ... code for running a scraper by name
 };
