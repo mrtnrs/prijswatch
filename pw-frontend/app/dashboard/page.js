@@ -15,6 +15,7 @@ import { useContext } from 'react';
 import WebshopContext from '@/context/WebshopContext';
 
 import { deleteWebshop } from '@/api/webshopService';
+import { testScraper, saveScraper } from '@/api/scraperService';
 
 
 // ** MUI Imports
@@ -25,6 +26,8 @@ import CardStatisticsCharacter from './components/card-stats-with-image'
 import DialogCreateApp from '@/components/dialog-examples/DialogCreateApp'
 
 import WebshopsCard from '@/components/WebshopsCard';
+import TableColumns from '@/views/TableColumns';
+import DialogEditUserInfo from '@/views/DialogEditUserInfo';
 
 // ** Styled Component Import
 import KeenSliderWrapper from '@/core/styles/libs/keen-slider'
@@ -55,6 +58,8 @@ function Dashboard() {
 
   const [isEditing, setIsEditing] = useState(false);
   const { setSelectedWebshop } = useContext(WebshopContext);
+
+  const [displayAddScraperDialog, setDisplayAddScraperDialog] = useState(false);
 
   useEffect(() => {
     if (!session || !session.user || session.user.email !== 'raesmaarten@gmail.com') {
@@ -96,6 +101,36 @@ function Dashboard() {
   }
 };
 
+const handleTest = async (formData) => {
+	try {
+    const result = await testScraper(formData.webshopId, formData.scraperSettings);
+    console.log("Test result:", result);
+    // Handle test result as needed
+    toast.success('Data fetched succesfully');
+  } catch (error) {
+    console.error("Error testing scraper:", error);
+    toast.error("Error fechting data:", error);
+    // Handle error as needed
+  }
+}
+
+const handleSave = async (formData) => {
+	try {
+    const result = await saveScraper(formData.webshopId, formData.scraperSettings);
+    console.log("Test result:", result);
+    // Handle test result as needed
+    toast.success('Scraper stored succesfully');
+  } catch (error) {
+    console.error("Error testing scraper:", error);
+    toast.error("Error fechting data:", error);
+    // Handle error as needed
+  }
+}
+
+	const handleNewScraperBtn = () => {
+		setDisplayAddScraperDialog(true);
+	}
+
 
   if (status === 'loading') return <div>Loading...</div>;
 
@@ -105,6 +140,13 @@ function Dashboard() {
 
   	 <ApexChartWrapper>
       <KeenSliderWrapper>
+      <DialogEditUserInfo 
+      	displayAddScraperDialog={displayAddScraperDialog}
+      	setDisplayAddScraperDialog={setDisplayAddScraperDialog}
+      	webshops={webshops}
+      	handleTest={handleTest}
+      	handleSave={handleSave}  />
+
 <Grid container spacing={6} className='match-height'>
 <Grid item xs={12} md={12}>
       <WebshopsCard 
@@ -114,6 +156,9 @@ function Dashboard() {
       />
       </Grid>
 
+      <Grid item xs={12} md={12}>
+      <TableColumns handleNewScraperBtn={handleNewScraperBtn} />
+      </Grid>
         
           <Grid item xs={12} md={6}>
             <EcommerceSalesOverview />

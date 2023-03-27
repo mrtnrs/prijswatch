@@ -4,9 +4,28 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
+    type: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        isIn: [['api', 'puppeteer']],
+      },
+    },
     settings: {
       type: DataTypes.JSON,
       allowNull: false,
+    },
+    interval: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    webshopId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+      references: {
+        model: 'Webshops',
+        key: 'id',
+      },
     },
     active: {
       type: DataTypes.BOOLEAN,
@@ -15,7 +34,12 @@ module.exports = (sequelize, DataTypes) => {
     },
   });
 
-  // Add associations if needed
+  Scraper.associate = (models) => {
+    Scraper.belongsTo(models.Webshop, {
+      foreignKey: 'webshopId',
+      onDelete: 'CASCADE',
+    });
+  };
 
   return Scraper;
 };
