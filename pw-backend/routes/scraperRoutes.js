@@ -3,10 +3,17 @@ const express = require('express');
 const router = express.Router();
 const scraperController = require('../controllers/scraperController');
 
-router.post('/run-scraper', scraperController.runScraper);
+
+router.get('/', scraperController.getAllScrapers);
+router.put('/update/:scraperId', scraperController.updateScraper);
+router.delete('/delete/:id', scraperController.deleteScraper);
+router.patch('/update-active-state/:scraperId', scraperController.updateActiveState);
+
 
 // Test scraper
 router.post('/test', async (req, res) => {
+  console.log('test succes');
+  console.log('received data:', req.body);
   try {
     const result = await scraperController.testScraper(req, res);
     console.log("testing...");
@@ -26,20 +33,24 @@ router.post('/save', async (req, res) => {
   }
 });
 
-// Update scraper
-router.put('/update', async (req, res) => {
+// run scraper once
+
+router.post('/run-once/:id', async (req, res) => {
   try {
-    await scraperController.updateScraper(req, res);
-    res.status(200).json({ message: "Scraper updated successfully" });
+    const scraperId = req.params.id;
+    console.log(scraperId);
+    // Pass the request and response objects to runScraper
+    await scraperController.runScraper(req, res);
   } catch (error) {
+    console.log(error);
     res.status(500).json({ error: error.message });
   }
 });
 
-router.post("/add", scraperController.addScraper);
+
+
 router.post("/remove", scraperController.removeScraper);
 router.get("/:name", scraperController.getScraper);
-router.get("/", scraperController.getAllScrapers);
 router.get("/run/:name", scraperController.runScraper);
 
 

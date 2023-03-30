@@ -39,7 +39,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
   }, {
-  tableName: 'Webshop',
+  tableName: 'Webshops',
 });
 
   Webshop.associate = (models) => {

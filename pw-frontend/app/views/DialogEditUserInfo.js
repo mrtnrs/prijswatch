@@ -29,7 +29,15 @@ const Transition = forwardRef(function Transition(props, ref) {
   return <Fade ref={ref} {...props} />
 })
 
-const DialogEditUserInfo = ({ displayAddScraperDialog, setDisplayAddScraperDialog, webshops, handleTest, handleSave} ) => {
+const DialogEditUserInfo = ({ 
+  displayAddScraperDialog, 
+  setDisplayAddScraperDialog, 
+  webshops, 
+  handleTest, 
+  handleSave, 
+  selectedScraper,
+  handleUpdate,
+  onDelete } ) => {
 
   // ** States
   const [show, setShow] = useState(false)
@@ -45,6 +53,53 @@ const DialogEditUserInfo = ({ displayAddScraperDialog, setDisplayAddScraperDialo
   const [paginationParameter, setPaginationParameter] = useState('');
   const [pageSize, setPageSize] = useState('');
 
+  // Puppeteer-specific states
+const [puppeteerUrlSelector, setPuppeteerUrlSelector] = useState('');
+const [puppeteerProductNameSelector, setPuppeteerProductNameSelector] = useState('');
+const [puppeteerProductPriceSelector, setPuppeteerProductPriceSelector] = useState('');
+const [puppeteerPagination, setPuppeteerPagination] = useState(false);
+const [puppeteerPaginationSelector, setPuppeteerPaginationSelector] = useState('');
+
+
+  // SET IF EDIT
+
+useEffect(() => {
+  if (selectedScraper) {
+    const {
+      url,
+      interval,
+      type,
+      settings: {
+        category,
+        pagination,
+        paginationParameter,
+        pageSize,
+        urlSelector,
+        productNameSelector,
+        productPriceSelector,
+        nextPageSelector,
+      },
+    } = selectedScraper;
+
+    setUrl(url);
+    setScrapeInterval(interval);
+    setCategory(category);
+    setScraperType(formatScraperType(type));
+    setHasPagination(!!nextPageSelector);
+    setPaginationParameter(paginationParameter);
+    setPageSize(pageSize);
+    setPuppeteerUrlSelector(urlSelector);
+    setPuppeteerProductNameSelector(productNameSelector);
+    setPuppeteerProductPriceSelector(productPriceSelector);
+    setPuppeteerPagination(!!nextPageSelector);
+    setPuppeteerPaginationSelector(nextPageSelector || '');
+  }
+}, [selectedScraper]);
+
+
+  const formatScraperType = (type) => {
+    return type === "api" ? "API" : "Puppeteer";
+  };
 
   // EVENT HANDLERS
 
@@ -58,24 +113,35 @@ const DialogEditUserInfo = ({ displayAddScraperDialog, setDisplayAddScraperDialo
   }
 
   const handleTestClick = (action) => {
-    const scraperSettings = {
-      url,
-      scrapeInterval,
-      category,
-      type: scraperType,
-      saveStatus,
-      pagination: hasPagination,
-      paginationParameter,
-      pageSize
-    };
 
-    const formData = {
-      webshopId: selectedWebshopId,
-      scraperSettings,
-    };
+const scraperSettings = {
+  url,
+  scrapeInterval,
+  category,
+  type: scraperType,
+  saveStatus,
+  pagination: hasPagination,
+  paginationParameter,
+  pageSize,
+  ...(scraperType === 'Puppeteer' && {
+    urlSelector: puppeteerUrlSelector,
+    productNameSelector: puppeteerProductNameSelector,
+    productPriceSelector: puppeteerProductPriceSelector,
+    nextPageSelector: puppeteerPagination ? puppeteerPaginationSelector : '',
+  }),
+};
+
+
+const formData = {
+  webshopId: selectedWebshopId,
+  scraperSettings,
+  ...(selectedScraper && { selectedScraper }), // Include selectedScraper in formData if it's available
+};
 
     if(action === 'save') {
       handleSave(formData);
+    } else if (action === 'update') {
+      handleUpdate(formData);
     } else {
       handleTest(formData);
     }
@@ -93,6 +159,25 @@ const DialogEditUserInfo = ({ displayAddScraperDialog, setDisplayAddScraperDialo
     } = event
     setLanguages(typeof value === 'string' ? value.split(',') : value)
   }
+
+  // Handle Delete
+
+    const handleDelete = () => {
+      if (selectedScraper) {
+        onDelete(selectedScraper.id);
+        setShow(false);
+        setDisplayAddScraperDialog(false);
+      }
+    };
+
+    const handlePuppeteerPaginationChange = () => {
+  setPuppeteerPagination(!puppeteerPagination);
+}
+
+const handleTitleSelectorChange = (e) => setPuppeteerProductNameSelector(e.target.value);
+const handlePriceSelectorChange = (e) => setPuppeteerProductPriceSelector(e.target.value);
+const handleUrlSelectorChange = (e) => setPuppeteerUrlSelector(e.target.value);
+
 
   return (
     <Card>
@@ -118,7 +203,7 @@ const DialogEditUserInfo = ({ displayAddScraperDialog, setDisplayAddScraperDialo
     </IconButton>
     <Box sx={{ mb: 8, textAlign: 'center' }}>
     <Typography variant='h5' sx={{ mb: 3, lineHeight: '2rem' }}>
-    Add Scraper
+    { selectedScraper ? "Edit scraper" : "Add Scraper" }
     </Typography>
     </Box>
     <Grid container spacing={6}>
@@ -184,7 +269,9 @@ const DialogEditUserInfo = ({ displayAddScraperDialog, setDisplayAddScraperDialo
     </FormControl>
     </Grid>
 
-    <Grid item xs={12}>
+    { scraperType === 'API' && (
+
+      <Grid item xs={12}>
     <FormControlLabel
     control={<Switch checked={hasPagination} onChange={handlePaginationChange} />}
     label='Api has pagination'
@@ -196,49 +283,96 @@ const DialogEditUserInfo = ({ displayAddScraperDialog, setDisplayAddScraperDialo
     />
     </Grid>
 
+      )}
+
     {scraperType === 'API' && hasPagination && (
-      <>
-      <Grid item sm={6} xs={12}>
-        <TextField
-          value={paginationParameter}
-          onChange={(e) => setPaginationParameter(e.target.value)}
-          fullWidth
-          label="Pagination Parameter"
-          placeholder="page"
-          required
-        />
-      </Grid>
-      <Grid item sm={6} xs={12}>
-        <TextField
-          value={pageSize}
-          onChange={(e) => setPageSize(e.target.value)}
-          fullWidth
-          label="Page Size Parameter"
-          placeholder="&pageSize=96"
-          required
-        />
-      </Grid>
-      </>
-      )}
-    {scraperType === 'Puppeteer' && (
-      <>
-    {/* Puppeteer specific form fields */}
-      </>
-      )}
-
-
-    
-    <Grid item xs={12}>
-    <FormControlLabel
-    control={<Switch defaultChecked />}
-    label='Make this default shipping address'
-    sx={{
-      '& .MuiFormControlLabel-label': {
-        color: 'text.secondary'
-      }
-    }}
-    />
+          <>
+            {/* API-specific form fields */}
+            <Grid item sm={6} xs={12}>
+              <TextField
+                value={paginationParameter}
+                onChange={(e) => setPaginationParameter(e.target.value)}
+                fullWidth
+                label="Pagination Parameter"
+                placeholder="page"
+                required
+              />
+            </Grid>
+            <Grid item sm={6} xs={12}>
+              <TextField
+                value={pageSize}
+                onChange={(e) => setPageSize(e.target.value)}
+                fullWidth
+                label="Page Size Parameter"
+                placeholder="&pageSize=96"
+                required
+              />
+            </Grid>
+          </>
+        )}
+        {scraperType === 'Puppeteer' && (
+  <>
+    {/* Puppeteer-specific form fields */}
+    <Grid item sm={6} xs={12}>
+      <TextField
+          value={puppeteerProductNameSelector}
+        onChange={handleTitleSelectorChange}
+        fullWidth
+        label="Title CSS Selector"
+        placeholder=".product-title"
+        required
+      />
     </Grid>
+    <Grid item sm={6} xs={12}>
+      <TextField
+  value={puppeteerProductPriceSelector}
+  onChange={handlePriceSelectorChange}
+        fullWidth
+        label="Price CSS Selector"
+        placeholder=".product-price"
+        required
+      />
+    </Grid>
+    <Grid item sm={6} xs={12}>
+      <TextField
+  value={puppeteerUrlSelector}
+  onChange={handleUrlSelectorChange}
+        fullWidth
+        label="URL CSS Selector"
+        placeholder=".product-url"
+        required
+      />
+    </Grid>
+    <Grid item xs={12}>
+      <FormControlLabel
+        control={<Switch checked={puppeteerPagination} onChange={handlePuppeteerPaginationChange} />}
+        label='Puppeteer uses Pagination'
+        sx={{
+          '& .MuiFormControlLabel-label': {
+            color: 'text.secondary'
+          }
+        }}
+      />
+    </Grid>
+    {puppeteerPagination && (
+      <>
+        {/* Puppeteer Pagination fields */}
+        <Grid item sm={6} xs={12}>
+          <TextField
+            value={puppeteerPaginationSelector}
+            onChange={(e) => setPuppeteerPaginationSelector(e.target.value)}
+            fullWidth
+            label="Pagination Selector"
+            placeholder=".next-page"
+            required
+          />
+        </Grid>
+      </>
+    )}
+  </>
+)}
+
+
     </Grid>
     </DialogContent>
 
@@ -247,31 +381,19 @@ const DialogEditUserInfo = ({ displayAddScraperDialog, setDisplayAddScraperDialo
   {/* ... other buttons ... */}
 
 <Button
-    variant="contained"
-    sx={{ mr: 2 }}
-    onClick={() => {
-      setSaveStatus('saveAndRun');
-      // Handle form submission
-      setShow(false);
-      setDisplayAddScraperDialog(false);
-    }}
-  >
-    Save & Run
-  </Button>
-  <Button
-    variant="contained"
-    color="secondary"
-    sx={{ mr: 2 }}
-    onClick={() => {
-      setSaveStatus('save');
-      // Handle form submission
-      setShow(false);
-      setDisplayAddScraperDialog(false);
-      handleTestClick('save');
-    }}
-  >
-    Save
-  </Button>
+  variant="contained"
+  color="secondary"
+  sx={{ mr: 2 }}
+  onClick={() => {
+    setSaveStatus('save');
+    // Handle form submission
+    setShow(false);
+    setDisplayAddScraperDialog(false);
+    handleTestClick(selectedScraper ? 'update' : 'save');
+  }}
+>
+  {selectedScraper ? 'Update' : 'Save'}
+</Button>
   <Button
     variant="outlined"
     color="secondary"
@@ -289,11 +411,12 @@ const DialogEditUserInfo = ({ displayAddScraperDialog, setDisplayAddScraperDialo
     color="error"
     sx={{ mr: 2 }}
     onClick={() => {
-      setShow(false);
-      setDisplayAddScraperDialog(false);
+      if (window.confirm('Are you sure you want to delete this scraper?')) {
+      handleDelete();
+      }
     }}
   >
-    Discard
+    Delete
   </Button>
   <Button
     variant="outlined"

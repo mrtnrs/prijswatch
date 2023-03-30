@@ -13,7 +13,7 @@ const ProductCard = ({ product }) => {
         <Typography variant='h6' sx={{ mb: 2 }}>
           {product.name}
         </Typography>
-        <Typography sx={{ mb: 2 }}>$249.40</Typography>
+        <Typography sx={{ mb: 2 }}>{product.url}</Typography>
         <Typography variant='body2'>
           {product.id}
         </Typography>

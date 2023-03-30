@@ -9,7 +9,10 @@ class ApiScraper extends BaseScraper {
     // Any ApiScraper-specific code
   }
 
+
+
   async scrape() {
+    console.log('scraping...');
     // Implement the API scraping logic here
     // You can use this.settings to access the settings for this scraper instance
     // Return the scraped data

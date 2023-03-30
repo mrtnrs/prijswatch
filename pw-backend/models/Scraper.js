@@ -1,5 +1,11 @@
 module.exports = (sequelize, DataTypes) => {
   const Scraper = sequelize.define('Scraper', {
+    id: {
+      type: DataTypes.UUID,
+      primaryKey: true,
+      defaultValue: DataTypes.UUIDV4,
+      allowNull: false,
+    },
     name: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -16,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
     interval: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
       allowNull: false,
     },
     webshopId: {
@@ -32,6 +38,29 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       defaultValue: true,
     },
+    lastRun: {
+      type: DataTypes.DATE,
+      allowNull: true,
+    },
+    lastRunStatus: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      validate: {
+        isIn: [['success', 'failure']],
+      },
+    },
+    totalProducts: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 0,
+    },
+    changedProducts: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 0,
+    }
+  }, {
+    tableName: 'Scrapers',
   });
 
   Scraper.associate = (models) => {

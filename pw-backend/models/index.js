@@ -9,14 +9,12 @@ const sequelize = new Sequelize(
   config
 );
 
-console.log(config);
-console.log(sequelize);
-
 const models = {
   Webshop: require('./Webshop.js')(sequelize, Sequelize.DataTypes),
   Product: require('./Product.js')(sequelize, Sequelize.DataTypes),
   Price: require('./Price.js')(sequelize, Sequelize.DataTypes),
   Scraper: require('./Scraper.js')(sequelize, Sequelize.DataTypes),
+  ScraperError: require('./ScraperError.js')(sequelize, Sequelize.DataTypes),
 };
 
 Object.keys(models).forEach((modelName) => {
@@ -24,6 +22,13 @@ Object.keys(models).forEach((modelName) => {
     models[modelName].associate(models);
   }
 });
+
+sequelize.sync().then(() => {
+  console.log('All tables created successfully.');
+}).catch((error) => {
+  console.error('Error creating tables:', error);
+});
+
 
 models.sequelize = sequelize;
 models.Sequelize = Sequelize;

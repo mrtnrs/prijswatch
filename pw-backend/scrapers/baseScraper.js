@@ -1,9 +1,8 @@
 class BaseScraper {
-  constructor(name, url, interval, scrapeSettings) {
+  constructor(name, url, interval) {
     this.name = name;
     this.url = url;
     this.interval = interval;
-    this.scrapeSettings = scrapeSettings;
   }
 
   async fetchProductsForPage(page) {

@@ -6,6 +6,10 @@ const { sequelize } = require('./models');
 const db = require('./models');
 const cors = require('cors');
 
+console.log('kaka');
+console.log(db.ScraperError);
+console.log('Expected table name:', db.ScraperError.getTableName());
+
 // const passport = require('passport');
 // const session = require('express-session');
 // const passportConfig = require('./passportConfig');
@@ -48,11 +52,16 @@ sequelize
     console.error('Unable to connect to the database:', err);
   });
 
-db.sequelize.sync();
- 
+db.sequelize.sync({alter: true});
 
-app.get('/', (req, res) => {
-  res.send('Hello World!');
+
+db.ScraperError.create({
+  scraperId: '851511854388379649', // Replace with a valid Scraper ID from your database
+  errorMessage: 'Test error message',
+}).then((result) => {
+  console.log('ScraperError created:', result);
+}).catch((error) => {
+  console.log('Error creating ScraperError:', error);
 });
 
 

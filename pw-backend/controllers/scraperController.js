@@ -1,6 +1,6 @@
 const apiScraper = require('../scrapers/apiScraper');
 const productController = require('./productController');
-const { Price, Scraper } = require('../models');
+const { Price, Scraper, ScraperError } = require('../models');
 
 const ApiScraper = require('../scrapers/apiScraper');
 const PuppeteerScraper = require('../scrapers/puppeteerScraper');
@@ -9,19 +9,38 @@ const ScraperManager = require("../scrapers/scraperManager");
 const scraperManager = new ScraperManager();
 
 
+// fetch all scrapers
+
+exports.getAllScrapers = async (req, res) => {
+  console.log('hai');
+  try {
+    console.log('hey');
+    const scrapers = await Scraper.findAll();
+    console.log(scrapers);
+    return res.status(200).json({scrapers: scrapers});
+  } catch (error) {
+    return res.status(500).json({ message: 'Error fetching scrapers', error });
+  }
+};
+
+
+// RUN SCRAPER
+
 exports.runScraper = async (req, res, saveData = true) => {
-  console.log("Running scraper...");
-  const { scraperId } = req.params;
+  console.log("Running scraper... scraperController");
+  const scraperId = req.params.id;
+  console.log(scraperId);
 
-  // Retrieve the scraper settings from the database
-  //const scraperSettings = await Scraper.findByPk(scraperId);
-
+  const scraperSettings = await Scraper.findByPk(scraperId);
+  console.log(scraperSettings);
   if (!scraperSettings) {
+    console.log('no scraperSettings');
     return res.status(404).json({ message: "Scraper not found sc 20" });
   }
 
   let scraperInstance;
   if (scraperSettings.type === "api") {
+    console.log('api detected');
     scraperInstance = new ApiScraper(scraperSettings.settings);
   } else if (scraperSettings.type === "puppeteer") {
     scraperInstance = new PuppeteerScraper(scraperSettings.settings);
@@ -29,27 +48,23 @@ exports.runScraper = async (req, res, saveData = true) => {
     return res.status(400).json({ message: "Invalid scraper type" });
   }
 
+  const startTime = new Date();
+    let totalProducts = 0;
+    let changedProducts = 0;
+    
   try {
-    const scrapedData = await scraperInstance.run(); // Run the scraper
-    // Process the scraped data and save it to the database...
-    console.log("************");
-    console.log(scrapedData);
-    console.log("************");
-
+    const scrapedData = await scraperInstance.scrape(); // Run the scraper
+    const errorList = scraperInstance.errors || [];
+    console.log('lets save data');
     if (saveData) {
-      // Process the scraped data and save it to the database...
-
-      // Your existing implementation for saving the products and prices
+      console.log('saveData');
+      console.log(saveData);
       const savedProducts = await Promise.all(
         scrapedData.map(async (data) => {
           const { price, ...productData } = data;
 
-          // Log the product data to debug
-          console.log("Product Data:", productData);
-
           if (!productData.url) {
             console.error("Missing URL:", productData);
-            // CATCH CASE PRODUCT NO EXISTO
             return null;
           }
 
@@ -61,7 +76,11 @@ exports.runScraper = async (req, res, saveData = true) => {
             order: [["createdAt", "DESC"]],
           });
 
+          totalProducts++;
+          console.log(totalProducts);
+
           if (!lastPrice || lastPrice.value !== price.value) {
+            changedProducts++;
             const savedPrice = await Price.create({
               ...price,
               productId: product.id,
@@ -75,6 +94,43 @@ exports.runScraper = async (req, res, saveData = true) => {
         })
       );
 
+      await Scraper.update(
+        {
+          lastRun: startTime,
+          lastRunStatus: "success",
+          totalProducts,
+          changedProducts,
+        },
+        { where: { id: scraperId } }
+      );
+
+      console.log('hey');
+
+      const maxErrorEntries = 100;
+      const errorPromises = [];
+
+      for (const error of errorList) {
+        errorPromises.push(ScraperError.create({ scraperId, error: JSON.stringify(error) }));
+      }
+
+      await Promise.all(errorPromises);
+
+      const errorsToDelete = await ScraperError.findAll({
+        where: { scraperId },
+        order: [["createdAt", "ASC"]],
+        offset: maxErrorEntries - 1,
+      });
+
+      if (errorsToDelete.length > 0) {
+        await ScraperError.destroy({
+          where: {
+            id: {
+              [Op.in]: errorsToDelete.map((error) => error.id),
+            },
+          },
+        });
+      }
+
       res.status(200).json({
         message: saveData ? "Scraper ran successfully" : "Scraper test ran successfully",
         data: savedProducts,
@@ -86,112 +142,147 @@ exports.runScraper = async (req, res, saveData = true) => {
       });
     }
   } catch (error) {
+    console.log(error);
+    await Scraper.update(
+      {
+        lastRun: startTime,
+        lastRunStatus: "failure",
+        totalProducts,
+        changedProducts,
+      },
+      { where: { id: scraperId } }
+    );
+
     res.status(500).json({
       message: "An error occurred while running the scraper",
       error: error.message,
     });
+    console.log(error);
   }
 };
 
-/*
-curl -X POST -H "Content-Type: application/json" -d '{
-  "type": "ApiScraper",
-  "name": "TestApiScraper",
-  "url": "https://api.krefel.be/api/v2/krefel/categories/C937/products?fields=FULL&currentPage=${page}&pageSize=96&lang=nl",
-  "interval": 86400,
-  "scrapeSettings": {
-    "apiKey": "your_api_key",
-    "otherSetting": "value"
-  }
-}' http://localhost:3001/test-run-scraper
+// update scraper
 
-*/
-  // try {
-  //   console.log('hey');
-  //   const scrapedData = await apiScraper(); // Run the scraper
-  //   console.log('Products fetched:', scrapedData);
-  //   
-
-
-  //      
-
-  //   }
-
-  //       // Return the saved product and price data
-  //       return {
-  //         product,
-  //         price: savedPrice,
-  //       };
-  //     })
-  //   );
-
-//     res.status(200).json({
-//       message: 'Scraper ran successfully',
-//       data: savedProducts,
-//     });
-//   } catch (error) {
-//     res.status(500).json({
-//       message: 'An error occurred while running the scraper',
-//       error: error.message,
-//     });
-//   }
-// };
-
-// exports.runScraper = async (req, res) => {
-//   try {
-//     const { name } = req.params;
-//     const scraperRecord = await Scraper.findOne({ where: { name } });
-
-//     if (!scraperRecord) {
-//       return res.status(404).send({ message: "Scraper not found." });
-//     }
-
-//     const { type, settings } = scraperRecord;
-
-//     // Initialize the correct scraper based on the type
-//     let scraper;
-//     if (type === 'api') {
-//       scraper = new APIScraper(settings);
-//     } else if (type === 'puppeteer') {
-//       scraper = new PuppeteerScraper(settings);
-//     } else {
-//       return res.status(400).send({ message: "Invalid scraper type." });
-//     }
-
-//     // Run the scraper and process the results
-//     const scrapedData = await scraper.run();
-
-//     // ... (Handle the scraped data and save it to the database)
-
-//     res.status(200).json({
-//       message: 'Scraper ran successfully',
-//       data: processedData,
-//     });
-//   } catch (error) {
-//     res.status(500).json({
-//       message: 'An error occurred while running the scraper',
-//       error: error.message,
-//     });
-//   }
-// };
-
-
-// Add a new scraper
-exports.addScraper = async (req, res) => {
+exports.updateScraper = async (req, res) => {
   try {
-    const { name, type, settings, interval, webshopId } = req.body;
-    const newScraper = await Scraper.create({
-      name,
-      type,
-      settings,
-      interval,
+    const { scraperId } = req.params;
+    const { webshopId, scraperSettings } = req.body;
+    const { url, scrapeInterval, category, type, saveStatus, pagination, paginationParameter, pageSize } = scraperSettings;
+
+    // You can add validation for the input data if needed
+
+    const updatedScraper = await Scraper.update({
+      type: type.toLowerCase(),
+      settings: {
+        url,
+        category,
+        pagination,
+        paginationParameter,
+        pageSize,
+        ...(type === 'Puppeteer' && {
+        urlSelector: scraperSettings.urlSelector,
+        productNameSelector: scraperSettings.productNameSelector,
+        productPriceSelector: scraperSettings.productPriceSelector,
+        nextPageSelector: scraperSettings.nextPageSelector,
+      }),
+      },
+      interval: scrapeInterval,
       webshopId,
+      active: saveStatus === 'active',
+    }, {
+      where: { id: scraperId },
+      returning: true,
+      plain: true,
     });
-    res.status(201).send({ message: "Scraper added successfully.", data: newScraper });
+
+    res.status(200).json({ message: "Scraper updated successfully", scraper: updatedScraper[1] });
   } catch (error) {
-    res.status(500).send({ message: "An error occurred while adding the scraper.", error: error.message });
+    console.error("Error updating scraper:", error);
+    res.status(500).json({ error: error.message });
   }
 };
+
+
+// delete scraper 
+
+exports.deleteScraper = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const scraper = await Scraper.findByPk(id);
+
+    if (!scraper) {
+      return res.status(404).json({ message: 'Scraper not found' });
+    }
+
+    await scraper.destroy();
+
+    res.status(200).json({ message: 'Scraper deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting scraper:', error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// set scraper to run
+
+exports.updateActiveState = async (req, res) => {
+  try {
+    const { scraperId } = req.params;
+    const { active } = req.body;
+
+    await Scraper.update(
+      { active },
+      { where: { id: scraperId } }
+    );
+
+    res.status(200).json({ message: 'Scraper active state updated successfully' });
+  } catch (error) {
+    console.error('Error updating scraper active state:', error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+
+
+
+// save scraper
+
+exports.saveScraper = async (req, res) => {
+  try {
+    const { webshopId, scraperSettings } = req.body;
+    const { url, scrapeInterval, category, type, saveStatus, pagination, paginationParameter, pageSize } = scraperSettings;
+    const randomNum = Math.floor(Math.random() * 10000);
+    // You can add validation for the input data if needed
+
+    const newScraper = await Scraper.create({
+      name: `${type}-${category}-${randomNum}`, // You can customize the name as needed
+      type: type.toLowerCase(),
+      settings: {
+        url,
+        category,
+        pagination,
+        paginationParameter,
+        pageSize,
+        ...(type === 'Puppeteer' && {
+        urlSelector: scraperSettings.urlSelector,
+        productNameSelector: scraperSettings.productNameSelector,
+        productPriceSelector: scraperSettings.productPriceSelector,
+        nextPageSelector: scraperSettings.nextPageSelector,
+      }),
+      },
+      interval: scrapeInterval,
+      webshopId,
+      active: saveStatus === 'active',
+    });
+
+    res.status(201).json({ message: "Scraper created successfully", scraper: newScraper });
+  } catch (error) {
+    console.error("Error saving scraper:", error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
 
 // test scraper
 
@@ -201,11 +292,11 @@ exports.testScraper = async (req, res) => {
     const { type } = scraperSettings;
 
     let scraperInstance;
-
+    console.log('haki');
     if (type === 'API') {
       scraperInstance = new apiScraper(scraperSettings);
     } else if (type === 'Puppeteer') {
-      scraperInstance = new puppeteerScraper(scraperSettings);
+      scraperInstance = new PuppeteerScraper(scraperSettings);
     } else {
       return res.status(400).json({ message: 'Invalid scraper type' });
     }
@@ -233,19 +324,6 @@ exports.getScraper = async (req, res) => {
   const scraper = scraperManager.getScraper(name);
   res.status(200).send(scraper);
 };
-
-// Get all scrapers
-exports.getAllScrapers = async (req, res) => {
-  const scrapers = scraperManager.getAllScrapers();
-  res.status(200).send(scrapers);
-};
-
-// Run a scraper by name
-exports.runScraperByName = async (req, res) => {
-  // ... code for running a scraper by name
-};
-
-
 
 // create new Scraper
 

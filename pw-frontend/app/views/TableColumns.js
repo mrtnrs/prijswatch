@@ -1,5 +1,5 @@
 // ** React Imports
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 // ** MUI Imports
 import Box from '@mui/material/Box'
@@ -19,76 +19,8 @@ import CustomAvatar from '@/components/mui/avatar'
 // ** Utils Import
 import { getInitials } from '@/core/utils/get-initials'
 
-// ** Data Import
-
-
-const rows = [
-  {
-    id: 47,
-    avatar: '4.png',
-    full_name: 'Had Chatelot',
-    post: 'Cost Accountant',
-    email: 'hchatelot1a@usatoday.com',
-    city: 'Mercedes',
-    start_date: '11/23/2016',
-    salary: 11446.3,
-    age: '64',
-    experience: '4 Years',
-    status: 4
-  },
-  {
-    id: 48,
-    avatar: '',
-    full_name: 'Georgia McCrum',
-    post: 'Registered Nurse',
-    email: 'gmccrum1b@icio.us',
-    city: 'Nggalak',
-    start_date: '04/19/2018',
-    salary: 14002.31,
-    age: '63',
-    experience: '3 Years',
-    status: 1
-  },
-  {
-    id: 49,
-    avatar: '5.png',
-    full_name: 'Krishnah Stilldale',
-    post: 'VP Accounting',
-    email: 'kstilldale1c@chronoengine.com',
-    city: 'Slavs’ke',
-    start_date: '03/18/2017',
-    salary: 10704.29,
-    age: '56',
-    experience: '6 Years',
-    status: 1
-  },
-  {
-    id: 50,
-    avatar: '4.png',
-    full_name: 'Mario Umbert',
-    post: 'Research Assistant',
-    email: 'mumbert1d@digg.com',
-    city: 'Chorotis',
-    start_date: '05/13/2019',
-    salary: 21813.54,
-    age: '43',
-    experience: '3 Years',
-    status: 1
-  },
-  {
-    id: 95,
-    avatar: '2.png',
-    full_name: 'Edwina Ebsworth',
-    post: 'Human Resources Assistant',
-    email: 'eebsworth2m@sbwire.com',
-    city: 'Puzi',
-    start_date: '09/27/2018',
-    salary: 19586.23,
-    age: '27',
-    experience: '2 Years',
-    status: 1
-  }
-]
+// API
+import { runOnce } from '@/api/scraperService';
 
 
 // ** renders client column
@@ -110,7 +42,7 @@ const renderClient = params => {
 
 const statusObj = {
   1: { title: 'current', color: 'primary' },
-  2: { title: 'professional', color: 'success' },
+  2: { title: 'Succes', color: 'success' },
   3: { title: 'rejected', color: 'error' },
   4: { title: 'resigned', color: 'warning' },
   5: { title: 'applied', color: 'info' }
@@ -129,10 +61,54 @@ const getFullName = params =>
     </Box>
   )
 
-const TableColumns = ({handleNewScraperBtn}) => {
+const TableColumns = ({
+  key, 
+  webshop, 
+  scrapers, 
+  handleNewScraperBtn, 
+  setSelectedScraper, 
+  setDisplayAddScraperDialog,
+  onStartStop
+}) => {
   // ** States
-  const [pageSize, setPageSize] = useState(7)
-  const [hideNameColumn, setHideNameColumn] = useState(false)
+  const [pageSize, setPageSize] = useState(7);
+  const [hideNameColumn, setHideNameColumn] = useState(false);
+  const [rows, setRows] = useState([]);
+
+
+
+  useEffect(() => {
+    if (scrapers !== undefined) {
+      // Create rows here and store them in the 'rows' state
+        const rows = scrapers.map(scraper => ({
+    id: scraper.id,
+    avatar: '', // Add appropriate avatar field
+    full_name: scraper.name,
+    post: scraper.type,
+    email: scraper.id, // Add appropriate email field
+    city: '', // Add appropriate city field
+    lastrun: scraper.lastRun, // Add appropriate start_date field
+    numProducts: scraper.totalProducts, // Add appropriate salary field
+    newUpdated: scraper.changedProducts, // Add appropriate age field
+    experience: '', // Add appropriate experience field
+    status: scraper.lastRunStatus === 'success' ? 2 : 1, // Update status based on your data model
+    active: scraper.active, // Add the active property here
+  }));
+      setRows(rows);
+    }
+  }, [scrapers]);
+
+const handleRunOnce = async (scraperId) => {
+  console.log(scraperId);
+  try {
+    const result = await runOnce(scraperId);
+    console.log(result);
+    toast.success('Scraper ran: ' + result);
+  } catch (error) {
+    console.error('Error running scraper:', error);
+    toast.error('Error running scraper:', error);
+  }
+};
 
   const columns = [
     {
@@ -142,53 +118,62 @@ const TableColumns = ({handleNewScraperBtn}) => {
       headerName: 'Name',
       hide: hideNameColumn,
       renderCell: params => {
-        const { row } = params
+      const { row } = params;
+      const scraper = scrapers.find(scraper => scraper.id === row.id);
 
-        return (
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            {renderClient(params)}
-            <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-              <Typography noWrap variant='body2' sx={{ color: 'text.primary', fontWeight: 600 }}>
-                {row.full_name}
-              </Typography>
-              <Typography noWrap variant='caption'>
-                {row.email}
-              </Typography>
-            </Box>
+      return (
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          {renderClient(params)}
+          <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+            <Typography
+              noWrap
+              variant="body2"
+              sx={{ color: 'text.primary', fontWeight: 600 }}
+              onClick={() => {
+                setSelectedScraper(scraper);
+                setDisplayAddScraperDialog(true);
+              }}
+            >
+              {row.full_name}
+            </Typography>
+            <Typography noWrap variant="caption">
+              {row.email}
+            </Typography>
           </Box>
-        )
-      }
+        </Box>
+      );
+    },
     },
     {
       flex: 0.175,
       minWidth: 120,
-      headerName: 'Date',
-      field: 'start_date',
+      headerName: 'Last run',
+      field: 'lastrun',
       renderCell: params => (
         <Typography variant='body2' sx={{ color: 'text.primary' }}>
-          {params.row.start_date}
+          {params.row.lastrun}
         </Typography>
       )
     },
     {
       flex: 0.15,
       minWidth: 110,
-      field: 'salary',
-      headerName: 'Salary',
+      field: '# products',
+      headerName: '# products',
       renderCell: params => (
         <Typography variant='body2' sx={{ color: 'text.primary' }}>
-          {params.row.salary}
+          {params.row.numProducts}
         </Typography>
       )
     },
     {
       flex: 0.1,
-      field: 'age',
+      field: 'New/Updated',
       minWidth: 80,
-      headerName: 'Age',
+      headerName: 'New/Updated',
       renderCell: params => (
         <Typography variant='body2' sx={{ color: 'text.primary' }}>
-          {params.row.age}
+          {params.row.newUpdated}
         </Typography>
       )
     },
@@ -213,26 +198,40 @@ const TableColumns = ({handleNewScraperBtn}) => {
     },
     {
       flex: 0.125,
-      minWidth: 140,
+      minWidth: 240,
       field: 'actions',
       headerName: 'Actions',
-      renderCell: params => {
-        return (
-          <Button size='small' variant='outlined' color='secondary' onClick={() => getFullName(params)}>
-            Get Name
-          </Button>
-        )
-      }
+  renderCell: params => {
+    const scraperId = params.row.id; // Get the scraper id from the row data
+    const scraper = rows.find(row => row.id === scraperId);
+
+    return (
+      <>
+        <Button size='small' variant='outlined' color='secondary' onClick={() => handleRunOnce(scraperId)}>
+          Run Once
+        </Button>
+       <Button
+          size='small'
+          variant='outlined'
+          color='secondary'
+          onClick={() => onStartStop(scraperId, scraper.active)}
+        >
+          {scraper.active ? 'Stop' : 'Start'}
+        </Button>
+
+      </>
+    );
+  },
     }
   ]
 
   return (
     <Card>
       <CardHeader
-        title='Column'
+        title={webshop.name}
         action={
           <div>
-            <Button size='small' variant='contained' onClick={() => handleNewScraperBtn()}>
+            <Button size='small' variant='contained' onClick={() => handleNewScraperBtn( )}>
               Add new scraper
             </Button>
           </div>
