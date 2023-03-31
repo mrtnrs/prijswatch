@@ -1,12 +1,15 @@
 const apiScraper = require('../scrapers/apiScraper');
+const stringSimilarity = require('string-similarity');
 const productController = require('./productController');
-const { Price, Scraper, ScraperError } = require('../models');
+const { Price, Scraper, ScraperError, MetaProduct } = require('../models');
+const slugify = require('slugify');
 
 const ApiScraper = require('../scrapers/apiScraper');
 const PuppeteerScraper = require('../scrapers/puppeteerScraper');
 
 const ScraperManager = require("../scrapers/scraperManager");
 const scraperManager = new ScraperManager();
+const { findMatchingMetaProduct, MIN_SIMILARITY_SCORE } = require('./productMatcher');
 
 
 // fetch all scrapers
@@ -51,7 +54,7 @@ exports.runScraper = async (req, res, saveData = true) => {
   const startTime = new Date();
     let totalProducts = 0;
     let changedProducts = 0;
-    
+
   try {
     const scrapedData = await scraperInstance.scrape(); // Run the scraper
     const errorList = scraperInstance.errors || [];
@@ -337,4 +340,63 @@ function createScraperInstance(type, settings) {
       return null;
   }
 }
+
+exports.handleScrapedProduct = async (scrapedProduct) => {
+  // ... (existing code for handling scraped products)
+
+  // Find or create a MetaProduct for the scrapedProduct
+  const allMetaProducts = await MetaProduct.findAll({ where: { category: scrapedProduct.category } });
+  let metaProduct;
+
+  const generateSlug = (productName) => {
+    return slugify(productName, {
+      lower: true,
+      replacement: '-',
+      remove: /[*+~.()'"!:@]/g,
+    });
+  };
+
+  if (allMetaProducts.length === 0) {
+    // If there are no existing MetaProduct objects, create a new one
+
+    const slug = generateSlug(scrapedProduct.name);
+
+    metaProduct = await MetaProduct.create({
+      name: scrapedProduct.name,
+      brand: scrapedProduct.brand,
+      category: scrapedProduct.category,
+      imageUrl: scrapedProduct.imageUrl,
+      needsReview: true,
+      slug,
+    });
+  } else {
+    // Find a matching MetaProduct if one exists
+    const productNames = allMetaProducts.map(metaProduct => metaProduct.name.toLowerCase());
+    const bestMatch = stringSimilarity.findBestMatch(scrapedProduct.name.toLowerCase(), productNames);
+    const bestMatchScore = bestMatch.bestMatch.rating;
+
+    if (bestMatchScore >= MIN_SIMILARITY_SCORE) {
+      // If a matching MetaProduct exists, use it
+      metaProduct = allMetaProducts[bestMatch.bestMatchIndex];
+    } else {
+      // Otherwise, create a new MetaProduct
+
+      const slug = generateSlug(scrapedProduct.name);
+
+      metaProduct = await MetaProduct.create({
+        name: scrapedProduct.name,
+        brand: scrapedProduct.brand,
+        category: scrapedProduct.category,
+        imageUrl: scrapedProduct.imageUrl,
+        needsReview: true,
+        slug,
+      });
+    }
+  }
+
+  // Assign the metaProductId to the scrapedProduct and save it
+  scrapedProduct.metaProductId = metaProduct.id;
+  await scrapedProduct.save();
+};
+
 

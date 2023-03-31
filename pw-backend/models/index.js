@@ -15,6 +15,7 @@ const models = {
   Price: require('./Price.js')(sequelize, Sequelize.DataTypes),
   Scraper: require('./Scraper.js')(sequelize, Sequelize.DataTypes),
   ScraperError: require('./ScraperError.js')(sequelize, Sequelize.DataTypes),
+  MetaProduct: require('./MetaProduct.js')(sequelize, Sequelize.DataTypes),
 };
 
 Object.keys(models).forEach((modelName) => {

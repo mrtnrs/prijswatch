@@ -1,6 +1,7 @@
 const { Op } = require("sequelize");
-const Scraper = require("../models/Scraper");
-const scraperController = require("../controllers/scraperController"); // Move require statement here
+const { Product, Scraper } = require('../models');
+const scraperController = require("../controllers/scraperController");
+const findMatchingMetaProduct = require("../controllers/productMatcher")
 
 class ScraperManager {
   constructor() {}
@@ -36,7 +37,33 @@ class ScraperManager {
         }
       }
     }
+
+    await this.matchUnlinkedProducts();
+
   }
+
+
+  async matchUnlinkedProducts() {
+    const BATCH_SIZE = 100;
+    let offset = 0;
+    let unlinkedProductsBatch;
+
+    do {
+      unlinkedProductsBatch = await Product.findAll({
+        where: { metaProductId: null },
+        limit: BATCH_SIZE,
+        offset: offset,
+      });
+
+      for (const scrapedProduct of unlinkedProductsBatch) {
+        await scraperController.handleScrapedProduct(scrapedProduct);
+      }
+
+      offset += BATCH_SIZE;
+    } while (unlinkedProductsBatch.length > 0);
+  }
+
+
 }
 
 module.exports = ScraperManager;

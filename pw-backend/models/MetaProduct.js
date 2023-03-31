@@ -1,14 +1,10 @@
-// Product.js
+// metaProduct.js
 module.exports = (sequelize, DataTypes) => {
-  const Product = sequelize.define('Product', {
+  const MetaProduct = sequelize.define('MetaProduct', {
     id: {
       type: DataTypes.UUID,
       primaryKey: true,
       defaultValue: DataTypes.UUIDV4,
-      allowNull: false,
-    },
-    code: {
-      type: DataTypes.STRING,
       allowNull: false,
     },
     name: {
@@ -27,31 +23,29 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: true,
     },
-    url: {
+    description: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+    },
+    needsReview: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
+    slug: {
       type: DataTypes.STRING,
       allowNull: false,
-    },
-    metaProductId: {
-      type: DataTypes.UUID,
-      allowNull: true,
-      references: {
-        model: 'MetaProducts',
-        key: 'id',
-      },
+      unique: true,
     },
   });
 
-  Product.associate = (models) => {
+  MetaProduct.associate = (models) => {
     // Associations
-    Product.belongsTo(models.MetaProduct, {
+    MetaProduct.hasMany(models.Product, {
       foreignKey: 'metaProductId',
-      as: 'metaProduct',
-    });
-    Product.hasMany(models.Price, {
-      foreignKey: 'productId',
-      as: 'prices',
+      as: 'products',
     });
   };
 
-  return Product;
+  return MetaProduct;
 };
