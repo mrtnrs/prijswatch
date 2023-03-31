@@ -252,7 +252,7 @@ const handleUrlSelectorChange = (e) => setPuppeteerUrlSelector(e.target.value);
     onChange={(e) => setCategory(e.target.value)}
     fullWidth labelId='status-select' label='Category'>
     <MenuItem value='Smartphones'>Smartphones</MenuItem>
-    <MenuItem value='Active'>Active</MenuItem>
+    <MenuItem value='Natuurcamera'>Natuurcamera's</MenuItem>
     <MenuItem value='Inactive'>Inactive</MenuItem>
     <MenuItem value='Suspended'>Suspended</MenuItem>
     </Select>

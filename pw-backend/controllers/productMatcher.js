@@ -1,34 +1,33 @@
 // productMatcher.js
-const stringSimilarity = require('string-similarity');
 
-const MIN_SIMILARITY_SCORE = 0.8; // Adjust this value based on your desired matching accuracy
+const { Configuration, OpenAIApi } = require("openai");
+const configuration = new Configuration({
+  apiKey: process.env.OPENAI_API_KEY,
+});
+const openai = new OpenAIApi(configuration);
 
-async function findMatchingMetaProduct(product, metaProducts) {
-  const productName = product.name.toLowerCase();
-  const productBrand = product.brand.toLowerCase();
-  const productCategory = product.category.toLowerCase();
+exports.sanitizeTitleAndExtractMetadata = async (productName, scrapedProduct) => {
+  const prompt = `Given the product title "${productName}", sanitize title to specific product model and extract metadata such as color, storage, and brand. Include the brand only if you are confident about it.
+  Ie, if title = "Apple iPhone 13 Red 500GB", response should be: {"sanitizedTitle": "iPhone 13", "metadata": {"color": "red", "storage": "500GB", "brand": "Apple"}}
+  Ie, if title = "PlayStation 5 + Hogwarts Legacy + Extra controller Wit", response should be: {"sanitizedTitle": "PlayStation 5", "metadata": {"game": "Hogwarts Legacy", "accessory": "Extra controller Wit", "brand": "Sony"}}\n\nResponse:\n`;
 
-  const matchingMetaProducts = metaProducts.filter((metaProduct) => {
-    const metaProductName = metaProduct.name.toLowerCase();
-    const metaProductBrand = metaProduct.brand.toLowerCase();
-    const metaProductCategory = metaProduct.category.toLowerCase();
-
-    // Compare product and metaProduct attributes
-    const nameSimilarity = stringSimilarity.compareTwoStrings(productName, metaProductName);
-    const brandSimilarity = stringSimilarity.compareTwoStrings(productBrand, metaProductBrand);
-    const categorySimilarity = stringSimilarity.compareTwoStrings(productCategory, metaProductCategory);
-
-    return (
-      nameSimilarity >= MIN_SIMILARITY_SCORE &&
-      brandSimilarity >= MIN_SIMILARITY_SCORE &&
-      categorySimilarity >= MIN_SIMILARITY_SCORE
-    );
+  const response = await openai.createChatCompletion({
+    model: 'gpt-3.5-turbo',
+    messages: [{ role: 'user', content: prompt }],
   });
 
-  // Return the best matching MetaProduct or null if no match is found
-  return matchingMetaProducts.length > 0 ? matchingMetaProducts[0] : null;
-}
+  const resultText = response.data.choices[0].message.content.trim();
+    
+  console.log('*************');
+  console.log(resultText);
+  console.log('*************');
 
-module.exports = {
-  findMatchingMetaProduct,
+  try {
+    const result = JSON.parse(resultText);
+    return { sanitizedTitle: result.sanitizedTitle, metadata: result.metadata };
+  } catch (error) {
+    console.error(`Unable to parse JSON for product ID: ${scrapedProduct.id}`);
+    await Product.update({ needsReview: true }, { where: { id: scrapedProduct.id } });
+    return null;
+  }
 };

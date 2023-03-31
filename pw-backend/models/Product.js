@@ -39,6 +39,11 @@ module.exports = (sequelize, DataTypes) => {
         key: 'id',
       },
     },
+    needsreview: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
   });
 
   Product.associate = (models) => {
