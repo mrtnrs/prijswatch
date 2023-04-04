@@ -5,7 +5,7 @@ import Typography from '@mui/material/Typography'
 import { DataGrid } from '@mui/x-data-grid'
 
 // ** Icon Imports
-import Icon from '@/components/icon'
+import Icon from '@/components/Icon'
 
 // ** Custom Components
 import CustomChip from '@/components/mui/chip'

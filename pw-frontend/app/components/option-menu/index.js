@@ -12,7 +12,7 @@ import MenuItem from '@mui/material/MenuItem'
 import IconButton from '@mui/material/IconButton'
 
 // ** Icon Imports
-import Icon from '@/components/icon'
+import Icon from '@/components/Icon'
 
 // ** Hook Import
 import { useSettings } from '@/core/hooks/useSettings'

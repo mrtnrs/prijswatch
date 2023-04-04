@@ -19,7 +19,7 @@ import Typography from '@mui/material/Typography'
 import TableContainer from '@mui/material/TableContainer'
 
 // ** Icon Imports
-import Icon from '@/components/icon'
+import Icon from '@/components/Icon'
 
 // ** Custom Components
 import CustomChip from '@/components/mui/chip'

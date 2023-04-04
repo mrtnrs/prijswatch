@@ -2,6 +2,8 @@
 const express = require('express');
 const router = express.Router();
 const scraperController = require('../controllers/scraperController');
+const ScraperManager = require("../scrapers/scraperManager");
+const scraperManager = new ScraperManager();
 
 
 router.get('/', scraperController.getAllScrapers);
@@ -41,6 +43,8 @@ router.post('/run-once/:id', async (req, res) => {
     console.log(scraperId);
     // Pass the request and response objects to runScraper
     await scraperController.runScraper(req, res);
+    // Call matchUnlinkedProducts after running the scraper
+    await scraperManager.matchUnlinkedProducts();
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: error.message });

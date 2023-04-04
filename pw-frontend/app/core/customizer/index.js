@@ -15,7 +15,7 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 import MuiDrawer from '@mui/material/Drawer'
 
 // ** Icon Imports
-import Icon from '@/components/icon'
+import Icon from '@/components/Icon'
 
 // ** Hook Import
 import { useSettings } from '../hooks/useSettings'

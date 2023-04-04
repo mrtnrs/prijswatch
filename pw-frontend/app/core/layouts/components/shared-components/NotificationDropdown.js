@@ -13,7 +13,7 @@ import MuiMenuItem from '@mui/material/MenuItem'
 import Typography from '@mui/material/Typography'
 
 // ** Icon Imports
-import Icon from '@/components/icon'
+import Icon from '@/components/Icon'
 
 // ** Third Party Components
 import PerfectScrollbar from 'perfect-scrollbar'

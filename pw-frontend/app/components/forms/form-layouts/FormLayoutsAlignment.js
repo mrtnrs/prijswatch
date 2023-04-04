@@ -19,7 +19,7 @@ import InputAdornment from '@mui/material/InputAdornment'
 import FormControlLabel from '@mui/material/FormControlLabel'
 
 // ** Icon Imports
-import Icon from '@/components/icon'
+import Icon from '@/components/Icon'
 
 // Styled component for the form
 const Form = styled('form')(({ theme }) => ({

@@ -1,0 +1,67 @@
+
+ .root {
+  align-items: center;
+  display: grid;
+  grid-template-columns: auto auto 1fr;
+  height: 32px;
+}
+
+.root.isSelected {
+  color: #1967d2;
+  border: 5px solid red;
+}
+
+.arrow {
+  align-items: center;
+  font-size: 0;
+  cursor: pointer;
+  display: flex;
+  height: 24px;
+  justify-content: center;
+  width: 24px;
+  transition: transform linear 0.1s;
+  transform: rotate(0deg);
+}
+
+.arrow.is-open {
+  transform: rotate(90deg);
+}
+
+.filetype {
+  display: flex;
+}
+
+.label {
+  padding-inline-start: 8px;
+}
+
+.current {
+  background-color: #f3f3f3;
+  margin: 24px;
+  padding: 16px 24px;
+  border: 5px solid red !important;
+}
+
+.current > p {
+  font-size: small;
+  margin: 0;
+}
+
+.currentLabel {
+  font-weight: bold;
+  margin-inline-start: 0.5em;
+}
+
+.treeRoot {
+  box-sizing: border-box;
+  height: 100%;
+  padding: 32px;
+}
+
+.draggingSource {
+  opacity: 0.3;
+}
+
+.dropTarget {
+  background-color: #e8f0fe;
+}

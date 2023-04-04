@@ -24,7 +24,7 @@ import MuiAutocomplete from '@mui/material/Autocomplete'
 // import axios from 'axios'
 
 // ** Icon Imports
-import Icon from '@/components/icon'
+import Icon from '@/components/Icon'
 
 // ** Configs Imports
 import themeConfig from '@/core/configs/themeConfig'

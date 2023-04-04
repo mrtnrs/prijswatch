@@ -17,7 +17,7 @@ import MuiMenu from '@mui/material/Menu'
 import MuiMenuItem from '@mui/material/MenuItem'
 
 // ** Icon Imports
-import Icon from '@/components/icon'
+import Icon from '@/components/Icon'
 
 // ** Third Party Components
 import PerfectScrollbarComponent from 'perfect-scrollbar'

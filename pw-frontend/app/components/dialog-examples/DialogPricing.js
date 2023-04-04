@@ -15,7 +15,7 @@ import Fade from '@mui/material/Fade'
 import DialogContent from '@mui/material/DialogContent'
 
 // ** Icon Imports
-import Icon from 'src/@core/components/icon'
+import Icon from '@/components/Icon'
 
 // ** Component Import
 import PricingPlans from 'src/views/pages/pricing/PricingPlans'

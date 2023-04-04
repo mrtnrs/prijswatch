@@ -4,6 +4,12 @@ const scraperController = require("../controllers/scraperController");
 const { sanitizeTitleAndExtractMetadata } = require("../controllers/productMatcher");
 const stringSimilarity = require('string-similarity');
 const slugify = require('slugify');
+const { createMiniSearch, updateSearchIndex } = require('../miniSearch');
+const fs = require('fs');
+const MiniSearch = require('minisearch');
+const path = require('path');
+
+const INDEX_FILE = path.join(__dirname, 'searchIndex.json')
 
 function chunkArray(array, size) {
   const result = [];
@@ -35,52 +41,118 @@ class ScraperManager {
   }
 
   async findLocalMatchingMetaProduct(scrapedProduct, metaProducts) {
+  if (metaProducts.length === 0) {
+    return null;
+  }
+
     const threshold = 0.8;
     const target = scrapedProduct;
-    const candidates = metaProducts;
+    const candidates = metaProducts.map((metaProduct) => metaProduct.dataValues.name);
 
     const result = stringSimilarity.findBestMatch(target, candidates);
 
     if (result.bestMatch.rating >= threshold) {
-      return metaProducts[result.bestMatchIndex];
+      return metaProducts[result.bestMatchIndex].dataValues.id;
     } else {
       return null;
     }
   }
+  
 
-async matchUnlinkedProducts() {
-  const BATCH_SIZE = 50;
-  let offset = 0;
-  let unlinkedProductsBatch;
+  async setupMiniSearch() {
+      console.log('setupMiniSearch');
+  const miniSearchOptions = {
+    fields: ['name', 'description'],
+    storeFields: ['name', 'imageUrl', 'slug'],
+    searchOptions: {
+    prefix: true,
+    fuzzy: 0.2,
+  },
+    idField: 'slug',
+  };
 
-  do {
-    unlinkedProductsBatch = await Product.findAll({
-      where: { metaProductId: null },
-      limit: BATCH_SIZE,
-      offset: offset,
-    });
+    try {
+    let miniSearchInstance;
 
-    for (const scrapedProduct of unlinkedProductsBatch) {
-      console.log(scrapedProduct);
-      console.log(scrapedProduct.category);
-      const categoryMetaProducts = await MetaProduct.findAll({
-        where: { category: scrapedProduct.category },
+      if (fs.existsSync(INDEX_FILE)) {
+        const indexData = fs.readFileSync(INDEX_FILE, 'utf8');
+        miniSearchInstance = MiniSearch.loadJSON(indexData, miniSearchOptions);
+      } else {
+        const metaProducts = await MetaProduct.findAll();
+        miniSearchInstance = new MiniSearch(miniSearchOptions);
+        miniSearchInstance.addAll(metaProducts);
+        fs.writeFileSync(INDEX_FILE, JSON.stringify(miniSearchInstance.toJSON()));
+      }
+
+      return miniSearchInstance;
+    } catch (error) {
+      console.error('Error in setupMiniSearch:', error);
+    }
+  }
+
+  async search(query) {
+    console.log('managerSearch: ' + query);
+    const miniSearchInstance = await this.setupMiniSearch();
+    console.log('C');
+    console.log(miniSearchInstance.search(query))
+    // const autoSuggestions = miniSearchInstance.autoSuggest(query, { fuzzy: 0.2, top: 10 });
+
+    return miniSearchInstance.search(query).slice(0, 10);;
+    // return autoSuggestions;
+  }
+
+
+  async matchUnlinkedProducts() {
+    const BATCH_SIZE = 50;
+    let offset = 0;
+    let unlinkedProductsBatch;
+
+    do {
+      let unlinkedProducts = await Product.findAll({
+        where: { metaProductId: null },
       });
 
-      // local check
-      const localMatch = await this.findLocalMatchingMetaProduct(
-        scrapedProduct.name,
-        categoryMetaProducts.map((metaProduct) => metaProduct.dataValues.name)
-      );
+      console.log(`Number of unlinked products: ${unlinkedProducts.length}`);
 
-      if (localMatch) {
-        await Product.update(
-          { metaProductId: localMatch.id },
-          { where: { id: scrapedProduct.id } }
-        );
-      } else {
+      unlinkedProductsBatch = await Product.findAll({
+        where: { metaProductId: null },
+        limit: BATCH_SIZE,
+        offset: offset,
+      });
+
+      for (const scrapedProduct of unlinkedProductsBatch) {
         try {
           const { sanitizedTitle, metadata } = await sanitizeTitleAndExtractMetadata(scrapedProduct.name, scrapedProduct);
+
+          console.log('sanitizedTitle:', sanitizedTitle);
+          console.log('metadata:', metadata);
+
+          const categoryMetaProducts = await MetaProduct.findAll({
+           where: { category: scrapedProduct.category },
+          });
+
+          console.log('categoryMetaProducts:', categoryMetaProducts);
+
+        // local check
+        const localMatch = await this.findLocalMatchingMetaProduct(
+          sanitizedTitle,
+          categoryMetaProducts
+        );
+
+        console.log('localMatch:', localMatch);
+
+        if (localMatch) {
+          console.log('Match found; updating metaProductId');
+          console.log(localMatch);
+          await Product.update(
+            {
+              metaProductId: localMatch,
+              metadata: JSON.stringify(metadata),
+            },
+            { where: { id: scrapedProduct.id } }
+          );
+        } else {
+          console.log('No Match found; creating new MetaProduct');
           const slug = generateSlug(sanitizedTitle);
           const brand = scrapedProduct.brand || (metadata && metadata.brand) || null;
 
@@ -90,23 +162,30 @@ async matchUnlinkedProducts() {
             category: scrapedProduct.category,
             slug,
           });
+
+          console.log('newMetaProduct:', newMetaProduct);
+
           await Product.update(
-            { metaProductId: newMetaProduct.id },
-            { where: { id: scrapedProduct.id } }
-          );
-        } catch (error) {
-          console.error(`Error processing product ID: ${scrapedProduct.id}: ${error.message}`);
-          await Product.update(
-            { needsreview: true },
+            {
+              metaProductId: newMetaProduct.id,
+              metadata: JSON.stringify(metadata),
+            },
             { where: { id: scrapedProduct.id } }
           );
         }
+      } catch (error) {
+        console.error(`Error processing product ID: ${scrapedProduct.id}: ${error.message}`);
+        await Product.update(
+          { needsReview: true },
+          { where: { id: scrapedProduct.id } }
+        );
       }
     }
 
-    offset += BATCH_SIZE;
-  } while (unlinkedProductsBatch.length > 0);
-}
+      offset += BATCH_SIZE;
+    } while (unlinkedProductsBatch.length > 0);
+  }
+
 
 
   async runDueScrapers() {
@@ -132,6 +211,7 @@ async matchUnlinkedProducts() {
     }
 
     await this.matchUnlinkedProducts();
+    await this.setupMiniSearch();
   }
 }
 

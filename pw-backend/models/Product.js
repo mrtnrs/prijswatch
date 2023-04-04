@@ -44,6 +44,18 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       defaultValue: false,
     },
+    metadata: {
+      type: DataTypes.JSON,
+      allowNull: true,
+    },
+    webshopId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+      references: {
+        model: 'Webshops',
+        key: 'id',
+      },
+    },
   });
 
   Product.associate = (models) => {
@@ -56,7 +68,23 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'productId',
       as: 'prices',
     });
+    Product.belongsTo(models.Webshop, {
+      foreignKey: 'webshopId',
+      as: 'webshop',
+    });
   };
 
+  Product.deleteAllByCategoryId = async function (categoryId) {
+    try {
+      const result = await this.destroy({ where: { category: categoryId } });
+      return result;
+    } catch (error) {
+      console.error('Error deleting products by category ID:', error);
+      throw error;
+    }
+  };
+
+
   return Product;
+  
 };

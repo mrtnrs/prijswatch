@@ -65,7 +65,8 @@ exports.runScraper = async (req, res, saveData = true) => {
       const savedProducts = await Promise.all(
         scrapedData.map(async (data) => {
           const { price, ...productData } = data;
-
+          productData.webshopId = scraperSettings.webshopId;
+          
           if (!productData.url) {
             console.error("Missing URL:", productData);
             return null;

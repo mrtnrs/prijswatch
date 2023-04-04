@@ -9,7 +9,7 @@ import CardContent from '@mui/material/CardContent'
 import CustomAvatar from 'src/@core/components/mui/avatar'
 
 // ** Icon Imports
-import Icon from 'src/@core/components/icon'
+import Icon from '@/components/Icon'
 
 // ** Styled Avatar component
 const Avatar = styled(CustomAvatar)(({ theme }) => ({
@@ -17,7 +17,7 @@ const Avatar = styled(CustomAvatar)(({ theme }) => ({
   height: 40,
   marginRight: theme.spacing(4)
 }))
-
+@/components/Icon
 const CardStatsHorizontal = props => {
   // ** Props
   const { title, icon, stats, trendNumber, color = 'primary', trend = 'positive' } = props

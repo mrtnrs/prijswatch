@@ -7,7 +7,7 @@
 // import Box from '@mui/material/Box'
 
 // // ** Icon Imports
-// import Icon from 'src/@core/components/icon'
+// import Icon from 'src/@core/components/Icon'
 
 // // ** Theme Config Import
 // import themeConfig from 'src/configs/themeConfig'

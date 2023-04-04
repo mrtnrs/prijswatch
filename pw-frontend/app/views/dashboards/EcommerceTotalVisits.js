@@ -10,7 +10,7 @@ import LinearProgress from '@mui/material/LinearProgress'
 import CustomAvatar from '@/components/mui/avatar'
 
 // ** Icon Imports
-import Icon from '@/components/icon'
+import Icon from '@/components/Icon'
 
 const EcommerceTotalVisits = () => {
   return (

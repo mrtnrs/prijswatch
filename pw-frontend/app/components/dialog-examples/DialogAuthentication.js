@@ -17,7 +17,7 @@ import Fade from '@mui/material/Fade'
 import DialogContent from '@mui/material/DialogContent'
 
 // ** Icon Imports
-import Icon from 'src/@core/components/icon'
+import Icon from '@/components/Icon'
 
 // ** Hooks
 import useBgColor from 'src/@core/hooks/useBgColor'

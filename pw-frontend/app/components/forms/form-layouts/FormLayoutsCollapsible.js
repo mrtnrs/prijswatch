@@ -26,7 +26,7 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 //import Cards from 'react-credit-cards'
 
 // ** Icon Imports
-import Icon from '@/components/icon'
+import Icon from '@/components/Icon'
 
 // ** Styled Component Imports
 // import CardWrapper from 'src/@core/styles/libs/react-credit-cards'

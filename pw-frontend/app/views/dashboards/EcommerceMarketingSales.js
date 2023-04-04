@@ -17,7 +17,7 @@ import clsx from 'clsx'
 import { useKeenSlider } from 'keen-slider/react'
 
 // ** Icon Imports
-import Icon from '@/components/icon'
+import Icon from '@/components/Icon'
 
 // ** Custom Components Imports
 import CustomAvatar from '@/components/mui/avatar'

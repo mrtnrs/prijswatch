@@ -9,7 +9,7 @@ import CustomChip from 'src/@core/components/mui/chip'
 import CustomAvatar from 'src/@core/components/mui/avatar'
 
 // ** Icon Imports
-import Icon from 'src/@core/components/icon'
+import Icon from '@/components/Icon'
 
 const CardStatsVertical = props => {
   // ** Props

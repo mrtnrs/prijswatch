@@ -4,8 +4,13 @@ import { useParams } from 'next/navigation';
 import Link from 'next/link';
 
 async function getAllMetaProducts(category) {
-  const res = await fetch(`http://localhost:3001/api/products/${category}/meta-product`);
-  return res.json();
+  try {
+      const res = await fetch(`http://localhost:3001/api/products/${category}/meta-product`);
+      return res.json();
+  } catch (error) {
+        console.error(`Error in fetch request for ${caller}: ${error.message}`);
+    throw error;
+  }
 }
 
 function MetaProducts() {

@@ -20,7 +20,7 @@ import InputAdornment from '@mui/material/InputAdornment'
 import IconButton from '@mui/material/IconButton'
 
 // ** Icon Imports
-import Icon from 'src/@core/components/icon'
+import Icon from '@/components/Icon'
 
 // ** Custom Components Imports
 import CustomAvatar from 'src/@core/components/mui/avatar'

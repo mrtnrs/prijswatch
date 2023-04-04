@@ -16,6 +16,7 @@ const models = {
   Scraper: require('./Scraper.js')(sequelize, Sequelize.DataTypes),
   ScraperError: require('./ScraperError.js')(sequelize, Sequelize.DataTypes),
   MetaProduct: require('./MetaProduct.js')(sequelize, Sequelize.DataTypes),
+  Category: require('./Category.js')(sequelize, Sequelize.DataTypes),
 };
 
 Object.keys(models).forEach((modelName) => {

@@ -1,11 +1,10 @@
 'use client'
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { useSession } from 'next-auth/react';
 
 import Button from '@mui/material/Button'
 import { styled } from '@mui/material/styles'
-import Icon from '@/components/icon'
+import Icon from '@/components/Icon'
 
 import AddWebshop from '@/components/AddWebshop'
 import { getAllWebshops, deleteWebshop } from '@/api/webshopService';
@@ -22,7 +21,6 @@ import Grid from '@mui/material/Grid'
 
 // ** Custom Components Imports
 import CardStatisticsCharacter from './components/card-stats-with-image'
-import DialogCreateApp from '@/components/dialog-examples/DialogCreateApp'
 
 import WebshopsCard from '@/components/WebshopsCard';
 import TableColumns from '@/views/TableColumns';
@@ -51,7 +49,7 @@ import toast from 'react-hot-toast'
 function Dashboard() {
 
 
-  const { data: session, status } = useSession();
+ // const { data: session, status } = useSession();
   const router = useRouter();
   const [webshops, setWebshops] = useState([]);
   const [scrapers, setScrapers] = useState([]);
@@ -62,11 +60,11 @@ function Dashboard() {
   const [displayAddScraperDialog, setDisplayAddScraperDialog] = useState(false);
   const [selectedScraper, setSelectedScraper] = useState(null);
 
-  useEffect(() => {
-    if (!session || !session.user || session.user.email !== 'raesmaarten@gmail.com') {
-     // router.replace('/login');
-    }
-  }, [session, router]);
+  //useEffect(() => {
+  //   if (!session || !session.user || session.user.email !== 'raesmaarten@gmail.com') {
+  //    // router.replace('/login');
+  //   }
+  // }, [session, router]);
 
   useEffect(() => {
     const fetchWebshops = async () => {

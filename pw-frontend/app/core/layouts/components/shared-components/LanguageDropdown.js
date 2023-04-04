@@ -1,5 +1,5 @@
 // ** Icon Imports
-import Icon from '@/components/icon'
+import Icon from '@/components/Icon'
 
 // ** Third Party Import
 import { useTranslation } from 'react-i18next'

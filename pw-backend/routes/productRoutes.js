@@ -7,6 +7,9 @@ const productController = require('../controllers/productController');
 router.get('/:category/meta-product', productController.getAllMetaProductsByCategory);
 router.get('/:category/:slug/meta-product', productController.getMetaProductBySlugHandler);
 
+router.get('/by-meta-product-id/:metaProductId', productController.getProductsByMetaProductId);
+
+
 router.post('/scrape-and-store', productController.createOrUpdateProductHandler);
 router.get('/', productController.getAllProductsHandler);
 

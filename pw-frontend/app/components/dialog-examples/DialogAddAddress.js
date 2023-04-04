@@ -22,7 +22,7 @@ import DialogActions from '@mui/material/DialogActions'
 import FormControlLabel from '@mui/material/FormControlLabel'
 
 // ** Icon Imports
-import Icon from 'src/@core/components/icon'
+import Icon from '@/components/Icon'
 
 // ** Hooks
 import useBgColor from 'src/@core/hooks/useBgColor'

@@ -105,7 +105,7 @@ import FormHelperText from '@mui/material/FormHelperText'
 import InputAdornment from '@mui/material/InputAdornment'
 
 // ** Icon Imports
-import Icon from 'src/@core/components/icon'
+import Icon from '@/components/Icon'
 
 const TextFieldInputAdornment = () => {
   // ** State
@@ -278,7 +278,7 @@ import FormControl from '@mui/material/FormControl'
 import InputAdornment from '@mui/material/InputAdornment'
 
 // ** Icon Imports
-import Icon from 'src/@core/components/icon'
+import Icon from '@/components/Icon'
 
 const TextFieldIcons = () => {
   return (

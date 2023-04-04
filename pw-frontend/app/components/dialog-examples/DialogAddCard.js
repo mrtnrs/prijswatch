@@ -31,7 +31,7 @@ import CardWrapper from 'src/@core/styles/libs/react-credit-cards'
 import 'react-credit-cards/es/styles-compiled.css'
 
 // ** Icon Imports
-import Icon from 'src/@core/components/icon'
+import Icon from '@/components/Icon'
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Fade ref={ref} {...props} />

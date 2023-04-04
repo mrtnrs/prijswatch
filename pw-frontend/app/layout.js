@@ -2,7 +2,6 @@
 import './styles/globals.css'
 import Navigation from './components/Navigation';
 import Footer from './components/Footer';
-import { SessionProvider } from "next-auth/react"
 // import "./api/auth/[...nextauth]";
 import UserLayout from '@/components/layouts/UserLayout'
 
@@ -27,7 +26,6 @@ export default function RootLayout({ Component, pageProps, children, session }) 
 
   return (
 <html lang="en">
-      <SessionProvider>
       <SettingsProvider>
             <SettingsConsumer>
               {({ settings }) => {
@@ -47,8 +45,6 @@ export default function RootLayout({ Component, pageProps, children, session }) 
               }}
             </SettingsConsumer>
           </SettingsProvider>
-
-      </SessionProvider>
     </html>
   )
 }

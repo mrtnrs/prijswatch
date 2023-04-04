@@ -6,7 +6,7 @@ import Box from '@mui/material/Box'
 import MuiToolbar from '@mui/material/Toolbar'
 
 // ** Icon Imports
-import Icon from '@/components/icon'
+import Icon from '@/components/Icon'
 
 // ** Theme Config Import
 import themeConfig from '@/core/configs/themeConfig'

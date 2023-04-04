@@ -37,6 +37,14 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       unique: true,
     },
+    categoryId: {
+      type: DataTypes.UUID,
+      allowNull: true,
+      references: {
+        model: 'Categories',
+        key: 'id',
+      },
+    },
   });
 
   MetaProduct.associate = (models) => {
@@ -44,6 +52,10 @@ module.exports = (sequelize, DataTypes) => {
     MetaProduct.hasMany(models.Product, {
       foreignKey: 'metaProductId',
       as: 'products',
+    });
+    MetaProduct.belongsTo(models.Category, {
+      foreignKey: 'categoryId',
+      as: 'categoryRef',
     });
   };
 

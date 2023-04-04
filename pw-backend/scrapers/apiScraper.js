@@ -12,15 +12,22 @@ class ApiScraper extends BaseScraper {
 
 
   async scrape() {
-    console.log('scraping...');
+    try {
+
+      console.log('scraping...');
     // Implement the API scraping logic here
     // You can use this.settings to access the settings for this scraper instance
     // Return the scraped data
-
+    
+    
   const fetchProductsForPage = async (page) => {
+
+    console.log('FETCHPRODUCTSFORPAGE');
     // const url = `https://api.krefel.be/api/v2/krefel/categories/C937/products?fields=FULL&currentPage=${page}&pageSize=96&lang=nl`;
     const url = this.pagination ? `${this.url}&currentPage=${page}&pageSize=96&lang=nl` : this.url;
     const { data } = await axios.get(url);
+
+    console.log('API response data:', data); // Log the response data
 
     if (data.products.length === 0) {
       return null;
@@ -66,6 +73,11 @@ class ApiScraper extends BaseScraper {
     } else {
       const scrapedData = await fetchProductsForPage();
       return scrapedData;
+    }
+
+    } catch (error) {
+      console.error('Error while scraping:', error);
+    return { error: 'An error occurred while scraping. Please check the provided URL and try again.' };
     }
 
   }

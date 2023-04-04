@@ -23,7 +23,7 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 import Select from '@mui/material/Select'
 
 // ** Icon Imports
-import Icon from 'src/@core/components/icon'
+import Icon from '@/components/Icon'
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Fade ref={ref} {...props} />

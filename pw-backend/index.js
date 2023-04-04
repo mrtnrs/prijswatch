@@ -36,8 +36,9 @@ const webshopRoutes = require('./routes/webshopRoutes');
 const priceRoutes = require('./routes/priceRoutes');
 const scraperRoutes = require('./routes/scraperRoutes');
 const authRoutes = require('./routes/authRoutes');
-
+const searchRoutes = require('./routes/searchRoutes');
 const scheduler = require('./scheduler');
+const categoryRoutes = require('./routes/categoryRoutes');
 
 
 
@@ -71,6 +72,8 @@ app.use('/api/webshops', webshopRoutes);
 app.use('/api/prices', priceRoutes);
 app.use('/api/scrapers', scraperRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/api/search', searchRoutes);
+app.use('/api/categories', categoryRoutes);
 
 app.listen(port, () => {
   console.log(`Server listening at http://localhost:${port}`);

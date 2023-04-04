@@ -21,7 +21,7 @@ import InputAdornment from '@mui/material/InputAdornment'
 import Select from '@mui/material/Select'
 
 // ** Icon Imports
-import Icon from 'src/@core/components/icon'
+import Icon from '@/components/Icon'
 
 // ** Custom Components Imports
 import StepperCustomDot from './StepperCustomDot'

@@ -1,4 +1,4 @@
-const { Product, MetaProduct } = require('../models');
+const { Product, MetaProduct, Price, Webshop } = require('../models');
 const { Op } = require('sequelize');
 
 
@@ -115,4 +115,41 @@ exports.getAllMetaProductsByCategory = async (req, res) => {
   }
 };
 
+// Get products by MetaProduct
+
+exports.getProductsByMetaProductId = async (req, res) => {
+  console.log('getProductsByMeta');
+  try {
+    const metaProductId = req.params.metaProductId;
+const products = await Product.findAll({
+    where: { metaProductId },
+    include: [
+      {
+        model: Webshop,
+        as: 'webshop',
+      },
+      {
+        model: Price,
+        as: 'prices',
+        limit: 1,
+        order: [['createdAt', 'DESC']],
+      },
+    ],
+  });
+
+    // Format the products with the latest price
+    const formattedProducts = products.map((product) => {
+      const latestPrice = product.prices[0];
+      return {
+        ...product.toJSON(),
+        latestPrice: latestPrice ? latestPrice.value : null,
+      };
+    });
+
+    res.json(formattedProducts);
+  } catch (error) {
+    console.error('Error fetching products by metaProductId:', error);
+    res.status(500).json({ message: 'Error fetching products by metaProductId' });
+  }
+};
 

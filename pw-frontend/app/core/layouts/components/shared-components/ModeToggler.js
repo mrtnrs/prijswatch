@@ -2,7 +2,7 @@
 import IconButton from '@mui/material/IconButton'
 
 // ** Icon Imports
-import Icon from '@/components/icon'
+import Icon from '@/components/Icon'
 
 const ModeToggler = props => {
   // ** Props

@@ -1,5 +1,5 @@
 // ** React Imports
-import { useState, forwardRef, useEffect } from 'react'
+import { useState, forwardRef, useEffect, useMemo } from 'react'
 
 // ** MUI Imports
 import Box from '@mui/material/Box'
@@ -23,7 +23,12 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 import Select from '@mui/material/Select'
 
 // ** Icon Imports
-import Icon from '@/components/icon'
+import Icon from '@/components/Icon'
+import CategoryTree from '@/dashboard/components/CategoryTree'
+
+import {fetchCategories, createCategory} from '@/api/categoryService'
+import ReactSelect from 'react-select';
+
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Fade ref={ref} {...props} />
@@ -46,7 +51,7 @@ const DialogEditUserInfo = ({
   const [selectedWebshopId, setSelectedWebshopId] = useState('');
   const [url, setUrl] = useState('');
   const [scrapeInterval, setScrapeInterval] = useState('');
-  const [category, setCategory] = useState('');
+  const [category, setCategory] = useState(null);
   const [scraperType, setScraperType] = useState('API');
   const [saveStatus, setSaveStatus] = useState('');
   const [hasPagination, setHasPagination] = useState(false);
@@ -60,16 +65,30 @@ const [puppeteerProductPriceSelector, setPuppeteerProductPriceSelector] = useSta
 const [puppeteerPagination, setPuppeteerPagination] = useState(false);
 const [puppeteerPaginationSelector, setPuppeteerPaginationSelector] = useState('');
 
+// categories
+const [categoryOptions, setCategoryOptions] = useState([]);
+
+
 
   // SET IF EDIT
 
 useEffect(() => {
+  const fetchedCategories = async () => {
+    const categories = await fetchCategories();
+    console.log('caties', categories);
+    setCategoryOptions(categories);
+  }
+  fetchedCategories();
+}, []);
+
+useEffect(() => {
   if (selectedScraper) {
     const {
-      url,
+      webshopId,
       interval,
       type,
       settings: {
+        url,
         category,
         pagination,
         paginationParameter,
@@ -80,10 +99,11 @@ useEffect(() => {
         nextPageSelector,
       },
     } = selectedScraper;
-
+    console.log('AAA', category);
     setUrl(url);
-    setScrapeInterval(interval);
     setCategory(category);
+    setSelectedWebshopId(webshopId); // Set the selectedWebshopId
+    setScrapeInterval(interval);
     setScraperType(formatScraperType(type));
     setHasPagination(!!nextPageSelector);
     setPaginationParameter(paginationParameter);
@@ -95,6 +115,34 @@ useEffect(() => {
     setPuppeteerPaginationSelector(nextPageSelector || '');
   }
 }, [selectedScraper]);
+
+useEffect(() => {
+  if (selectedScraper && categoryOptions.length > 0) {
+    const foundCategory = categoryOptions.find(c => c.name === selectedScraper.settings.category);
+    if (foundCategory) {
+      setCategory(foundCategory.id);
+    } else {
+      console.error(`No matching category found for ${selectedScraper.settings.category}`);
+    }
+  }
+}, [selectedScraper, categoryOptions]);
+
+
+
+const formatCategoryOptions = (categories) => {
+  console.log("Input categories:", categories);
+  return categories.map((category) => {
+    return {
+      value: category.id,
+      label: category.name,
+      children: category.subcategories?.length > 0 ? formatCategoryOptions(category.subcategories) : [],
+    };
+  });
+
+  console.log("Formatted categories:", formattedCategories);
+  return formattedCategories;
+};
+
 
 
   const formatScraperType = (type) => {
@@ -178,6 +226,71 @@ const handleTitleSelectorChange = (e) => setPuppeteerProductNameSelector(e.targe
 const handlePriceSelectorChange = (e) => setPuppeteerProductPriceSelector(e.target.value);
 const handleUrlSelectorChange = (e) => setPuppeteerUrlSelector(e.target.value);
 
+const handleNewCategory = (newCategory) => {
+  // Find the parent category in the categoryOptions, if there's one
+  const parentCategory = newCategory.parentId
+    ? categoryOptions.find((category) => category.value === newCategory.parentId)
+    : null;
+
+  const newCategoryOption = {
+    value: newCategory.id,
+    label: newCategory.name,
+    children: [],
+  };
+
+  if (parentCategory) {
+    // If there's a parent category, update its children array
+    parentCategory.children = [...parentCategory.children, newCategoryOption];
+  } else {
+    // If there's no parent category, add the new category to the categoryOptions state
+    setCategoryOptions([...categoryOptions, newCategoryOption]);
+  }
+};
+
+const handleAddCategory = async (categoryData) => {
+  try {
+    const newCategory = await createCategory(categoryData);
+    // Fetch categories again to update the list
+    const updatedCategories = await fetchCategories();
+    setCategoryOptions(formatCategoryOptions(updatedCategories));
+  } catch (error) {
+    console.error('Error adding category:', error);
+  }
+};
+
+function findParentCategories(categoryOptions, level11CategoryId) {
+  const level11Category = categoryOptions.find(
+    (category) => category.value === level11CategoryId
+  );
+
+  if (!level11Category) {
+    return { level1Category: null, mainCategory: null };
+  }
+
+  const level1Category = categoryOptions.find(
+    (category) => category.value === level11Category.parentId
+  );
+
+  if (!level1Category) {
+    return { level1Category: null, mainCategory: null };
+  }
+
+  const mainCategory = categoryOptions.find(
+    (category) => category.value === level1Category.parentId
+  );
+
+  return { level1Category, mainCategory };
+}
+
+const { level1Category, mainCategory } = useMemo(
+  () => findParentCategories(categoryOptions, selectedScraper?.settings.level11CategoryId),
+  [categoryOptions, selectedScraper]
+);
+
+const handleCategoryChange = (selectedCategoryId) => {
+  setCategory(selectedCategoryId);
+};
+
 
   return (
     <Card>
@@ -206,6 +319,9 @@ const handleUrlSelectorChange = (e) => setPuppeteerUrlSelector(e.target.value);
     { selectedScraper ? "Edit scraper" : "Add Scraper" }
     </Typography>
     </Box>
+
+
+
     <Grid container spacing={6}>
     <Grid item xs={12}>
     <FormControl fullWidth>
@@ -246,16 +362,11 @@ const handleUrlSelectorChange = (e) => setPuppeteerUrlSelector(e.target.value);
 
     <Grid item sm={6} xs={12}>
     <FormControl fullWidth>
-    <InputLabel id='status-select'>Category</InputLabel>
-    <Select defaultValue='Smartphones' 
-    value={category}
-    onChange={(e) => setCategory(e.target.value)}
-    fullWidth labelId='status-select' label='Category'>
-    <MenuItem value='Smartphones'>Smartphones</MenuItem>
-    <MenuItem value='Natuurcamera'>Natuurcamera's</MenuItem>
-    <MenuItem value='Inactive'>Inactive</MenuItem>
-    <MenuItem value='Suspended'>Suspended</MenuItem>
-    </Select>
+<CategoryTree
+  categoryOptions={categoryOptions} 
+  category={category}
+  onCategoryChange={handleCategoryChange}
+/>
     </FormControl>
     </Grid>
     

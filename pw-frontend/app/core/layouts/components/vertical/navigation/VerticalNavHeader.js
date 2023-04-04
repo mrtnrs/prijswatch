@@ -8,7 +8,7 @@ import { styled, useTheme } from '@mui/material/styles'
 import Typography from '@mui/material/Typography'
 
 // ** Custom Icon Import
-import Icon from 'src/@core/components/icon'
+import Icon from '@/components/Icon'
 
 // ** Configs
 import themeConfig from 'src/configs/themeConfig'
