@@ -1,5 +1,7 @@
 // ** React Imports
 import { createContext, useState, useEffect } from 'react'
+import { fetchCategoryStructure } from '@/api/categoryService';
+
 
 // ** ThemeConfig Import
 import themeConfig from '@/core/configs/themeConfig'
@@ -59,14 +61,22 @@ const storeSettings = settings => {
 }
 
 // ** Create Context
-export const SettingsContext = createContext({
+const SettingsContext = createContext({
   saveSettings: () => null,
   settings: initialSettings
-})
+});
+
+export default SettingsContext;
 
 export const SettingsProvider = ({ children, pageSettings }) => {
   // ** State
   const [settings, setSettings] = useState({ ...initialSettings })
+  const [categoryStructure, setCategoryStructure] = useState([]);
+
+  useEffect(() => {
+  fetchCategoryTree();
+}, []);
+
   useEffect(() => {
     const restoredSettings = restoreSettings()
     if (restoredSettings) {
@@ -87,12 +97,19 @@ export const SettingsProvider = ({ children, pageSettings }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [settings.layout])
 
+const fetchCategoryTree = async () => {
+  const categoryStructure = await fetchCategoryStructure();
+  setCategoryStructure(categoryStructure);
+};
+
+
+
   const saveSettings = updatedSettings => {
     storeSettings(updatedSettings)
     setSettings(updatedSettings)
   }
 
-  return <SettingsContext.Provider value={{ settings, saveSettings }}>{children}</SettingsContext.Provider>
+  return <SettingsContext.Provider value={{ settings, saveSettings, categoryStructure }}>{children}</SettingsContext.Provider>
 }
 
 export const SettingsConsumer = SettingsContext.Consumer

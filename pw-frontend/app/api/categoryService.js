@@ -14,6 +14,11 @@ console.log('categories:', categories);
   }
 }
 
+export const fetchCategoryStructure = async () => {
+  const response = await fetch('/api/categoryStructure');
+  const data = await response.json();
+  return data;
+};
 
 export const handleAddCategory = async (categoryName, parentCategoryId = null) => {
   try {

@@ -9,36 +9,41 @@ import productService from '@/api/productService'
 import Grid from '@mui/material/Grid'
 import Container from '@mui/material/Container'
 
-import MetaProductInfo from '../components/MetaProductInfo';
-import PriceChart from '../components/PriceChart'
-import ProductGrid from '../components/ProductGrid'
+import MetaProductInfo from '@/[category]/components/MetaProductInfo';
+import PriceChart from '@/[category]/components/PriceChart'
+import ProductGrid from '@/[category]/components/ProductGrid'
 
-import RechartsAreaChart from '../components/RechartsAreaChart'
+import RechartsAreaChart from '@/[category]/components/RechartsAreaChart'
 
-async function getMetaProductBySlug(category, slug) {
+
+async function getMetaProductBySlug(categories, slug) {
+  const categoryPath = categories.join('/');
   try {
-      console.log('FETCHED');
-  const res = await fetch(`http://localhost:3001/api/products/${category}/${slug}/meta-product`);
-  console.log(res);
-  return res.json();
+    console.log('FETCHED');
+    const res = await fetch(`http://localhost:3001/api/products/${categoryPath}/${slug}/meta-product`);
+    console.log(res);
+    return res.json();
   } catch (error) {
-    console.error(`Error in fetch request for ${caller}: ${error.message}`);
+    console.error(`Error in fetch request: ${error.message}`);
     throw error;
   }
 }
 
 
+
 function MetaProduct() {
   const [metaProduct, setMetaProduct] = useState(null);
   const [products, setProducts] = useState([]);
+  const [urlData, setUrlData] = useState({});
   
   const params = useParams();
-
+  const { categories, slug } = params;
+  console.log(params);
 
   
   useEffect(() => {
     async function fetchData() {
-      const data = await getMetaProductBySlug(params.category, params.slug);
+      const data = await getMetaProductBySlug(categories, slug);
       console.log('data ja :');
       console.log(data);
       setMetaProduct(data);

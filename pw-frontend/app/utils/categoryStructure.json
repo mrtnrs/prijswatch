@@ -1,0 +1,68 @@
+[
+    {
+        "id": "236d2f38-caa7-4e16-927c-4efdebfeae89",
+        "name": "Audio",
+        "slug": "audio",
+        "parentId": null,
+        "children": [
+            {
+                "id": "05e2c6a3-38a6-494c-87dc-459cf8de9567",
+                "name": "Speakers",
+                "slug": "speakers",
+                "parentId": "236d2f38-caa7-4e16-927c-4efdebfeae89",
+                "children": []
+            },
+            {
+                "id": "94ecbed2-9224-4982-9a28-25ef1a49ea2b",
+                "name": "Tester",
+                "slug": "tester",
+                "parentId": "236d2f38-caa7-4e16-927c-4efdebfeae89",
+                "children": []
+            }
+        ]
+    },
+    {
+        "id": "43bb420f-c02f-4b43-b32c-20ad07dd123c",
+        "name": "Camera's",
+        "slug": "camera's",
+        "parentId": null,
+        "children": [
+            {
+                "id": "0a0d7013-5bc1-46ac-bce7-204c370d37eb",
+                "name": "Natuurcamera's",
+                "slug": "natuurcamera's",
+                "parentId": "43bb420f-c02f-4b43-b32c-20ad07dd123c",
+                "children": []
+            },
+            {
+                "id": "c93b378e-0a9c-4059-a5ce-147618d3fcfa",
+                "name": "Testcamera",
+                "slug": "testcamera",
+                "parentId": "43bb420f-c02f-4b43-b32c-20ad07dd123c",
+                "children": []
+            }
+        ]
+    },
+    {
+        "id": "545cb7d3-8a7e-45fc-a02b-6fcf7617839d",
+        "name": "Smartphones",
+        "slug": "smartphones",
+        "parentId": null,
+        "children": [
+            {
+                "id": "24c1732c-ef77-4831-a20d-80a1b293c0c4",
+                "name": "dolr",
+                "slug": "dolr",
+                "parentId": "545cb7d3-8a7e-45fc-a02b-6fcf7617839d",
+                "children": []
+            },
+            {
+                "id": "c097a62f-91a9-4ad1-ab01-da1f3f98e784",
+                "name": "L'ac Du kaka",
+                "slug": "l'ac-du-kaka",
+                "parentId": "545cb7d3-8a7e-45fc-a02b-6fcf7617839d",
+                "children": []
+            }
+        ]
+    }
+]
