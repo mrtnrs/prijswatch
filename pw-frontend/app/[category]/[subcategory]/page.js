@@ -1,11 +1,16 @@
-import React from 'react'
+'use client';
+import { useEffect, useState, Suspense, useContext } from 'react';
+import SettingsContext from '@/core/context/SettingsContext';
+import { useCategoryStructure } from '@/core/hooks/useSettings';
+import { useParams } from 'next/navigation';
+import Link from 'next/link';
 
-function page() {
-	return (
-		<div>
-			somecat
-		</div>
-	)
+import CategoryOrMetaProducts from '../components/CategoryOrMetaProducts'
+
+
+
+export default function CategoryPage() {
+
+	return <CategoryOrMetaProducts />;
+
 }
-
-export default page

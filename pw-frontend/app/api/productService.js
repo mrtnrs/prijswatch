@@ -22,8 +22,21 @@ async function fetchProducts(metaProductId) {
   }
 };
 
+async function fetchMetaProductsByCategoryAndBrand(categorySlug) {
+  try {
+    const response = await fetch(`${API_URL}/${categorySlug}/grouped-by-brand`);
+    const data = await response.json();
+    console.log(data);
+    return data;
+  } catch (error) {
+    console.error('Error fetching MetaProducts by category and brand:', error);
+    throw new Error('Failed to fetch MetaProducts by category and brand');
+  }
+}
+
 export default {
   fetchMetaProduct,
-  fetchProducts
+  fetchProducts,
+  fetchMetaProductsByCategoryAndBrand,
 };
 

@@ -23,7 +23,7 @@ import InputAdornment from '@mui/material/InputAdornment'
 import FormControlLabel from '@mui/material/FormControlLabel'
 
 // ** Third Party Imports
-import toast from 'react-hot-toast'
+import { Toast } from './core/CustomHotToast';
 import DatePicker from 'react-datepicker'
 import { useForm, Controller } from 'react-hook-form'
 
@@ -67,7 +67,7 @@ const FormValidationBasic = () => {
   const handleMouseDownPassword = event => {
     event.preventDefault()
   }
-  const onSubmit = () => toast.success('Form Submitted')
+  const onSubmit = () => Toast.success('Form Submitted')
 
   return (
     <Card>

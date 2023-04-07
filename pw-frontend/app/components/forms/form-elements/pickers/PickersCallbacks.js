@@ -5,7 +5,8 @@ import { useState } from 'react'
 import Box from '@mui/material/Box'
 
 // ** Third Party Imports
-import toast from 'react-hot-toast'
+import { Toast } from './core/CustomHotToast';
+
 import DatePicker from 'react-datepicker'
 
 // ** Custom Component Imports
@@ -16,7 +17,7 @@ const PickersCallbacks = ({ popperPlacement }) => {
   const [date, setDate] = useState(new Date())
 
   const handlePickerCallback = msg => {
-    toast(msg, { duration: 2000 })
+    Toast(msg, { duration: 2000 })
   }
 
   return (

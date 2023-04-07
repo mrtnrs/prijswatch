@@ -17,7 +17,8 @@ import InputAdornment from '@mui/material/InputAdornment'
 
 // ** Third Party Imports
 import * as yup from 'yup'
-import toast from 'react-hot-toast'
+import { Toast } from './core/CustomHotToast';
+
 import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 
@@ -82,7 +83,7 @@ const FormValidationSchema = () => {
   const handleMouseDownPassword = event => {
     event.preventDefault()
   }
-  const onSubmit = () => toast.success('Form Submitted')
+  const onSubmit = () => Toast.success('Form Submitted')
 
   return (
     <Card>

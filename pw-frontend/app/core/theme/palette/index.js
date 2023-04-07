@@ -2,14 +2,17 @@ const DefaultPalette = (mode, skin) => {
   // ** Vars
   const whiteColor = '#FFF'
   const lightColor = '76, 78, 100'
-  const darkColor = '234, 234, 255'
+  const darkColor = '244, 244, 248'
+  const secondLightColor = 'red'
+  const secondDarkColor = '148, 163, 184'
   const mainColor = mode === 'light' ? lightColor : darkColor
+  const secondMainColor = mode === 'light' ? secondLightColor : secondDarkColor
 
   const defaultBgColor = () => {
     if (skin === 'bordered' && mode === 'light') {
       return whiteColor
     } else if (skin === 'bordered' && mode === 'dark') {
-      return '#30334E'
+      return '#0f172a'
     } else if (mode === 'light') {
       return '#F7F7F9'
     } else return '#282A42'
@@ -85,13 +88,14 @@ const DefaultPalette = (mode, skin) => {
       A700: '#616161'
     },
     text: {
-      primary: `rgba(${mainColor}, 0.87)`,
+      primary: `rgba(${mainColor}, 0.95)`,
       secondary: `rgba(${mainColor}, 0.6)`,
-      disabled: `rgba(${mainColor}, 0.38)`
+      disabled: `rgba(${mainColor}, 0.38)`,
+      secondPrimary: `rgba(${secondMainColor}, 1)`,
     },
     divider: `rgba(${mainColor}, 0.12)`,
     background: {
-      paper: mode === 'light' ? whiteColor : '#30334E',
+      paper: mode === 'light' ? whiteColor : '#0f172a',
       default: defaultBgColor()
     },
     action: {

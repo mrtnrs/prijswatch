@@ -1,8 +1,10 @@
+
+
 // ** React Imports
 import { useEffect, Fragment } from 'react'
 
 // ** Next Import
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 
 // ** MUI Imports
 import Chip from '@mui/material/Chip'
@@ -21,16 +23,16 @@ import clsx from 'clsx'
 import Icon from '@/components/Icon'
 
 // ** Configs Import
-import themeConfig from 'src/configs/themeConfig'
+import themeConfig from '@/core/configs/themeConfig'
 
 // ** Utils
-import { hasActiveChild, removeChildren } from 'src/@core/layouts/utils'
+import { hasActiveChild, removeChildren } from '@/core/layouts/utils'
 
 // ** Custom Components Imports
 import VerticalNavItems from './VerticalNavItems'
-import UserIcon from 'src/layouts/components/UserIcon'
-import Translations from 'src/layouts/components/Translations'
-import CanViewNavGroup from 'src/layouts/components/acl/CanViewNavGroup'
+import UserIcon from '@/components/layouts/components/UserIcon'
+import Translations from '@/components/layouts/components/Translations'
+import CanViewNavGroup from '@/components/layouts/components/CanViewNavGroup'
 
 const MenuItemTextWrapper = styled(Box)(() => ({
   width: '100%',

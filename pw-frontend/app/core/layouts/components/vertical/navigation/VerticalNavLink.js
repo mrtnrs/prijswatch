@@ -1,6 +1,6 @@
 // ** Next Imports
 import Link from 'next/link'
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 
 // ** MUI Imports
 import Chip from '@mui/material/Chip'
@@ -12,15 +12,15 @@ import { styled, useTheme } from '@mui/material/styles'
 import ListItemButton from '@mui/material/ListItemButton'
 
 // ** Configs Import
-import themeConfig from 'src/configs/themeConfig'
+import themeConfig from '@/core/configs/themeConfig'
 
 // ** Custom Components Imports
-import UserIcon from 'src/layouts/components/UserIcon'
-import Translations from 'src/layouts/components/Translations'
-import CanViewNavLink from 'src/layouts/components/acl/CanViewNavLink'
+import UserIcon from '@/components/layouts/components/UserIcon'
+import Translations from '@/components/layouts/components/Translations'
+import CanViewNavLink from '@/components/layouts/components/CanViewNavLink'
 
 // ** Util Import
-import { handleURLQueries } from 'src/@core/layouts/utils'
+import { handleURLQueries } from '@/core/layouts/utils'
 
 // ** Styled Components
 const MenuNavLink = styled(ListItemButton)(({ theme }) => ({

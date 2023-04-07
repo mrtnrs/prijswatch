@@ -11,7 +11,7 @@ import Typography from '@mui/material/Typography'
 import Icon from '@/components/Icon'
 
 // ** Configs
-import themeConfig from 'src/configs/themeConfig'
+import themeConfig from '@/core/configs/themeConfig'
 
 // ** Styled Components
 const MenuHeaderWrapper = styled(Box)(({ theme }) => ({

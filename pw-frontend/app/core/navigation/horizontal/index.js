@@ -1,113 +1,51 @@
 const navigation = () => {
   return [
     {
-      icon: 'mdi:home-outline',
-      title: 'Dashboards',
+      icon: 'mdi:devices',
+      title: 'Phone & Tablet',
       children: [
         {
-          icon: 'mdi:chart-donut',
-          title: 'CRM',
-          path: '/dashboards/crm'
+          icon: 'mdi:cellphone',
+          title: 'Smartphones',
+          path: '/smartphones'
         },
         {
-          icon: 'mdi:chart-timeline-variant',
-          title: 'Analytics',
-          path: '/dashboards/analytics'
+          icon: 'mdi:tablet',
+          title: 'Tablets',
+          path: '/tablets'
         },
         {
-          icon: 'mdi:cart-outline',
-          title: 'eCommerce',
-          path: '/dashboards/ecommerce'
+          icon: 'mdi:watch-variant',
+          title: 'Smartwatches',
+          path: '/smartwatches'
         }
       ]
     },
     {
-      icon: 'mdi:apps',
-      title: 'Apps',
+      icon: 'mdi:music-note-eighth',
+      title: 'Audio',
       children: [
         {
-          title: 'Email',
-          icon: 'mdi:email-outline',
+          title: 'Speakers',
+          icon: 'mdi:speaker',
           path: '/apps/email'
         },
         {
-          title: 'Chat',
-          icon: 'mdi:message-outline',
+          title: 'Koptelefoons',
+          icon: 'mdi:headphones',
           path: '/apps/chat'
         },
         {
-          title: 'Calendar',
-          icon: 'mdi:calendar-blank-outline',
-          path: '/apps/calendar'
-        },
-        {
-          title: 'Invoice',
-          icon: 'mdi:file-document-outline',
+          title: 'Oortjes',
+          icon: 'mdi:earbuds-outline',
           children: [
             {
-              title: 'List',
+              title: 'Draadloos',
               path: '/apps/invoice/list'
             },
             {
-              title: 'Preview',
+              title: 'Met draad',
               path: '/apps/invoice/preview'
-            },
-            {
-              title: 'Edit',
-              path: '/apps/invoice/edit'
-            },
-            {
-              title: 'Add',
-              path: '/apps/invoice/add'
-            }
-          ]
-        },
-        {
-          title: 'User',
-          icon: 'mdi:account-outline',
-          children: [
-            {
-              title: 'List',
-              path: '/apps/user/list'
-            },
-            {
-              title: 'View',
-              children: [
-                {
-                  title: 'Overview',
-                  path: '/apps/user/view/overview'
-                },
-                {
-                  title: 'Security',
-                  path: '/apps/user/view/security'
-                },
-                {
-                  title: 'Billing & Plans',
-                  path: '/apps/user/view/billing-plan'
-                },
-                {
-                  title: 'Notifications',
-                  path: '/apps/user/view/notification'
-                },
-                {
-                  title: 'Connection',
-                  path: '/apps/user/view/connection'
-                }
-              ]
-            }
-          ]
-        },
-        {
-          title: 'Roles & Permissions',
-          icon: 'mdi:shield-outline',
-          children: [
-            {
-              title: 'Roles',
-              path: '/apps/roles'
-            },
-            {
-              title: 'Permissions',
-              path: '/apps/permissions'
             }
           ]
         }

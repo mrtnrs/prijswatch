@@ -14,7 +14,7 @@ import DatePickerWrapper from '@/core/styles/libs/react-datepicker'
 import FormLayoutsSeparator from '@/components/forms/form-layouts/FormLayoutsSeparator'
 
 
-import toast from 'react-hot-toast'
+import { Toast } from './core/CustomHotToast';
 
 const FormLayouts = () => {
 
@@ -31,10 +31,10 @@ const handleSubmit = async (event, webshop) => {
     try {
       await updateWebshop(selectedWebshop.id, webshop);
       setSelectedWebshop(null);
-      toast.success('Webshop updated successfully!');
+      Toast.success('Webshop updated successfully!');
       router.push('/dashboard');
     } catch (error) {
-      toast.error("Problem: " + error);
+      Toast.error("Problem: " + error);
     }
   } else {
 
@@ -59,11 +59,11 @@ const handleSubmit = async (event, webshop) => {
 
   try {
     await createWebshop(requestData);
-    toast.success('Webshop created successfully!');
+    Toast.success('Webshop created successfully!');
     router.push('/dashboard');
   } catch (error) {
     // Handle error, e.g., show an error message
-    toast.error("This didn't work.");
+    Toast.error("This didn't work.");
   }
 
   }

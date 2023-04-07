@@ -1,3 +1,4 @@
+'use client'
 // ** React Imports
 import { useState, Fragment } from 'react'
 

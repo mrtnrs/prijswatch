@@ -27,7 +27,8 @@ import Icon from '@/components/Icon'
 import StepperCustomDot from './StepperCustomDot'
 
 // ** Third Party Imports
-import toast from 'react-hot-toast'
+import { Toast } from './core/CustomHotToast';
+
 
 // ** Styled Component
 import StepperWrapper from 'src/@core/styles/mui/stepper'
@@ -76,7 +77,7 @@ const StepperAlternativeLabel = () => {
   const handleNext = () => {
     setActiveStep(prevActiveStep => prevActiveStep + 1)
     if (activeStep === steps.length - 1) {
-      toast.success('Form Submitted')
+      Toast.success('Form Submitted')
     }
   }
 

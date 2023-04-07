@@ -1,52 +1,62 @@
+'use client'
 import { useState } from 'react';
-const API_URL = 'http://localhost:3001/api/search';
 
-function SearchBar(props) {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [searchResults, setSearchResults] = useState([]);
 
-  const handleSearch = (query) => {
-    console.log(query);
-    try { 
-      fetch(`${API_URL}/?q=${query}`)
-      .then(response => {
-        if (!response.ok) {
-          console.log(response);
-          throw new Error('Failed to fetch search results');
+import TextField from '@mui/material/TextField';
+import InputAdornment from '@mui/material/InputAdornment';
+import Icon from '@/components/Icon'
+import IconButton from '@mui/material/IconButton';
 
-        }
-        console.log(response);
-        return response.json();
-      })
-      .then(data => setSearchResults(data))
-      .catch(error => console.error(error));
-    } catch (error) {
-      console.error(`Error in fetch request for ${caller}: ${error.message}`);
-      throw error;
-    }
 
-  };
+function SearchBar({ handleSearch, setSearchResults, searchQuery, setSearchQuery, setIsLoading, ...props}) {
+
 
   return (
-    <div>
-      <input
-        type="text"
+       <div>
+      <TextField
         value={searchQuery}
         onChange={(e) => {
-          setSearchQuery(e.target.value);
-          handleSearch(e.target.value);
+        setSearchQuery(e.target.value);
+        handleSearch(e.target.value);
+        setIsLoading(true);
         }}
-        placeholder="Search for electronics..."
+        placeholder="Zoek een product..."
+        sx={{
+          borderRadius: '10px',
+          background: 'rgba(255, 255, 255, 0.1)',
+          backdropFilter: 'blur(10px)',
+          padding: '0 10px',
+          '& .MuiInputBase-input': {
+            color: 'white',
+          },
+          padding: 0,
+          outline: '1px solid #ffffff1f',
+          border: '1px solid black',
+          minWidth: { md: '20rem' },
+        }}
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <Icon icon='mdi:magnify' fontSize={24} />
+            </InputAdornment>
+          ),
+          endAdornment: searchQuery ? (
+            <InputAdornment position="end">
+              <IconButton
+                edge="end"
+                color="inherit"
+                onClick={() => {
+                  setSearchQuery('');
+                  setSearchResults([]);
+                }}
+              >
+                <Icon icon='mdi:close' fontSize={24} />
+              </IconButton>
+            </InputAdornment>
+          ) : null,
+        }}
         {...props}
       />
-      <div>
-        {searchResults.map((result) => (
-          <div key={result.id}>
-            <img src={result.imageUrl} alt={result.name} />
-            <a href={`/smartphones/${result.slug}`}>{result.name}</a>
-          </div>
-        ))}
-      </div>
     </div>
   );
 }

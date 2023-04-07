@@ -17,7 +17,7 @@ import InputAdornment from '@mui/material/InputAdornment'
 import CircularProgress from '@mui/material/CircularProgress'
 
 // ** Third Party Imports
-import toast from 'react-hot-toast'
+import { Toast } from './core/CustomHotToast';
 import { useForm, Controller } from 'react-hook-form'
 
 // ** Icon Imports
@@ -59,7 +59,7 @@ const FormValidationAsync = () => {
     const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
     await sleep(2000)
     setLoading(false)
-    toast.success('Form Submitted')
+    Toast.success('Form Submitted')
   }
 
   return (

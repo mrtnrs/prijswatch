@@ -1,21 +1,16 @@
 'use client'
 import './styles/globals.css'
-import Navigation from './components/Navigation';
+// import Navigation from './components/Navigation';
 import Footer from './components/Footer';
 // import "./api/auth/[...nextauth]";
 import UserLayout from '@/components/layouts/UserLayout'
 
-import { SettingsConsumer, SettingsProvider } from '@/core/context/settingsContext'
+import { SettingsConsumer, SettingsProvider } from '@/core/context/SettingsContext'
 import ThemeComponent from '@/core/theme/ThemeComponent'
-import { WebshopProvider } from '@/context/WebshopContext'
 
 import '@/core/configs/i18n'
 import { Toaster } from 'react-hot-toast'
 import ReactHotToast from '@/core/react-hot-toast'
-
-
-import { useEffect } from 'react';
-import { categoryStructure } from '@/utils/categoryStructure';
 
 
 
@@ -27,38 +22,26 @@ import { categoryStructure } from '@/utils/categoryStructure';
 
 export default function RootLayout({ Component, pageProps, children, session }) {
 
-  // Log the category tree on app start
-  useEffect(() => {
-    async function fetchData() {
-      await categoryStructure.updateTree();
-      console.log('Category tree:', categoryStructure.tree);
-    }
-
-    fetchData();
-  }, []);
-
-
   return (
-<html lang="en">
+
       <SettingsProvider>
             <SettingsConsumer>
               {({ settings }) => {
                 return (
                   <ThemeComponent settings={settings}>
-                  <WebshopProvider>
-        <body>
-        <UserLayout><div className="container mx-auto px-4">{children}</div></UserLayout>
-        <Footer />
-        </body>
-        </WebshopProvider>
-                            <ReactHotToast>
+                  <html>
+                  <body>
+                    <UserLayout>{children}</UserLayout>
+                    <Footer />
+                    <ReactHotToast>
                       <Toaster position={settings.toastPosition} toastOptions={{ className: 'react-hot-toast' }} />
                     </ReactHotToast>
-                          </ThemeComponent>
+                  </body>
+                  </html>
+                  </ThemeComponent>
                 )
               }}
             </SettingsConsumer>
           </SettingsProvider>
-    </html>
   )
 }

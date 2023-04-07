@@ -1,3 +1,4 @@
+'use client'
 // ** React Imports
 import { createContext, useState, useEffect } from 'react'
 import { fetchCategoryStructure } from '@/api/categoryService';

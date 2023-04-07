@@ -14,7 +14,7 @@ import Typography from '@mui/material/Typography'
 import Icon from '@/components/Icon'
 
 // ** Third Party Components
-import toast from 'react-hot-toast'
+import { Toast } from './core/CustomHotToast';
 import { useDropzone } from 'react-dropzone'
 
 // Styled component for the upload image inside the dropzone area
@@ -53,7 +53,7 @@ const FileUploaderRestrictions = () => {
       setFiles(acceptedFiles.map(file => Object.assign(file)))
     },
     onDropRejected: () => {
-      toast.error('You can only upload 2 files & maximum size of 2 MB.', {
+      Toast.error('You can only upload 2 files & maximum size of 2 MB.', {
         duration: 2000
       })
     }

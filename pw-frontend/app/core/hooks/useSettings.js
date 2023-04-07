@@ -1,5 +1,5 @@
 import { useContext } from 'react'
-import  SettingsContext from '@/core/context/settingsContext'
+import  SettingsContext from '@/core/context/SettingsContext'
 
 export const useCategoryStructure = () => {
   const context = useContext(SettingsContext);

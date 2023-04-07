@@ -1,9 +1,13 @@
 const Typography = theme => {
   return {
     h1: {
-      fontWeight: 500,
-      letterSpacing: '-1.5px',
-      color: theme.palette.text.primary
+      fontWeight: 'bold',
+      letterSpacing: '-1.9px',
+      color: theme.palette.text.primary,
+      fontSize: '3rem',
+      [theme.breakpoints.up('md')]: {
+        fontSize: '3.75rem', // Maximum font size for screens larger than 'lg' breakpoint
+      }
     },
     h2: {
       fontWeight: 500,
@@ -31,11 +35,12 @@ const Typography = theme => {
     },
     subtitle1: {
       letterSpacing: '0.15px',
-      color: theme.palette.text.primary
+      color: theme.palette.text.secondPrimary
     },
     subtitle2: {
       letterSpacing: '0.1px',
-      color: theme.palette.text.secondary
+      fontSize: '0.8rem',
+      color: theme.palette.text.secondPrimary
     },
     body1: {
       letterSpacing: '0.15px',

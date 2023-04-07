@@ -15,7 +15,7 @@ import styles from "./App.module.css";
 import DialogAlert from "./DialogAlert";
 import { deleteCategory, createCategory, fetchCategories } from '@/api/categoryService';
 
-import toast from 'react-hot-toast'
+import { Toast } from '@/core/CustomHotToast';
 
 
 function arrayToTree(items) {
@@ -109,14 +109,14 @@ const handleAddNode = async (newNode) => {
     console.log(newTreeData);
     console.log('newtree!');
     setTreeData(newTreeData);
-    toast.success('Categorie gecreeërd');
+    Toast.success('Categorie gecreeërd');
     setOpenDialog(false);
     fetchAndUpdateTreeData();
     setForceUpdate(forceUpdate + 1);
 
   } catch (error) {
     console.error('Error adding category:', error);
-    toast.error('Error creating category');
+    Toast.error('Error creating category');
     setOpenDialog(false);
   }
 };
@@ -126,9 +126,9 @@ const handleDeleteNode = async (id) => {
   try {
     await deleteCategory(id);
   } catch (error) {
-    toast.error('Error deleted category');
+    Toast.error('Error deleted category');
   }
-  toast.success('Categorie verwijderd');
+  Toast.success('Categorie verwijderd');
    fetchAndUpdateTreeData(); // Fetch and update the tree data
   // Update the tree data in the state
   const newTree = treeData.filter((node) => node.id !== id);

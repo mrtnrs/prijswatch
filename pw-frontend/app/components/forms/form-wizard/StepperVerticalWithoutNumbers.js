@@ -15,7 +15,7 @@ import StepContent from '@mui/material/StepContent'
 
 // ** Third Party Imports
 import clsx from 'clsx'
-import toast from 'react-hot-toast'
+import { Toast } from './core/CustomHotToast';
 
 // ** Custom Components Imports
 import StepperCustomDot from './StepperCustomDot'
@@ -56,7 +56,7 @@ const StepperVerticalWithoutNumbers = () => {
   const handleNext = () => {
     setActiveStep(prevActiveStep => prevActiveStep + 1)
     if (activeStep === steps.length - 1) {
-      toast.success('Completed All Steps!!')
+      Toast.success('Completed All Steps!!')
     }
   }
 

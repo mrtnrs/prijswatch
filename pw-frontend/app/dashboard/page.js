@@ -43,7 +43,7 @@ import EcommerceActivityTimeline from '@/views/dashboards/EcommerceActivityTimel
 import EcommerceImpressionsOrders from '@/views/dashboards/EcommerceImpressionsOrders'
 import EcommerceSalesOverviewWithTabs from '@/views/dashboards/EcommerceSalesOverviewWithTabs'
 
-import toast from 'react-hot-toast'
+import { Toast } from '@/core/CustomHotToast';
 
 
 function Dashboard() {
@@ -55,7 +55,7 @@ function Dashboard() {
   const [scrapers, setScrapers] = useState([]);
 
   const [isEditing, setIsEditing] = useState(false);
-  const { setSelectedWebshop } = useContext(WebshopContext);
+  // const { setSelectedWebshop } = useContext(WebshopContext);
 
   const [displayAddScraperDialog, setDisplayAddScraperDialog] = useState(false);
   const [selectedScraper, setSelectedScraper] = useState(null);
@@ -93,7 +93,7 @@ function Dashboard() {
   const editWebshop = (webshop) => {
   	console.log('editWebshop');
   	setIsEditing(true);
-  	setSelectedWebshop(webshop);
+  	// setSelectedWebshop(webshop);
   	router.push('/dashboard/addwebshop');
   }
 
@@ -101,10 +101,10 @@ function Dashboard() {
     try {
       await deleteWebshop(id);
       setWebshops(webshops.filter((webshop) => webshop.id !== id));
-      setSelectedWebshop(null);
-      toast.success('Webshop verwijderd');
+      // setSelectedWebshop(null);
+      Toast.success('Webshop verwijderd');
     } catch (error) {
-     toast.error("Error deleting webshop:", error);
+     Toast.error("Error deleting webshop:", error);
      console.error('Error deleting webshop:', error);
    }
  };
@@ -114,10 +114,10 @@ function Dashboard() {
     const result = await testScraper(formData.webshopId, formData.scraperSettings);
     console.log("Test result:", result);
     // Handle test result as needed
-    toast.success('Data fetched succesfully');
+    Toast.success('Data fetched succesfully');
   } catch (error) {
     console.error("Error testing scraper:", error);
-    toast.error("Error fechting data:", error);
+    Toast.error("Error fechting data:", error);
     // Handle error as needed
   }
 }
@@ -131,10 +131,10 @@ const handleUpdate = async (formData) => {
     const result = await updateScraper(selectedScraper.id, webshopId, scraperSettings);
     console.log("Update result:", result);
     // Handle update result as needed
-    toast.success('Scraper updated successfully');
+    Toast.success('Scraper updated successfully');
   } catch (error) {
     console.error("Error updating scraper:", error);
-    toast.error("Error updating scraper:", error);
+    Toast.error("Error updating scraper:", error);
     // Handle error as needed
   }
 }
@@ -145,10 +145,10 @@ const handleSave = async (formData) => {
     const result = await saveScraper(formData.webshopId, formData.scraperSettings);
     console.log("Test result:", result);
     // Handle test result as needed
-    toast.success('Scraper stored succesfully');
+    Toast.success('Scraper stored succesfully');
   } catch (error) {
     console.error("Error testing scraper:", error);
-    toast.error("Error fechting data:", error);
+    Toast.error("Error fechting data:", error);
     // Handle error as needed
   }
 }
@@ -157,11 +157,11 @@ const handleDeleteScraper = async (scraperId) => {
   try {
     await deleteScraper(scraperId);
     setScrapers((prevState) => prevState.filter((scraper) => scraper.id !== scraperId));
-    toast.success('Scraper deleted successfully');
+    Toast.success('Scraper deleted successfully');
     // Refresh the scrapers list or remove the deleted scraper from the state
   } catch (error) {
     console.error('Error deleting scraper:', error);
-    toast.error('Error deleting scraper:', error);
+    Toast.error('Error deleting scraper:', error);
   }
 };
 
@@ -183,10 +183,10 @@ const handleStartStop = async (scraperId, isActive) => {
     await updateScraperActiveState(scraperId, !isActive);
     updateScraperActive(scraperId, !isActive); // Add this line
     // Refresh the scrapers list or update the specific scraper's active state in the state
-    toast.success(isActive ? 'Scraper stopped successfully' : 'Scraper started successfully');
+    Toast.success(isActive ? 'Scraper stopped successfully' : 'Scraper started successfully');
   } catch (error) {
     console.error('Error updating scraper active state:', error);
-    toast.error('Error updating scraper active state:', error);
+    Toast.error('Error updating scraper active state:', error);
   }
 };
 
