@@ -3,8 +3,10 @@ const { MetaProduct } = require('./models');
 
 async function fetchMetaProducts() {
   const metaProducts = await MetaProduct.findAll({
-    attributes: ['name', 'description', 'imageUrl', 'slug'],
+    attributes: ['name', 'description', 'imageUrl', 'slug', 'brand', 'category'],
   });
+  const metaProductsJSON = metaProducts.map((mp) => mp.toJSON());
+  console.log(metaProductsJSON);
   return metaProducts.map((mp) => mp.toJSON());
 }
 
@@ -12,7 +14,7 @@ function createMiniSearch(metaProducts) {
   console.log('createMiniSearch');
   const miniSearchInstance = new MiniSearch({
     fields: ['name', 'description'],
-    storeFields: ['name', 'imageUrl', 'slug'],
+    storeFields: ['name', 'imageUrl', 'slug', 'brand', 'category'],
     searchOptions: {
       prefix: true,
       fuzzy: 0.2,

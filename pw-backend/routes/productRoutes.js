@@ -8,7 +8,7 @@ router.get('/:category/meta-product', productController.getAllMetaProductsByCate
 router.get('/:category/:slug/meta-product', productController.getMetaProductBySlugHandler);
 
 router.get('/by-meta-product-id/:metaProductId', productController.getProductsByMetaProductId);
-
+router.get('/:category/grouped-by-brand', productController.getMetaProductsByCategoryAndBrand);
 
 router.post('/scrape-and-store', productController.createOrUpdateProductHandler);
 router.get('/', productController.getAllProductsHandler);

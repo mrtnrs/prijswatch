@@ -14,6 +14,9 @@ import productService from '@/api/productService';
 import BasicBreadcrumbs from '@/components/breadcrumbs/BasicBreadcrumbs'
 import Typography from '@mui/material/Typography'
 
+import updateCategoryTree from '@/core/utils/updateCategoryTree';
+
+
 export default function CategoryOrMetaProducts() {
   const params = useParams();
   const categoryStructure = importedCategoryStructure.tree;
@@ -21,10 +24,7 @@ export default function CategoryOrMetaProducts() {
   const joinedParams = [params.category, params.subcategory, params.subsubcategory].filter(Boolean).join('/');
   const lastParam = joinedParams.split('/').pop();
   const category = findCategoryBySlug(joinedParams, categoryStructure);
-
-
-  console.log('params', params);
-  console.log('catStruc', categoryStructure);
+  const [categoryTree, setCategoryTree] = useState([]);
 
   if (!categoryStructure) {
     return <div>Loading...</div>;
@@ -46,39 +46,56 @@ export default function CategoryOrMetaProducts() {
   }, [category]);
 
 
-
-  console.log(joinedParams);
-  console.log(lastParam);
-
-  console.log('categoryStructure', categoryStructure);
-
-
-  console.log(category);
-
-
+useEffect(() => {
   if (category) {
-    // Render the category landing page
-    console.log('metaProducts', category.metaProducts);
-    return (
-     <div>
-     <BasicBreadcrumbs />
-      <Typography variant="h1">{lastParam}</Typography>
-      <MetaProductsByBrand metaProducts={metaProducts} />
-    </div>
-    );
-  } else {
-    // Render the single meta product page if the last parameter is a MetaProduct
-    const paramsArray = joinedParams.split('/');
-    paramsArray.pop();
-    const newCategorySlug = paramsArray.join('/');
-    return (
-        <Suspense fallback={<MetaProductsFallback />}>
-          <BasicBreadcrumbs />
-          <SingleMetaProduct
-            categorySlug={newCategorySlug}
-            metaProductSlug={lastParam}
-          />
-        </Suspense>
-    );
+    const newCategoryTree = [];
+    let currentCategory = category;
+    while (currentCategory) {
+      newCategoryTree.unshift({
+        name: currentCategory.name,
+        url: currentCategory.slug,
+      });
+      currentCategory = currentCategory.parent;
+    }
+    setCategoryTree(newCategoryTree);
   }
+}, [category]);
+
+
+if (category) {
+  // Render the category landing page
+  console.log('metaProducts', category.metaProducts);
+  return (
+    <div>
+      <BasicBreadcrumbs categoryTree={categoryTree} />
+      <Typography variant="h1">{lastParam}</Typography>
+      <MetaProductsByBrand
+        metaProducts={metaProducts}
+        category={category}
+        categoryStructure={categoryStructure}
+      />
+    </div>
+  );
+} else {
+  // Render the single meta product page if the last parameter is a MetaProduct
+  const paramsArray = joinedParams.split('/');
+  paramsArray.pop();
+  const newCategorySlug = paramsArray.join('/');
+
+  useEffect(() => {
+    // Update the categoryTree for the SingleMetaProduct page
+    updateCategoryTree(newCategorySlug, setCategoryTree);
+  }, [newCategorySlug]);
+
+  return (
+    <Suspense fallback={<MetaProductsFallback />}>
+      <BasicBreadcrumbs categoryTree={categoryTree} productName={lastParam} />
+      <SingleMetaProduct
+        categorySlug={newCategorySlug}
+        metaProductSlug={lastParam}
+      />
+    </Suspense>
+  );
+}
+
 }

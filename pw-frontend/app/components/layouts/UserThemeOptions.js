@@ -19,15 +19,26 @@ const UserThemeOptions = () => {
         contrastText: '#FFF'
       }
     },
-    breakpoints: {
-      values: {
-        xs: 0,
-        sm: 768,
-        md: 992,
-        lg: 1200,
-        xl: 1920
-      }
+    */
+
+breakpoints: {
+    values: {
+      xs: 0,
+      sm: 600,
+      md: 900,
+      lg: 1200,
+      nm: 1440,
+      xl: 1536,
     },
+  },
+  components: {
+    MuiContainer: {
+      defaultProps: {
+        maxWidth: 'nm',
+      },
+    },
+  },
+    /*
     components: {
       MuiButton: {
         defaultProps: {

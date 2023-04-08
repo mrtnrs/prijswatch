@@ -1,4 +1,4 @@
-const { Product, MetaProduct, Price, Webshop } = require('../models');
+const { Product, MetaProduct, Price, Webshop, sequelize, Sequelize } = require('../models');
 const { Op } = require('sequelize');
 
 
@@ -150,6 +150,46 @@ const products = await Product.findAll({
   } catch (error) {
     console.error('Error fetching products by metaProductId:', error);
     res.status(500).json({ message: 'Error fetching products by metaProductId' });
+  }
+};
+
+
+exports.getMetaProductsByCategoryAndBrand = async (req, res) => {
+  try {
+    const { category } = req.params;
+
+    const query = `
+      SELECT
+        "brand",
+        array_agg("id") AS "metaProductIds",
+        array_agg("name") AS "names",
+        array_agg("imageUrl") AS "imageUrls",
+        array_agg("slug") AS "slugs"
+      FROM
+        "MetaProducts"
+      WHERE
+        "category" ILIKE :category
+      GROUP BY
+        "brand"
+      ORDER BY
+        "brand" ASC;
+    `;
+
+    const metaProducts = await sequelize.query(query, {
+      replacements: { category: category },
+      type: Sequelize.QueryTypes.SELECT,
+    });
+
+    res.status(200).json(metaProducts);
+  } catch (error) {
+    console.error('Error fetching MetaProducts grouped by brand:', error);
+  res.status(500).json({
+    message: 'Error fetching MetaProducts grouped by brand',
+    error: {
+      message: error.message,
+      stack: error.stack,
+    },
+  });
   }
 };
 

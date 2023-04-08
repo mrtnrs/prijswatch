@@ -3,6 +3,13 @@ import { useEffect, useState } from 'react';
 import { getMetaProduct } from '../api/metaProducts';
 import ProductGrid from './ProductGrid';
 
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import ApexLineChart from './ApexLineChart';
+
+
 export default function MetaProductPage() {
   const router = useRouter();
   const { category, name } = router.query;

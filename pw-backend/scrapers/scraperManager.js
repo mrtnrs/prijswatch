@@ -63,7 +63,7 @@ class ScraperManager {
       console.log('setupMiniSearch');
   const miniSearchOptions = {
     fields: ['name', 'description'],
-    storeFields: ['name', 'imageUrl', 'slug'],
+    storeFields: ['name', 'imageUrl', 'slug', 'brand', 'category'],
     searchOptions: {
     prefix: true,
     fuzzy: 0.2,
@@ -89,6 +89,28 @@ class ScraperManager {
       console.error('Error in setupMiniSearch:', error);
     }
   }
+
+  async checkForChangesAndUpdateIndex(miniSearchInstance) {
+  const latestMetaProductInIndex = miniSearchInstance.documents.reduce((latest, document) => {
+    const createdAt = new Date(document.createdAt);
+    return createdAt > latest.createdAt ? document : latest;
+  }, { createdAt: new Date(0) });
+
+  const latestMetaProductInDB = await MetaProduct.findOne({
+    order: [['createdAt', 'DESC']],
+  });
+
+  if (latestMetaProductInDB.createdAt > new Date(latestMetaProductInIndex.createdAt)) {
+    // Update the index
+    const metaProducts = await MetaProduct.findAll();
+    miniSearchInstance = new MiniSearch(miniSearchOptions);
+    miniSearchInstance.addAll(metaProducts);
+    fs.writeFileSync(INDEX_FILE, JSON.stringify(miniSearchInstance.toJSON()));
+  }
+
+  return miniSearchInstance;
+}
+
 
   async search(query) {
     console.log('managerSearch: ' + query);
@@ -212,6 +234,14 @@ class ScraperManager {
 
     await this.matchUnlinkedProducts();
     await this.setupMiniSearch();
+      // Check if it's time to update the MiniSearch index
+  const today = new Date();
+  const lastUpdateTime = fs.existsSync(INDEX_FILE) ? fs.statSync(INDEX_FILE).mtime : new Date(0);
+  const daysSinceLastUpdate = (today - lastUpdateTime) / (1000 * 60 * 60 * 24);
+  if (daysSinceLastUpdate >= 7) {
+    const miniSearchInstance = await this.setupMiniSearch();
+    await checkForChangesAndUpdateIndex(miniSearchInstance);
+  }
   }
 }
 

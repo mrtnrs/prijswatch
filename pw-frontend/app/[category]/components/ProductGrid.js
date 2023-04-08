@@ -14,7 +14,7 @@ export default function ProductGrid({ products }) {
             <Box>
               <Typography variant="h6">{product.name}</Typography>
               <Typography>Meta info: {product.brand}</Typography>
-              <Typography>Webshop: {product.webshop.name}</Typography>
+              <Typography>Webshop: {product.webshop?.name || 'NVT'}</Typography>
               <Typography>Current price: {product.latestPrice || 'Not available'}</Typography>
               <Typography>
                 Recent price change: {product.recentPriceChange}

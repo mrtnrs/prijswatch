@@ -3,6 +3,8 @@ import slugify from 'slugify';
 
  export function getCategoryPath(categorySlug, categoryStructure) {
   // Sanitize the categorySlug
+  console.log('getCategoryPath categorySlug:', categorySlug);
+  console.log('getCategoryPath typeof categorySlug:', typeof categorySlug);
     const sanitizedCategorySlug = slugify(categorySlug, { lower: true, strict: true });
 
     for (const category of categoryStructure) {

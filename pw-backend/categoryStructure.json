@@ -24,13 +24,13 @@
   {
     "id": "43bb420f-c02f-4b43-b32c-20ad07dd123c",
     "name": "Camera's",
-    "slug": "camera's",
+    "slug": "cameras",
     "parentId": null,
     "children": [
       {
         "id": "0a0d7013-5bc1-46ac-bce7-204c370d37eb",
         "name": "Natuurcamera's",
-        "slug": "natuurcamera's",
+        "slug": "natuurcameras",
         "parentId": "43bb420f-c02f-4b43-b32c-20ad07dd123c",
         "children": []
       },
@@ -53,13 +53,6 @@
         "id": "24c1732c-ef77-4831-a20d-80a1b293c0c4",
         "name": "dolr",
         "slug": "dolr",
-        "parentId": "545cb7d3-8a7e-45fc-a02b-6fcf7617839d",
-        "children": []
-      },
-      {
-        "id": "c097a62f-91a9-4ad1-ab01-da1f3f98e784",
-        "name": "L'ac Du kaka",
-        "slug": "l'ac-du-kaka",
         "parentId": "545cb7d3-8a7e-45fc-a02b-6fcf7617839d",
         "children": []
       }

@@ -1,29 +1,22 @@
-import * as React from 'react';
-import Typography from '@mui/material/Typography';
+import React from 'react';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
-import Link from '@mui/material/Link';
+import Link from 'next/link';
+import Typography from '@mui/material/Typography';
 
-function handleClick(e) {
-  event.preventDefault();
-  console.info('You clicked a breadcrumb.');
-}
-
-export default function BasicBreadcrumbs() {
+const BasicBreadcrumbs = ({ categoryTree, productName }) => {
   return (
-    <div role="presentation" onClick={handleClick}>
-      <Breadcrumbs aria-label="breadcrumb">
-        <Link underline="hover" color="inherit" href="/">
-          MUI
+    <Breadcrumbs aria-label="breadcrumb">
+      <Link href="/" passHref>
+        <Typography color="inherit">Home</Typography>
+      </Link>
+      {categoryTree.map((category, index) => (
+        <Link key={index} href={`/${category.url}`} passHref>
+          <Typography color="inherit">{category.name}</Typography>
         </Link>
-        <Link
-          underline="hover"
-          color="inherit"
-          href="/material-ui/getting-started/installation/"
-        >
-          Core
-        </Link>
-        <Typography color="text.primary">Breadcrumbs</Typography>
-      </Breadcrumbs>
-    </div>
+      ))}
+      {productName && <Typography color="textPrimary">{productName}</Typography>}
+    </Breadcrumbs>
   );
-}
+};
+
+export default BasicBreadcrumbs;
