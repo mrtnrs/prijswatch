@@ -17,7 +17,7 @@ import Typography from '@mui/material/Typography'
 import Icon from '@/components/Icon'
 
 // ** Third Party Components
-import PerfectScrollbar from 'perfect-scrollbar'
+import PerfectScrollbar from 'react-perfect-scrollbar'
 
 // ** Custom Components Imports
 import CustomChip from '@/components/mui/chip'
@@ -50,11 +50,6 @@ const MenuItem = styled(MuiMenuItem)(({ theme }) => ({
   }
 }))
 
-// ** Styled PerfectScrollbar component
-const PerfectScrollbarComp = styled(PerfectScrollbar)({
-  maxHeight: 344
-})
-
 // ** Styled Avatar component
 const Avatar = styled(CustomAvatar)({
   width: 38,
@@ -85,9 +80,17 @@ const ScrollWrapper = ({ children, hidden }) => {
   if (hidden) {
     return <Box sx={{ maxHeight: 349, overflowY: 'auto', overflowX: 'hidden' }}>{children}</Box>
   } else {
-    return <PerfectScrollbarComp options={{ wheelPropagation: false, suppressScrollX: true }}>{children}</PerfectScrollbarComp>
+    return (
+      <PerfectScrollbar
+        options={{ wheelPropagation: false, suppressScrollX: true }}
+        style={{ maxHeight: 349, overflowY: 'auto', overflowX: 'hidden' }}
+      >
+        {children}
+      </PerfectScrollbar>
+    )
   }
 }
+
 
 const NotificationDropdown = props => {
   // ** Props

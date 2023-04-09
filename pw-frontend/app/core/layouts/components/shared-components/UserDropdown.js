@@ -1,9 +1,10 @@
 'use client'
 // ** React Imports
-import { useState, Fragment } from 'react'
+import { useState, Fragment, useEffect } from 'react'
+import { getCurrentUser, signOutUser } from "./../../../../../firebase/auth.js";
 
 // ** Next Import
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 
 // ** MUI Imports
 import Box from '@mui/material/Box'
@@ -33,9 +34,12 @@ const BadgeContentSpan = styled('span')(({ theme }) => ({
 const UserDropdown = props => {
   // ** Props
   const { settings } = props
+  const [user, setUser] = useState(null);
+  const router = useRouter();
 
   // ** States
   const [anchorEl, setAnchorEl] = useState(null)
+  const [username, setUsername] = useState('');
 
   // ** Hooks
   // const router = useRouter()
@@ -43,6 +47,13 @@ const UserDropdown = props => {
 
   // ** Vars
   const { direction } = settings
+
+  useEffect(() => {
+    getCurrentUser().then((user) => {
+      setUser(user);
+      console.log(user);
+    });
+  }, []);
 
   const handleDropdownOpen = event => {
     setAnchorEl(event.currentTarget)
@@ -88,10 +99,11 @@ const UserDropdown = props => {
         }}
       >
         <Avatar
-          alt='John Doe'
+          alt='vervangmij'
           onClick={handleDropdownOpen}
           sx={{ width: 40, height: 40 }}
-          src='/images/avatars/1.png'
+          alt={user?.displayName || 'User'}
+          src={user?.photoURL || '/images/avatars/default-avatar.png'}
         />
       </Badge>
       <Menu
@@ -115,9 +127,9 @@ const UserDropdown = props => {
               <Avatar alt='John Doe' src='/images/avatars/1.png' sx={{ width: '2.5rem', height: '2.5rem' }} />
             </Badge>
             <Box sx={{ display: 'flex', ml: 3, alignItems: 'flex-start', flexDirection: 'column' }}>
-              <Typography sx={{ fontWeight: 600 }}>John Doe</Typography>
+              <Typography sx={{ fontWeight: 600 }}>{user?.displayName || 'User'}</Typography>
               <Typography variant='body2' sx={{ fontSize: '0.8rem', color: 'text.disabled' }}>
-                Admin
+                {user?.email || 'Admin'}
               </Typography>
             </Box>
           </Box>
@@ -125,44 +137,38 @@ const UserDropdown = props => {
         <Divider sx={{ mt: '0 !important' }} />
         <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose('/pages/user-profile/profile')}>
           <Box sx={styles}>
-            <Icon icon='mdi:account-outline' />
-            Profile
+            <Icon icon='mdi:bell-alert-outline' />
+            Alerts
           </Box>
         </MenuItem>
         <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose('/apps/email')}>
           <Box sx={styles}>
-            <Icon icon='mdi:email-outline' />
-            Inbox
-          </Box>
-        </MenuItem>
-        <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose('/apps/chat')}>
-          <Box sx={styles}>
-            <Icon icon='mdi:message-outline' />
-            Chat
+            <Icon icon='mdi:star-outline' />
+            Favorieten
           </Box>
         </MenuItem>
         <Divider />
         <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose('/pages/account-settings/account')}>
           <Box sx={styles}>
             <Icon icon='mdi:cog-outline' />
-            Settings
+            Instellingen
           </Box>
         </MenuItem>
         <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose('/pages/pricing')}>
           <Box sx={styles}>
             <Icon icon='mdi:currency-usd' />
-            Pricing
+            Premium
           </Box>
         </MenuItem>
         <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose('/pages/faq')}>
           <Box sx={styles}>
             <Icon icon='mdi:help-circle-outline' />
-            FAQ
+            FAQ & Contact
           </Box>
         </MenuItem>
         <Divider />
         <MenuItem
-          onClick={handleLogout}
+          onClick={async () => {await signOutUser()}}
           sx={{ py: 2, '& svg': { mr: 2, fontSize: '1.375rem', color: 'text.primary' } }}
         >
           <Icon icon='mdi:logout-variant' />

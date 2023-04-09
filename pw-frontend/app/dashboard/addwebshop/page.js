@@ -14,7 +14,7 @@ import DatePickerWrapper from '@/core/styles/libs/react-datepicker'
 import FormLayoutsSeparator from '@/components/forms/form-layouts/FormLayoutsSeparator'
 
 
-import { Toast } from './core/CustomHotToast';
+import { Toast } from '@/core/CustomHotToast';
 
 const FormLayouts = () => {
 

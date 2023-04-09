@@ -6,6 +6,7 @@ import Footer from './components/Footer';
 import UserLayout from '@/components/layouts/UserLayout'
 
 import { SettingsConsumer, SettingsProvider } from '@/core/context/SettingsContext'
+import { AuthProvider } from '@/context/AuthContext'
 import ThemeComponent from '@/core/theme/ThemeComponent'
 
 import '@/core/configs/i18n'
@@ -23,7 +24,7 @@ import ReactHotToast from '@/core/react-hot-toast'
 export default function RootLayout({ Component, pageProps, children, session }) {
 
   return (
-
+    <AuthProvider>
       <SettingsProvider>
             <SettingsConsumer>
               {({ settings }) => {
@@ -41,7 +42,8 @@ export default function RootLayout({ Component, pageProps, children, session }) 
                   </ThemeComponent>
                 )
               }}
-            </SettingsConsumer>
-          </SettingsProvider>
+          </SettingsConsumer>
+      </SettingsProvider>
+    </AuthProvider>
   )
 }
