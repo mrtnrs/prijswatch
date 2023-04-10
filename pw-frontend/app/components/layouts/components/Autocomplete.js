@@ -4,7 +4,7 @@ import { useEffect, useCallback, useRef, useState } from 'react'
 
 // ** Next Imports
 import Link from 'next/link'
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 
 // ** MUI Imports
 import Box from '@mui/material/Box'
@@ -344,7 +344,7 @@ const AutocompleteComponent = ({ hidden, settings }) => {
 
   // ** Hooks & Vars
   const theme = useTheme()
-  // const router = useRouter()
+  const router = useRouter()
   const { layout } = settings
   const wrapper = useRef(null)
   const fullScreenDialog = useMediaQuery(theme.breakpoints.down('sm'))

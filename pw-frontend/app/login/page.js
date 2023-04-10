@@ -1,6 +1,6 @@
 'use client'
 // ** React Imports
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/context/AuthContext';
 
@@ -44,6 +44,16 @@ const FormControlLabel = styled(MuiFormControlLabel)(({ theme }) => ({
 }))
 
 const LoginV1 = () => {
+
+  const { signInWithEmailAndPassword, currentUser } = useAuth() // Get signInWithEmailAndPassword from AuthContext
+  const router = useRouter()
+
+// Inside LoginV1 component
+useEffect(() => {
+  if (currentUser) {
+    router.push('/'); // Redirect to the front page or any other page of your choice
+  }
+}, [currentUser, router]);
   // ** State
   const [values, setValues] = useState({
     password: '',
@@ -56,8 +66,11 @@ const LoginV1 = () => {
   const [rememberMe, setRememberMe] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
 
-  const { signInWithEmailAndPassword } = useAuth() // Get signInWithEmailAndPassword from AuthContext
-  const router = useRouter()
+
+
+
+
+
 
   const handleSubmit = async e => {
     e.preventDefault()
@@ -72,12 +85,20 @@ const LoginV1 = () => {
       setPasswordError(true)
     }
     if (email && values.password) {
+      console.log('check 1');
       try {
+        console.log('check 2');
         await signInWithEmailAndPassword(email, values.password, rememberMe)
         router.back() // Navigate back to the previous page
       } catch (error) {
-        setErrorMessage('Inloggen niet gelukt. Controleer je wachtwoord en emailadres.')
-      }
+    if (error.message.startsWith('Error during sign-in')) {
+      setErrorMessage(error.message);
+    } else if (error.message === 'Email not verified. Please verify your email before logging in.') {
+      setErrorMessage('Email not verified. Please verify your email before logging in.');
+    } else {
+      setErrorMessage('Inloggen niet gelukt. Controleer je wachtwoord en emailadres.');
+    }
+  }
     }
   }
 
@@ -197,6 +218,7 @@ const LoginV1 = () => {
               <InputLabel htmlFor='auth-login-password'>Password</InputLabel>
               <OutlinedInput
                 label='Password'
+                autoComplete="on"
                 value={values.password}
                 id='auth-login-password'
                 onChange={handleChange('password')}

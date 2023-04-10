@@ -1,5 +1,5 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
-import { onAuthStateChanged } from './../../firebase/auth'; // Update the import path according to your project structure
+import { onAuthStateChanged, signInUserWithEmailAndPassword, signOutUser } from './../../firebase/auth'; // Update the import path according to your project structure
 
 const AuthContext = createContext();
 
@@ -8,7 +8,7 @@ export const useAuth = () => {
 };
 
 export const AuthProvider = ({ children }) => {
-  const [currentUser, setCurrentUser] = useState(null);
+  const [currentUser, setCurrentUser] = useState(undefined);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -20,13 +20,35 @@ export const AuthProvider = ({ children }) => {
     return unsubscribe;
   }, []);
 
+  const signInWithEmailAndPassword = async (email, password, rememberMe) => {
+    try {
+      const user = await signInUserWithEmailAndPassword(email, password, rememberMe);
+      if (!user.emailVerified) {
+        // Handle the case when the email is not verified
+        throw new Error('Email not verified. Please verify your email before logging in.');
+      }
+    } catch (error) {
+      throw error;
+    }
+  };
+
+    const signOut = async () => {
+    try {
+      await signOutUser();
+    } catch (error) {
+      console.error('Error during sign out:', error);
+    }
+  };
+
   const value = {
     currentUser,
+    signInWithEmailAndPassword,
+    signOut
   };
 
   return (
-    <AuthContext.Provider value={value}>
-      {!loading && children}
+    <AuthContext.Provider value={{ currentUser, signInWithEmailAndPassword, signOut, loading }}>
+      {children}
     </AuthContext.Provider>
   );
 };

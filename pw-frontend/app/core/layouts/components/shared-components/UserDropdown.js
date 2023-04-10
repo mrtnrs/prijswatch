@@ -1,7 +1,7 @@
 'use client'
 // ** React Imports
 import { useState, Fragment, useEffect } from 'react'
-import { getCurrentUser, signOutUser } from "./../../../../../firebase/auth.js";
+import { useAuth } from '@/context/AuthContext'
 
 // ** Next Import
 import { useRouter } from 'next/navigation'
@@ -18,9 +18,6 @@ import Typography from '@mui/material/Typography'
 
 // ** Icon Imports
 import Icon from '@/components/Icon'
-
-// ** Context
-// import { useAuth } from 'src/hooks/useAuth'
 
 // ** Styled Components
 const BadgeContentSpan = styled('span')(({ theme }) => ({
@@ -43,17 +40,11 @@ const UserDropdown = props => {
 
   // ** Hooks
   // const router = useRouter()
- // const { logout } = useAuth()
+  const { currentUser, signOut } = useAuth();
+  console.log('currentUser: ', currentUser);
 
   // ** Vars
   const { direction } = settings
-
-  useEffect(() => {
-    getCurrentUser().then((user) => {
-      setUser(user);
-      console.log(user);
-    });
-  }, []);
 
   const handleDropdownOpen = event => {
     setAnchorEl(event.currentTarget)
@@ -127,7 +118,7 @@ const UserDropdown = props => {
               <Avatar alt='John Doe' src='/images/avatars/1.png' sx={{ width: '2.5rem', height: '2.5rem' }} />
             </Badge>
             <Box sx={{ display: 'flex', ml: 3, alignItems: 'flex-start', flexDirection: 'column' }}>
-              <Typography sx={{ fontWeight: 600 }}>{user?.displayName || 'User'}</Typography>
+              <Typography sx={{ fontWeight: 600 }}>{currentUser?.email || 'User'}</Typography>
               <Typography variant='body2' sx={{ fontSize: '0.8rem', color: 'text.disabled' }}>
                 {user?.email || 'Admin'}
               </Typography>
@@ -167,13 +158,17 @@ const UserDropdown = props => {
           </Box>
         </MenuItem>
         <Divider />
+        {currentUser && (
         <MenuItem
-          onClick={async () => {await signOutUser()}}
+          onClick={async () => {
+            await signOut();
+          }}
           sx={{ py: 2, '& svg': { mr: 2, fontSize: '1.375rem', color: 'text.primary' } }}
         >
           <Icon icon='mdi:logout-variant' />
           Logout
         </MenuItem>
+      )}
       </Menu>
     </Fragment>
   )

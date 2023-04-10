@@ -1,6 +1,7 @@
 'use client'
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { useAuth } from '@/context/AuthContext';
 
 import Button from '@mui/material/Button'
 import { styled } from '@mui/material/styles'
@@ -47,10 +48,20 @@ import { Toast } from '@/core/CustomHotToast';
 
 
 function Dashboard() {
+  const { currentUser, loading } = useAuth();
+
+    if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!currentUser || currentUser.email !== process.env.NEXT_PUBLIC_ADMIN_EMAIL) {
+    return <div>Access denied</div>;
+  }
 
 
  // const { data: session, status } = useSession();
   const router = useRouter();
+
   const [webshops, setWebshops] = useState([]);
   const [scrapers, setScrapers] = useState([]);
 
@@ -60,11 +71,6 @@ function Dashboard() {
   const [displayAddScraperDialog, setDisplayAddScraperDialog] = useState(false);
   const [selectedScraper, setSelectedScraper] = useState(null);
 
-  //useEffect(() => {
-  //   if (!session || !session.user || session.user.email !== 'raesmaarten@gmail.com') {
-  //    // router.replace('/login');
-  //   }
-  // }, [session, router]);
 
   useEffect(() => {
     const fetchWebshops = async () => {
@@ -318,3 +324,4 @@ data={{
 }
 
 export default Dashboard;
+

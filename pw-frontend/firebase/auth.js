@@ -5,7 +5,11 @@ import {
   signInWithEmailAndPassword,
   signOut,
   onAuthStateChanged as firebaseOnAuthStateChanged,
+  browserLocalPersistence,
+  browserSessionPersistence,
 } from "firebase/auth";
+
+import { Toast } from '@/core/CustomHotToast';
 
 export const auth = getAuth(app);
 
@@ -41,20 +45,44 @@ export const signUpUserWithEmailAndPassword = async (email, password) => {
   }
 };
 
-export const signInUserWithEmailAndPassword = async (email, password) => {
+export const signInUserWithEmailAndPassword = async (email, password, rememberMe) => {
   try {
-    console.log("hi");
+    const persistence = rememberMe ? browserLocalPersistence : browserSessionPersistence;
+    await auth.setPersistence(persistence);
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
-    console.log(userCredential.user);
+    Toast.success('Je bent ingelogd');
+    return userCredential.user;
+  } catch (error) {
+    console.log('Error in signInUserWithEmailAndPassword:', error);
+    Toast.error('Inloggen mislukt');
+    throw new Error('Error during sign-in: ' + error.message);
+  }
+};
+
+export const setPersistence = async (persistence) => {
+  try {
+    await firebaseSetPersistence(auth, persistence);
+  } catch (error) {
+    throw error;
+  }
+};
+
+
+export const signOutUser = async () => {
+  try {
+    await signOut(auth);
+    Toast.success('Je bent uitgelogd');
   } catch (error) {
     console.log(error);
   }
 };
 
-export const signOutUser = async () => {
-  try {
-    await signOut(auth);
-  } catch (error) {
-    console.log(error);
-  }
-};
+
+
+
+
+
+
+      
+   
+

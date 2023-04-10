@@ -3,7 +3,7 @@ import { Fragment } from 'react'
 
 // ** Next Imports
 import Link from 'next/link'
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 
 // ** MUI Imports
 import Box from '@mui/material/Box'
@@ -53,17 +53,17 @@ const HorizontalNavLink = props => {
   const { item, settings, hasParent } = props
 
   // ** Hook & Vars
-  // const router = useRouter()
+  const router = useRouter()
   const { navSubItemIcon, menuTextTruncate } = themeConfig
   const icon = item.icon ? item.icon : navSubItemIcon
   const Wrapper = !hasParent ? List : Fragment
 
   const isNavLinkActive = () => {
-    // if (router.pathname === item.path || handleURLQueries(router, item.path)) {
-    //   return true
-    // } else {
-    //   return false
-    // }
+    if (router.pathname === item.path || handleURLQueries(router, item.path)) {
+      return true
+    } else {
+      return false
+    }
     return false
   }
 
