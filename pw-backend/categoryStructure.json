@@ -11,13 +11,6 @@
         "slug": "speakers",
         "parentId": "236d2f38-caa7-4e16-927c-4efdebfeae89",
         "children": []
-      },
-      {
-        "id": "94ecbed2-9224-4982-9a28-25ef1a49ea2b",
-        "name": "Tester",
-        "slug": "tester",
-        "parentId": "236d2f38-caa7-4e16-927c-4efdebfeae89",
-        "children": []
       }
     ]
   },
@@ -48,12 +41,19 @@
     "name": "Smartphones",
     "slug": "smartphones",
     "parentId": null,
+    "children": []
+  },
+  {
+    "id": "e5f68f41-5f16-4836-adde-462765e26389",
+    "name": "Keuken",
+    "slug": "keuken",
+    "parentId": null,
     "children": [
       {
-        "id": "24c1732c-ef77-4831-a20d-80a1b293c0c4",
-        "name": "dolr",
-        "slug": "dolr",
-        "parentId": "545cb7d3-8a7e-45fc-a02b-6fcf7617839d",
+        "id": "fbcd9038-7748-4eb9-80d0-271475516ce2",
+        "name": "Broodbakmachines",
+        "slug": "broodbakmachines",
+        "parentId": "e5f68f41-5f16-4836-adde-462765e26389",
         "children": []
       }
     ]

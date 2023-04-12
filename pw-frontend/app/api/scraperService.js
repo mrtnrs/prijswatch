@@ -1,12 +1,25 @@
 const API_URL = 'http://localhost:3001/api/scrapers';
+import { getIdToken } from './authService';
+
+const createHeaders = async () => {
+  const idToken = await getIdToken();
+
+  if (!idToken) {
+    throw new Error('User is not authenticated');
+  }
+
+  return {
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${idToken}`,
+  };
+};
 
 export const testScraper = async (webshopId, scraperSettings) => {
   try {
+    const headers = await createHeaders();
     const response = await fetch(`${API_URL}/test`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers,
       body: JSON.stringify({ webshopId, scraperSettings }),
     });
 
@@ -21,11 +34,10 @@ export const testScraper = async (webshopId, scraperSettings) => {
 
 export const saveScraper = async (webshopId, scraperSettings) => {
   try {
+    const headers = await createHeaders();
     const response = await fetch(`${API_URL}/save`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers,
       body: JSON.stringify({ webshopId, scraperSettings }),
     });
 
@@ -41,11 +53,10 @@ export const saveScraper = async (webshopId, scraperSettings) => {
 
 export const updateScraper = async (scraperId, webshopId, scraperSettings) => {
   try {
+    const headers = await createHeaders();
     const response = await fetch(`${API_URL}/update/${scraperId}`, {
       method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers,
       body: JSON.stringify({ webshopId, scraperSettings }),
     });
 
@@ -61,7 +72,10 @@ export const updateScraper = async (scraperId, webshopId, scraperSettings) => {
 
 export const getAllScrapers = async () => {
   try {
-    const response = await fetch(`${API_URL}/`);
+    const headers = await createHeaders();
+    const response = await fetch(`${API_URL}/`, {
+      headers,
+    });
 
     if (!response.ok) {
       throw new Error(`Error fetching scrapers: ${response.statusText}`);
@@ -76,8 +90,10 @@ export const getAllScrapers = async () => {
 
 export const deleteScraper = async (scraperId) => {
   try {
+    const headers = await createHeaders();
     const response = await fetch(`${API_URL}/delete/${scraperId}`, {
       method: 'DELETE',
+      headers,
     });
 
     if (!response.ok) {
@@ -90,11 +106,10 @@ export const deleteScraper = async (scraperId) => {
 
 export const updateScraperActiveState = async (scraperId, active) => {
   try {
+    const headers = await createHeaders();
     const response = await fetch(`${API_URL}/update-active-state/${scraperId}`, {
       method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers,
       body: JSON.stringify({ active }),
     });
 
@@ -110,8 +125,10 @@ export const updateScraperActiveState = async (scraperId, active) => {
 
 export const runOnce = async (scraperId) => {
   try {
+    const headers = await createHeaders();
     const response = await fetch(`${API_URL}/run-once/${scraperId}`, {
       method: 'POST',
+      headers,
     });
 
     if (!response.ok) {

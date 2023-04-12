@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const { Category, Product } = require('../models');
+const { Category, Product, MetaProduct } = require('../models');
 const slugify = require('slugify');
 
 // The recursive function for building the category tree
@@ -79,17 +79,38 @@ async function updateCategoryStructure() {
   }
 }
 
+// Helper function to delete categories recursively
+const deleteCategoryRecursively = async (categoryId) => {
+  // Fetch the category's subcategories
+  const subcategories = await Category.findAll({ where: { parentId: categoryId } });
+
+  // Delete each subcategory recursively
+  for (const subcategory of subcategories) {
+    await deleteCategoryRecursively(subcategory.id);
+  }
+
+  // Delete all related MetaProducts and their associated Products and Prices
+  const metaProducts = await MetaProduct.findAll({ where: { categoryId } });
+  for (const metaProduct of metaProducts) {
+    const products = await Product.findAll({ where: { metaProductId: metaProduct.id } });
+    for (const product of products) {
+      await Price.destroy({ where: { productId: product.id } }); // Delete related Prices
+      await product.destroy(); // Delete the Product
+    }
+    await metaProduct.destroy(); // Delete the MetaProduct
+  }
+
+  // Finally, delete the category
+  await Category.destroy({ where: { id: categoryId } });
+};
+
 
 exports.deleteCategory = async (req, res) => {
   try {
     const categoryId = req.params.categoryId;
 
-    // Delete all related products
-    // You'll need to implement this function in your product model
-    await Product.deleteAllByCategoryId(categoryId);
-
-    // Delete the category
-    await Category.destroy({ where: { id: categoryId } });
+    // Delete it all
+    await deleteCategoryRecursively(categoryId);
 
 
     await updateCategoryStructure();

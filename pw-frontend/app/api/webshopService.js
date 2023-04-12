@@ -1,11 +1,19 @@
 const API_URL = 'http://localhost:3001/api/webshops';
+import { getIdToken } from './authService';
 
 export const createWebshop = async (webshopData) => {
+  const idToken = await getIdToken();
+
+  if (!idToken) {
+    throw new Error('User is not authenticated');
+  }
+
   try {
     const response = await fetch(`${API_URL}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${idToken}`,
       },
       body: JSON.stringify(webshopData),
     });
@@ -37,11 +45,18 @@ export const getAllWebshops = async () => {
 };
 
 export async function updateWebshop(webshopId, webshopData) {
+  const idToken = await getIdToken();
+
+  if (!idToken) {
+    throw new Error('User is not authenticated');
+  }
+
   try {
     const response = await fetch(`${API_URL}/${webshopId}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${idToken}`,
       },
       body: JSON.stringify(webshopData),
     });
@@ -58,9 +73,19 @@ export async function updateWebshop(webshopId, webshopData) {
 }
 
 export const deleteWebshop = async (id) => {
+  const idToken = await getIdToken();
+
+  if (!idToken) {
+    throw new Error('User is not authenticated');
+  }
+
   try {
     const response = await fetch(`${API_URL}/${id}`, {
       method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${idToken}`,
+      },
     });
 
     if (!response.ok) {

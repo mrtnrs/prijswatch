@@ -12,7 +12,7 @@ import { useTheme } from '@mui/material/styles';
 
 import Link from 'next/link'
 
-import { getProductUrl, getCategoryPath } from '@/core/utils/get-product-url';
+import { getProductUrl, getCategoryPath, calculateCatPathForHome } from '@/core/utils/get-product-url';
 
 const SearchResults = ({ searchResults, queryLength, isLoading }) => {
 
@@ -38,7 +38,7 @@ const SearchResults = ({ searchResults, queryLength, isLoading }) => {
 ) : searchResults.length > 0 ? (
   searchResults.map((result, index) => {
     const productUrl = getProductUrl(result, categoryStructure.tree);
-    const categoryUrl = getCategoryPath(result.category, categoryStructure.tree);
+    const categoryUrl = productUrl.split('/').slice(0, -1).join('/');
 
     return (
       <Grid item xs={12} sm={6} md={6} key={result.id}>

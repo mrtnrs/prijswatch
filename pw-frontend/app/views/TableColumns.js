@@ -50,7 +50,7 @@ const statusObj = {
 
 // ** Full Name Getter
 const getFullName = params =>
-  toast(
+  Toast(
     <Box sx={{ display: 'flex', alignItems: 'center' }}>
       {renderClient(params)}
       <Box sx={{ display: 'flex', flexDirection: 'column' }}>
@@ -103,10 +103,10 @@ const handleRunOnce = async (scraperId) => {
   try {
     const result = await runOnce(scraperId);
     console.log(result);
-    toast.success('Scraper ran: ' + result);
+    Toast.success('Scraper ran: ' + result);
   } catch (error) {
     console.error('Error running scraper:', error);
-    toast.error('Error running scraper:', error);
+    Toast.error('Error running scraper:', error);
   }
 };
 

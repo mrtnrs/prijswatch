@@ -76,14 +76,17 @@ function Dashboard() {
     const fetchWebshops = async () => {
       try {
       	console.log('trying');
+        if(currentUser) {
         const fetchedWebshops = await getAllWebshops();
         const fetchedScrapers = await getAllScrapers();
+
         console.log(fetchedWebshops);
         console.log('scrapers:' + fetchedScrapers);
         console.log('scrapers:' + fetchedScrapers.scrapers);
         console.log(fetchedScrapers.scrapers);
         setWebshops(fetchedWebshops);
         setScrapers(fetchedScrapers.scrapers);
+        }
       } catch (error) {
         console.error('Error fetching webshops or scrapers:', error);
       }

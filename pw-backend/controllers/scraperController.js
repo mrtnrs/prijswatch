@@ -1,7 +1,7 @@
 const apiScraper = require('../scrapers/apiScraper');
 const stringSimilarity = require('string-similarity');
 const productController = require('./productController');
-const { Price, Scraper, ScraperError, MetaProduct } = require('../models');
+const { Price, Scraper, ScraperError, MetaProduct, Category } = require('../models');
 const slugify = require('slugify');
 
 const ApiScraper = require('../scrapers/apiScraper');
@@ -10,6 +10,8 @@ const PuppeteerScraper = require('../scrapers/puppeteerScraper');
 const ScraperManager = require("../scrapers/scraperManager");
 const scraperManager = new ScraperManager();
 const { findMatchingMetaProduct, MIN_SIMILARITY_SCORE } = require('./productMatcher');
+
+const resizeAndUpload = require("../util/resizeAndUpload");
 
 
 // fetch all scrapers
@@ -62,10 +64,14 @@ exports.runScraper = async (req, res, saveData = true) => {
     if (saveData) {
       console.log('saveData');
       console.log(saveData);
+      const category = await Category.findByPk(scraperSettings.settings.category);
       const savedProducts = await Promise.all(
         scrapedData.map(async (data) => {
           const { price, ...productData } = data;
           productData.webshopId = scraperSettings.webshopId;
+          productData.categoryId = scraperSettings.settings.category;
+          productData.category = category.name;
+
           
           if (!productData.url) {
             console.error("Missing URL:", productData);
@@ -73,6 +79,9 @@ exports.runScraper = async (req, res, saveData = true) => {
           }
 
           const product = await productController.createOrUpdateProduct(productData); // Save the product
+          console.log("Product data:", productData);
+          console.log("Created or updated product:", product);
+
 
           // Fetch the last price associated with the product
           const lastPrice = await Price.findOne({
@@ -188,6 +197,8 @@ exports.updateScraper = async (req, res) => {
         productNameSelector: scraperSettings.productNameSelector,
         productPriceSelector: scraperSettings.productPriceSelector,
         nextPageSelector: scraperSettings.nextPageSelector,
+        containerSelector: scraperSettings.containerSelector,
+        productImageSelector: scraperSettings.productImageSelector,
       }),
       },
       interval: scrapeInterval,
@@ -273,6 +284,8 @@ exports.saveScraper = async (req, res) => {
         productNameSelector: scraperSettings.productNameSelector,
         productPriceSelector: scraperSettings.productPriceSelector,
         nextPageSelector: scraperSettings.nextPageSelector,
+        containerSelector: scraperSettings.containerSelector,
+        productImageSelector: scraperSettings.productImageSelector,
       }),
       },
       interval: scrapeInterval,

@@ -92,7 +92,7 @@ useEffect(() => {
         router.back() // Navigate back to the previous page
       } catch (error) {
     if (error.message.startsWith('Error during sign-in')) {
-      setErrorMessage(error.message);
+      setErrorMessage("Probleem bij inloggen. Controleer je email en wachtwoord.");
     } else if (error.message === 'Email not verified. Please verify your email before logging in.') {
       setErrorMessage('Email not verified. Please verify your email before logging in.');
     } else {

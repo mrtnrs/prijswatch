@@ -8,6 +8,7 @@ The setup is:
 * NodeJS backend
 * NextJS 13 w/ app dir front
 * Scraping with either API or Puppeteer
+* Product matching w/ OpenAI API
 * Product images are stored on Cloudflare R2
 * Data is stored on Cockroachdb
 * MUI for frontend styling
@@ -33,4 +34,4 @@ The setup is:
 
 ## Contact
 
-Your Name - [@pandabutcher_](https://twitter.com/pandabutcher_)
+[@pandabutcher_](https://twitter.com/pandabutcher_)

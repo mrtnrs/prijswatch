@@ -1,5 +1,5 @@
 const { Op } = require("sequelize");
-const { Product, Scraper, MetaProduct } = require('../models');
+const { Product, Scraper, MetaProduct, Category } = require('../models');
 const scraperController = require("../controllers/scraperController");
 const { sanitizeTitleAndExtractMetadata } = require("../controllers/productMatcher");
 const stringSimilarity = require('string-similarity');
@@ -41,9 +41,9 @@ class ScraperManager {
   }
 
   async findLocalMatchingMetaProduct(scrapedProduct, metaProducts) {
-  if (metaProducts.length === 0) {
-    return null;
-  }
+    if (metaProducts.length === 0) {
+      return null;
+    }
 
     const threshold = 0.8;
     const target = scrapedProduct;
@@ -60,19 +60,19 @@ class ScraperManager {
   
 
   async setupMiniSearch() {
-      console.log('setupMiniSearch');
-  const miniSearchOptions = {
-    fields: ['name', 'description'],
-    storeFields: ['name', 'imageUrl', 'slug', 'brand', 'category'],
-    searchOptions: {
-    prefix: true,
-    fuzzy: 0.2,
-  },
-    idField: 'slug',
-  };
+    console.log('setupMiniSearch');
+    const miniSearchOptions = {
+      fields: ['name', 'description'],
+      storeFields: ['name', 'imageUrl', 'slug', 'brand', 'category'],
+      searchOptions: {
+        prefix: true,
+        fuzzy: 0.2,
+      },
+      idField: 'slug',
+    };
 
     try {
-    let miniSearchInstance;
+      let miniSearchInstance;
 
       if (fs.existsSync(INDEX_FILE)) {
         const indexData = fs.readFileSync(INDEX_FILE, 'utf8');
@@ -91,25 +91,25 @@ class ScraperManager {
   }
 
   async checkForChangesAndUpdateIndex(miniSearchInstance) {
-  const latestMetaProductInIndex = miniSearchInstance.documents.reduce((latest, document) => {
-    const createdAt = new Date(document.createdAt);
-    return createdAt > latest.createdAt ? document : latest;
-  }, { createdAt: new Date(0) });
+    const latestMetaProductInIndex = miniSearchInstance.documents.reduce((latest, document) => {
+      const createdAt = new Date(document.createdAt);
+      return createdAt > latest.createdAt ? document : latest;
+    }, { createdAt: new Date(0) });
 
-  const latestMetaProductInDB = await MetaProduct.findOne({
-    order: [['createdAt', 'DESC']],
-  });
+    const latestMetaProductInDB = await MetaProduct.findOne({
+      order: [['createdAt', 'DESC']],
+    });
 
-  if (latestMetaProductInDB.createdAt > new Date(latestMetaProductInIndex.createdAt)) {
+    if (latestMetaProductInDB.createdAt > new Date(latestMetaProductInIndex.createdAt)) {
     // Update the index
-    const metaProducts = await MetaProduct.findAll();
-    miniSearchInstance = new MiniSearch(miniSearchOptions);
-    miniSearchInstance.addAll(metaProducts);
-    fs.writeFileSync(INDEX_FILE, JSON.stringify(miniSearchInstance.toJSON()));
-  }
+      const metaProducts = await MetaProduct.findAll();
+      miniSearchInstance = new MiniSearch(miniSearchOptions);
+      miniSearchInstance.addAll(metaProducts);
+      fs.writeFileSync(INDEX_FILE, JSON.stringify(miniSearchInstance.toJSON()));
+    }
 
-  return miniSearchInstance;
-}
+    return miniSearchInstance;
+  }
 
 
   async search(query) {
@@ -151,62 +151,86 @@ class ScraperManager {
 
           const categoryMetaProducts = await MetaProduct.findAll({
            where: { category: scrapedProduct.category },
-          });
+         });
 
           console.log('categoryMetaProducts:', categoryMetaProducts);
 
         // local check
-        const localMatch = await this.findLocalMatchingMetaProduct(
-          sanitizedTitle,
-          categoryMetaProducts
-        );
+          const localMatch = await this.findLocalMatchingMetaProduct(
+            sanitizedTitle,
+            categoryMetaProducts
+            );
 
-        console.log('localMatch:', localMatch);
+          console.log('localMatch:', localMatch);
 
-        if (localMatch) {
-          console.log('Match found; updating metaProductId');
-          console.log(localMatch);
-          await Product.update(
+          if (localMatch) {
+            console.log('Match found; updating metaProductId');
+            console.log(localMatch);
+            await Product.update(
             {
               metaProductId: localMatch,
               metadata: JSON.stringify(metadata),
             },
             { where: { id: scrapedProduct.id } }
-          );
-        } else {
-          console.log('No Match found; creating new MetaProduct');
-          const slug = generateSlug(sanitizedTitle);
-          const brand = scrapedProduct.brand || (metadata && metadata.brand) || null;
+            );
 
-          const newMetaProduct = await MetaProduct.create({
-            name: sanitizedTitle,
-            brand: brand,
-            category: scrapedProduct.category,
-            slug,
-          });
+            const existingMetaProduct = await MetaProduct.findByPk(localMatch);
+            if (!existingMetaProduct.imageUrl && scrapedProduct.imageUrl) {
+              await MetaProduct.update(
+                { imageUrl: scrapedProduct.imageUrl },
+                { where: { id: existingMetaProduct.id } }
+                );
+            }
 
-          console.log('newMetaProduct:', newMetaProduct);
+          } else {
+            console.log('No Match found; creating new MetaProduct');
+            const slug = generateSlug(sanitizedTitle);
+            const brand = scrapedProduct.brand || (metadata && metadata.brand) || null;
 
-          await Product.update(
+            const newMetaProduct = await MetaProduct.create({
+              name: sanitizedTitle,
+              brand: brand,
+              category: scrapedProduct.category,
+              slug,
+              imageUrl: scrapedProduct.imageUrl,
+            });
+
+            console.log('newMetaProduct:', newMetaProduct);
+
+            await Product.update(
             {
               metaProductId: newMetaProduct.id,
               metadata: JSON.stringify(metadata),
             },
             { where: { id: scrapedProduct.id } }
-          );
+            );
+          }
+        } catch (error) {
+          console.error(`Error processing product ID: ${scrapedProduct.id}: ${error.message}`);
+          await Product.update(
+            { needsReview: true },
+            { where: { id: scrapedProduct.id } }
+            );
         }
-      } catch (error) {
-        console.error(`Error processing product ID: ${scrapedProduct.id}: ${error.message}`);
-        await Product.update(
-          { needsReview: true },
-          { where: { id: scrapedProduct.id } }
-        );
       }
-    }
 
       offset += BATCH_SIZE;
     } while (unlinkedProductsBatch.length > 0);
   }
+
+
+
+  intervalToMinutes(interval) {
+  if (interval.endsWith('h')) {
+    const hours = parseInt(interval.slice(0, -1), 10);
+    return hours * 60;
+  } else if (interval.endsWith('m')) {
+    return parseInt(interval.slice(0, -1), 10);
+  } else {
+    console.error('Invalid interval format:', interval);
+    return 0;
+  }
+}
 
 
 
@@ -215,8 +239,9 @@ class ScraperManager {
 
     for (const scraper of scrapers) {
       const { interval, lastRun, id } = scraper;
+      const intervalInMinutes = intervalToMinutes(interval);
       const currentTime = new Date();
-      const nextRun = new Date(lastRun.getTime() + interval * 60 * 1000);
+      const nextRun = new Date(lastRun.getTime() + intervalInMinutes * 60 * 1000);
 
       if (currentTime >= nextRun) {
         try {
@@ -224,7 +249,7 @@ class ScraperManager {
           await Scraper.update(
             { lastRun: currentTime },
             { where: { id: id } }
-          );
+            );
           console.log(`Scraper ${id} ran successfully.`);
         } catch (error) {
           console.error(`Error running scraper ${id}: ${error.message}`);
@@ -235,14 +260,16 @@ class ScraperManager {
     await this.matchUnlinkedProducts();
     await this.setupMiniSearch();
       // Check if it's time to update the MiniSearch index
-  const today = new Date();
-  const lastUpdateTime = fs.existsSync(INDEX_FILE) ? fs.statSync(INDEX_FILE).mtime : new Date(0);
-  const daysSinceLastUpdate = (today - lastUpdateTime) / (1000 * 60 * 60 * 24);
-  if (daysSinceLastUpdate >= 7) {
-    const miniSearchInstance = await this.setupMiniSearch();
-    await checkForChangesAndUpdateIndex(miniSearchInstance);
+    const today = new Date();
+    const lastUpdateTime = fs.existsSync(INDEX_FILE) ? fs.statSync(INDEX_FILE).mtime : new Date(0);
+    const daysSinceLastUpdate = (today - lastUpdateTime) / (1000 * 60 * 60 * 24);
+    if (daysSinceLastUpdate >= 7) {
+      const miniSearchInstance = await this.setupMiniSearch();
+      await checkForChangesAndUpdateIndex(miniSearchInstance);
+    }
   }
-  }
+
+
 }
 
 module.exports = ScraperManager;

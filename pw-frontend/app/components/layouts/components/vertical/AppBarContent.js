@@ -17,7 +17,7 @@ const notifications = [
   {
     meta: 'Today',
     avatarAlt: 'Flora',
-    title: 'Congratulation Flora! 🎉',
+    title: 'AppBarContent.js 🎉',
     avatarImg: '/images/avatars/4.png',
     subtitle: 'Won the monthly best seller badge'
   },

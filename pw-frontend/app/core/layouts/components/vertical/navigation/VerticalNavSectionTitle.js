@@ -6,7 +6,6 @@ import MuiListSubheader from '@mui/material/ListSubheader'
 
 // ** Custom Components Imports
 import Translations from '@/components/layouts/components/Translations'
-import CanViewNavSectionTitle from '@/components/layouts/components/CanViewNavSectionTitle'
 
 // ** Styled Components
 const ListSubheader = styled(props => <MuiListSubheader component='li' {...props} />)(({ theme }) => ({
@@ -53,7 +52,7 @@ const VerticalNavSectionTitle = props => {
   }
 
   return (
-    <CanViewNavSectionTitle navTitle={item}>
+    <>
       <ListSubheader
         className='nav-section-title'
         sx={{
@@ -85,7 +84,7 @@ const VerticalNavSectionTitle = props => {
           )}
         </Divider>
       </ListSubheader>
-    </CanViewNavSectionTitle>
+    </>
   )
 }
 

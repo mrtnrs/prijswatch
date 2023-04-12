@@ -1,6 +1,8 @@
 // pw-backend/scrapers/apiScraper.js
 const BaseScraper = require('./baseScraper');
 const axios = require("axios");
+const resizeAndUpload = require("../util/resizeAndUpload");
+
 
 class ApiScraper extends BaseScraper {
   constructor(scraperSettings) {
@@ -14,12 +16,6 @@ class ApiScraper extends BaseScraper {
   async scrape() {
     try {
 
-      console.log('scraping...');
-    // Implement the API scraping logic here
-    // You can use this.settings to access the settings for this scraper instance
-    // Return the scraped data
-    
-    
   const fetchProductsForPage = async (page) => {
 
     console.log('FETCHPRODUCTSFORPAGE');
@@ -33,37 +29,45 @@ class ApiScraper extends BaseScraper {
       return null;
     }
 
-    return data.products.map((product) => {
-      const {
-        code,
-        name,
-        price,
-        images,
-        brand,
-        categories,
-        url,
-      } = product;
+return await Promise.all(data.products.map(async (product) => {
+  const {
+    code,
+    name,
+    price,
+    images,
+    brand,
+    categories,
+    url,
+  } = product;
 
-      const imageUrl = images && images[0] ? images[0].url : null;
-      const category = categories && categories[0] ? categories[0].name : null;
-      const productUrl = `https://www.krefel.be/nl${url}`
+  const imageUrl = images && images[0] ? images[0].url : null;
+  const category = categories && categories[0] ? categories[0].name : null;
+  const productUrl = `https://www.krefel.be/nl${url}`;
 
-      const mappedProduct = {
-        code,
-        name,
-        brand: brand.name,
-        category,
-        imageUrl,
-        url: productUrl,
-        price: {
-          value: price.value,
-          currency: price.currencyIso,
-          formattedValue: price.formattedValue,
-        },
-      };
+  let resizedImageUrl = null;
+  try {
+    resizedImageUrl = imageUrl ? await resizeAndUpload(imageUrl, 200, 200) : null;
+  } catch (error) {
+    console.error(`Error resizing and uploading image: ${error}`);
+  }
 
-      return mappedProduct;
-      })
+  const mappedProduct = {
+    code,
+    name,
+    brand: brand.name,
+    category,
+    imageUrl: resizedImageUrl,
+    url: productUrl,
+    price: {
+      value: price.value,
+      currency: price.currencyIso,
+      formattedValue: price.formattedValue,
+    },
+  };
+
+  return mappedProduct;
+}));
+
     }
 
     if (this.pagination) {
@@ -130,31 +134,3 @@ const fetchProductsForPage = async (page) => {
   });
 };
 
-// const fetchAllProducts = async () => {
-//   console.log('fetching products');
-//   let allProducts = [];
-//   let currentPage = 1;
-
-//   while (true) {
-//     const products = await fetchProductsForPage(currentPage);
-
-//     if (!products) {
-//       break;
-//     }
-
-//     allProducts = allProducts.concat(products);
-//     currentPage += 1;
-//   }
-//   return allProducts;
-// };
-
-// fetchAllProducts()
-//   .then((products) => {
-//     console.log("All products fetched:", products);
-//     console.log(products.length);
-//   })
-//   .catch((error) => {
-//     console.error("Error fetching products:", error);
-//   });
-
-//   module.exports = fetchAllProducts;

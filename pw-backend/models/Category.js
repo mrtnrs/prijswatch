@@ -40,6 +40,12 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: 'parentId',
       as: 'subcategories',
     });
+
+    // Added association with Product model
+    Category.hasMany(models.Product, {
+      foreignKey: 'categoryId',
+      as: 'products',
+    });
   };
 
   return Category;

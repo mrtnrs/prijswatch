@@ -64,6 +64,11 @@ const [puppeteerProductNameSelector, setPuppeteerProductNameSelector] = useState
 const [puppeteerProductPriceSelector, setPuppeteerProductPriceSelector] = useState('');
 const [puppeteerPagination, setPuppeteerPagination] = useState(false);
 const [puppeteerPaginationSelector, setPuppeteerPaginationSelector] = useState('');
+const [puppeteerProductImageSelector, setPuppeteerProductImageSelector] = useState('');
+const [puppeteerContainerSelector, setPuppeteerContainerSelector] = useState('');
+
+
+
 
 // categories
 const [categoryOptions, setCategoryOptions] = useState([]);
@@ -96,6 +101,8 @@ useEffect(() => {
         urlSelector,
         productNameSelector,
         productPriceSelector,
+        productImageSelector,
+        containerSelector,
         nextPageSelector,
       },
     } = selectedScraper;
@@ -110,8 +117,10 @@ useEffect(() => {
     setPageSize(pageSize);
     setPuppeteerUrlSelector(urlSelector);
     setPuppeteerProductNameSelector(productNameSelector);
+    setPuppeteerProductImageSelector(productImageSelector);
     setPuppeteerProductPriceSelector(productPriceSelector);
     setPuppeteerPagination(!!nextPageSelector);
+    setPuppeteerContainerSelector(containerSelector);
     setPuppeteerPaginationSelector(nextPageSelector || '');
   }
 }, [selectedScraper]);
@@ -160,6 +169,8 @@ const formatCategoryOptions = (categories) => {
     setHasPagination(!hasPagination);
   }
 
+  
+
   const handleTestClick = (action) => {
 
 const scraperSettings = {
@@ -174,6 +185,8 @@ const scraperSettings = {
   ...(scraperType === 'Puppeteer' && {
     urlSelector: puppeteerUrlSelector,
     productNameSelector: puppeteerProductNameSelector,
+    productImageSelector: puppeteerProductImageSelector,
+    containerSelector: puppeteerContainerSelector,
     productPriceSelector: puppeteerProductPriceSelector,
     nextPageSelector: puppeteerPagination ? puppeteerPaginationSelector : '',
   }),
@@ -221,7 +234,7 @@ const formData = {
     const handlePuppeteerPaginationChange = () => {
   setPuppeteerPagination(!puppeteerPagination);
 }
-
+const handleImageSelectorChange = (e) => setPuppeteerProductImageSelector(e.target.value);
 const handleTitleSelectorChange = (e) => setPuppeteerProductNameSelector(e.target.value);
 const handlePriceSelectorChange = (e) => setPuppeteerProductPriceSelector(e.target.value);
 const handleUrlSelectorChange = (e) => setPuppeteerUrlSelector(e.target.value);
@@ -424,6 +437,17 @@ const handleCategoryChange = (selectedCategoryId) => {
         {scraperType === 'Puppeteer' && (
   <>
     {/* Puppeteer-specific form fields */}
+
+  <Grid item sm={6} xs={12}>
+      <TextField
+        value={puppeteerContainerSelector}
+        onChange={(e) => setPuppeteerContainerSelector(e.target.value)}
+        fullWidth
+        label="Container CSS Selector"
+        placeholder=".product-container"
+        required
+      />
+    </Grid>
     <Grid item sm={6} xs={12}>
       <TextField
           value={puppeteerProductNameSelector}
@@ -454,6 +478,16 @@ const handleCategoryChange = (selectedCategoryId) => {
         required
       />
     </Grid>
+    <Grid item sm={6} xs={12}>
+  <TextField
+    value={puppeteerProductImageSelector}
+    onChange={handleImageSelectorChange}
+    fullWidth
+    label="Image CSS Selector"
+    placeholder=".product-image"
+    required
+  />
+</Grid>
     <Grid item xs={12}>
       <FormControlLabel
         control={<Switch checked={puppeteerPagination} onChange={handlePuppeteerPaginationChange} />}

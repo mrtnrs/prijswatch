@@ -6,7 +6,7 @@ exports.createOrUpdateProduct = async (productData) => {
   const existingProduct = await Product.findOne({ where: { url: productData.url } });
 
   if (existingProduct) {
-   // await existingProduct.update(productData);
+    await existingProduct.update(productData);
     return existingProduct;
   } else {
     const newProduct = await Product.create(productData);

@@ -34,6 +34,7 @@ const response = await axios.post(workerUrl, imageBuffer, {
   headers: headers,
 });
 console.log("Image processed successfully:", response.data);
+return response.data;
   } catch (error) {
     console.error("Error processing image:", error.message);
     console.error("Error details:", error.response?.data);
