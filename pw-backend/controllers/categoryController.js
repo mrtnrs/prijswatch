@@ -71,13 +71,19 @@ exports.createCategory = async (req, res) => {
 async function updateCategoryStructure() {
   try {
     const categoryTree = await buildFullCategoryTree();
+    const version = Date.now(); // Use a timestamp as the version
+    const categoryData = {
+      version,
+      tree: categoryTree,
+    };
     const filePath = path.resolve(__dirname, '../categoryStructure.json');
-    fs.writeFileSync(filePath, JSON.stringify(categoryTree, null, 2), 'utf8');
+    fs.writeFileSync(filePath, JSON.stringify(categoryData, null, 2), 'utf8');
   } catch (error) {
     console.error('Error updating category structure:', error);
     throw error;
   }
 }
+
 
 // Helper function to delete categories recursively
 const deleteCategoryRecursively = async (categoryId) => {
@@ -124,12 +130,16 @@ exports.deleteCategory = async (req, res) => {
 
 
 exports.getCategoryStructure = async (req, res) => {
+  console.log('getCatStructure');
   try {
     const filePath = path.resolve(__dirname, '../categoryStructure.json');
     const data = fs.readFileSync(filePath, 'utf8');
     const categoryStructure = JSON.parse(data);
+    console.log('filePath:', filePath);
+    console.log('categoryStructure:', categoryStructure);
     res.status(200).json(categoryStructure);
   } catch (error) {
     res.status(500).json({ message: 'Error fetching category structure' });
   }
 };
+

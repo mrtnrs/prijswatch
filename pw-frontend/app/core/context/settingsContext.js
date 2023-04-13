@@ -1,7 +1,7 @@
 'use client'
 // ** React Imports
 import { createContext, useState, useEffect } from 'react'
-import { fetchCategoryStructure } from '@/api/categoryService';
+import  {categoryStructure} from '@/utils/categoryStructure';
 
 
 // ** ThemeConfig Import
@@ -72,11 +72,13 @@ export default SettingsContext;
 export const SettingsProvider = ({ children, pageSettings }) => {
   // ** State
   const [settings, setSettings] = useState({ ...initialSettings })
-  const [categoryStructure, setCategoryStructure] = useState([]);
+  const [categoryStructureFinn, setCategoryStructureFinn] = useState([]);
+
+  console.log('categoryStructure', categoryStructure);
 
   useEffect(() => {
   fetchCategoryTree();
-}, []);
+}, [categoryStructure]);
 
   useEffect(() => {
     const restoredSettings = restoreSettings()
@@ -99,8 +101,13 @@ export const SettingsProvider = ({ children, pageSettings }) => {
   }, [settings.layout])
 
 const fetchCategoryTree = async () => {
-  const categoryStructure = await fetchCategoryStructure();
-  setCategoryStructure(categoryStructure);
+  console.log('useEffect page');
+  console.log('Category structure initialized 1');
+  console.log(typeof categoryStructure);
+  const werkPls = await categoryStructure.init();
+  console.log('werkPls', werkPls);
+  setCategoryStructureFinn(categoryStructure.tree);
+  console.log('Category structure initialized');
 };
 
 
@@ -110,7 +117,7 @@ const fetchCategoryTree = async () => {
     setSettings(updatedSettings)
   }
 
-  return <SettingsContext.Provider value={{ settings, saveSettings, categoryStructure }}>{children}</SettingsContext.Provider>
+  return <SettingsContext.Provider value={{ settings, saveSettings, categoryStructureFinn }}>{children}</SettingsContext.Provider>
 }
 
 export const SettingsConsumer = SettingsContext.Consumer

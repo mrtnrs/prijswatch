@@ -5,6 +5,7 @@ const port = process.env.PORT || 3001;
 const { sequelize } = require('./models');
 const db = require('./models');
 const cors = require('cors');
+const rateLimit = require('express-rate-limit');
 
 console.log('kaka');
 console.log(db.ScraperError);
@@ -26,6 +27,13 @@ Sentry.init({
 });
 app.use(Sentry.Handlers.errorHandler());
 
+
+// TO BE SET:
+// const corsOptions = {
+//   origin: 'https://your-frontend-domain.com',
+//   methods: ['GET', 'POST', 'PUT', 'DELETE'],
+//   allowedHeaders: ['Content-Type', 'Authorization'],
+// };
 // Enable CORS for all routes
 app.use(cors());
 
@@ -65,11 +73,19 @@ db.ScraperError.create({
   console.log('Error creating ScraperError:', error);
 });
 
+const apiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // Limit each IP to 100 requests per windowMs
+});
+
+// Apply the rate limiter to all requests
+app.use(apiLimiter);
+
 
 // Use routes
 app.use('/api/products', productRoutes);
 app.use('/api/webshops', webshopRoutes);
-app.use('/api/prices', priceRoutes);
+app.use('/api/price', priceRoutes);
 app.use('/api/scrapers', scraperRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/search', searchRoutes);

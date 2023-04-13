@@ -32,7 +32,7 @@ import themeConfig from '@/core/configs/themeConfig'
 
 const defaultSuggestionsData = [
   {
-    category: 'Popular Searches',
+    category: 'Populaire producten',
     suggestions: [
       {
         icon: 'mdi:chart-donut',
@@ -57,7 +57,7 @@ const defaultSuggestionsData = [
     ]
   },
   {
-    category: 'Apps & Pages',
+    category: 'Populaire categorieën',
     suggestions: [
       {
         icon: 'mdi:calendar-blank',
@@ -81,56 +81,6 @@ const defaultSuggestionsData = [
       }
     ]
   },
-  {
-    category: 'User Interface',
-    suggestions: [
-      {
-        icon: 'mdi:format-text-variant-outline',
-        suggestion: 'Typography',
-        link: '/ui/typography'
-      },
-      {
-        icon: 'mdi:tab',
-        suggestion: 'Tabs',
-        link: '/components/tabs'
-      },
-      {
-        icon: 'mdi:gesture-tap-button',
-        suggestion: 'Buttons',
-        link: '/components/buttons'
-      },
-      {
-        icon: 'mdi:card-bulleted-settings-outline',
-        suggestion: 'Advanced Cards',
-        link: '/ui/cards/advanced'
-      }
-    ]
-  },
-  {
-    category: 'Forms & Tables',
-    suggestions: [
-      {
-        icon: 'mdi:format-list-checkbox',
-        suggestion: 'Select',
-        link: '/forms/form-elements/select'
-      },
-      {
-        icon: 'mdi:lastpass',
-        suggestion: 'Autocomplete',
-        link: '/forms/form-elements/autocomplete'
-      },
-      {
-        icon: 'mdi:view-grid-outline',
-        suggestion: 'Table',
-        link: '/tables/mui'
-      },
-      {
-        icon: 'mdi:calendar-range',
-        suggestion: 'Date Pickers',
-        link: '/forms/form-elements/pickers'
-      }
-    ]
-  }
 ]
 
 const categoryTitle = {
@@ -335,6 +285,7 @@ const DefaultSuggestions = ({ setOpenDialog }) => {
   )
 }
 
+
 const AutocompleteComponent = ({ hidden, settings }) => {
   // ** States
   const [isMounted, setIsMounted] = useState(false)
@@ -348,6 +299,9 @@ const AutocompleteComponent = ({ hidden, settings }) => {
   const { layout } = settings
   const wrapper = useRef(null)
   const fullScreenDialog = useMediaQuery(theme.breakpoints.down('sm'))
+
+
+
 
 /*
   // Get all data using API
@@ -366,14 +320,32 @@ const AutocompleteComponent = ({ hidden, settings }) => {
   }, [searchValue])
 */
 
+
+
+// NEED TO IMPLEMENT GOOGLE ANALYTICS BASED POPULAR SEARCHES/CATEGORIES
+// useEffect(() => {
+//   const { protocol, host } = window.location;
+//   const testApiUrl = 'http://127.0.0.1:3000/api/toppages/test';
+
+//   fetch(testApiUrl)
+//     .then((response) => response.json())
+//     .then((data) => {
+//       console.log("Test route data:", data);
+//     })
+//     .catch((error) => {
+//       console.error("Error fetching test route:", error);
+//     });
+// }, []);
+
+
   useEffect(() => {
+
     if (!openDialog) {
       setSearchValue('')
     }
   }, [openDialog])
   useEffect(() => {
     setIsMounted(true)
-
     return () => setIsMounted(false)
   }, [])
 

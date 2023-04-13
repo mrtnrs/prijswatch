@@ -52,10 +52,31 @@ const navigation = () => {
       ]
     },
     {
-      icon: 'mdi:palette-swatch-outline',
-      title: 'UI',
+      icon: 'mdi:controller',
+      title: 'Gaming',
       children: [
         {
+          title: 'Console',
+          icon: 'mdi:credit-card-outline',
+          children: [
+            {
+              title: 'Playstation',
+              icon: 'mdi:sony-playstation',
+              path: '/ui/cards/basic'
+            },
+            {
+              title: 'Xbox',
+              icon: 'mdi:microsoft-xbox',
+              path: '/ui/cards/advanced'
+            },
+            {
+              title: 'Wii',
+              icon: 'mdi:nintendo-wii',
+              path: '/ui/cards/statistics'
+            },
+          ]
+        },
+                {
           title: 'Typography',
           icon: 'mdi:format-letter-case',
           path: '/ui/typography'
@@ -64,36 +85,6 @@ const navigation = () => {
           title: 'Icons',
           path: '/ui/icons',
           icon: 'mdi:google-circles-extended'
-        },
-        {
-          title: 'Cards',
-          icon: 'mdi:credit-card-outline',
-          children: [
-            {
-              title: 'Basic',
-              path: '/ui/cards/basic'
-            },
-            {
-              title: 'Advanced',
-              path: '/ui/cards/advanced'
-            },
-            {
-              title: 'Statistics',
-              path: '/ui/cards/statistics'
-            },
-            {
-              title: 'Widgets',
-              path: '/ui/cards/widgets'
-            },
-            {
-              title: 'Gamification',
-              path: '/ui/cards/gamification'
-            },
-            {
-              title: 'Actions',
-              path: '/ui/cards/actions'
-            }
-          ]
         },
         {
           title: 'Components',

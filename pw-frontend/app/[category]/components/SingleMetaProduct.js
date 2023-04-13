@@ -12,9 +12,11 @@ import ApexLineChart from '@/components/chartjs/ApexLineChart';
 
 import updateCategoryTree from '@/core/utils/updateCategoryTree';
 import productService from '@/api/productService';
+import priceService from '@/api/priceService';
 
 
-export default function SingleMetaProduct({ categorySlug, metaProductSlug }) {
+
+export default function SingleMetaProduct({ categorySlug, metaProductSlug, onProductNotFound, onProductNameUpdate }) {
   const [metaProduct, setMetaProduct] = useState(null);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -26,8 +28,15 @@ export default function SingleMetaProduct({ categorySlug, metaProductSlug }) {
         const res = await fetch(`http://localhost:3001/api/products/${categorySlug}/${metaProductSlug}/meta-product`);
         if (res.ok) {
           const data = await res.json();
-          setMetaProduct(data);
-          setLoading(false);
+          if(data?.length === 0){
+            onProductNotFound();
+            setMetaProduct(null);
+            setLoading(false);
+          } else {
+            setMetaProduct(data);
+            onProductNameUpdate(data.name);
+            setLoading(false);
+          }
         } else {
           setMetaProduct(null);
         }
@@ -37,7 +46,7 @@ export default function SingleMetaProduct({ categorySlug, metaProductSlug }) {
     }
 
     fetchMetaProduct();
-  }, [categorySlug, metaProductSlug]);
+  }, [categorySlug, metaProductSlug, onProductNotFound]);
 
   useEffect(() => {
     if (metaProduct && metaProduct.id) {
@@ -54,6 +63,39 @@ export default function SingleMetaProduct({ categorySlug, metaProductSlug }) {
     }
   }, [metaProduct]);
 
+  useEffect(() => {
+  if (metaProduct && metaProduct.id) {
+    async function fetchPriceData() {
+      try {
+        const data = await priceService.fetchPriceData(metaProduct.id);
+        console.log('data', data);
+        setProducts(data);
+      } catch (error) {
+        console.error('Error fetching price data:', error);
+      }
+    }
+
+    fetchPriceData();
+  }
+}, [metaProduct]);
+
+    const createSeriesArray = (products) => {
+    return products.map((product) => {
+      return {
+        name: product.name,
+        data: product.prices.map((price) => {
+          return {
+            x: new Date(price.createdAt),
+            y: price.value,
+          };
+        }),
+      };
+    });
+  };
+
+    const series = createSeriesArray(products);
+
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -62,7 +104,7 @@ export default function SingleMetaProduct({ categorySlug, metaProductSlug }) {
     return (
       <div>
         <h1>404 Not Found</h1>
-        <p>The meta product you are looking for does not exist.</p>
+        <p>The product or category you are looking for does not exist.</p>
       </div>
     );
   }
@@ -84,7 +126,7 @@ export default function SingleMetaProduct({ categorySlug, metaProductSlug }) {
           </Box>
         </Grid>
         <Grid item xs={12} md={6} lg={8}>
-          <ApexLineChart />
+          <ApexLineChart series={series}/>
         </Grid>
       </Grid>
     </Box>

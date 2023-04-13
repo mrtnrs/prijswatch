@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ThemeProvider, CssBaseline } from "@mui/material";
 import { DndProvider } from "react-dnd";
 import {
@@ -14,6 +14,7 @@ import styles from "./App.module.css";
 // import { AddDialog } from "./AddDialog";
 import DialogAlert from "./DialogAlert";
 import { deleteCategory, createCategory, fetchCategories } from '@/api/categoryService';
+import { categoryStructure } from '@/utils/categoryStructure';
 
 import { Toast } from '@/core/CustomHotToast';
 
@@ -84,15 +85,22 @@ function CategoryTree({ categoryOptions, category, onCategoryChange }) {
     }
   }, [category, treeData]);
 
-const fetchAndUpdateTreeData = async () => {
-  try {
-    const categories = await fetchCategories();
-    const convertedCategories = convertCategoryData(categories);
-    setTreeData(convertedCategories);
-  } catch (error) {
-    console.error('Error fetching categories:', error);
-  }
-};
+  const fetchAndUpdateTreeData = async () => {
+    try {
+      console.log('fetchAndUpdateTreedata');
+      const categories = await categoryStructure.updateTree();
+      const convertedCategories = convertCategoryData(categories);
+      setTreeData(convertedCategories);
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+    }
+  };
+
+    useEffect(() => {
+    if (category) {
+      fetchAndUpdateTreeData();
+    }
+  }, [category]);
 
 const handleAddNode = async (newNode) => {
   console.log("handleAddNode:", newNode); // Log the newNode object

@@ -1,101 +1,137 @@
-'use client'
 import { useParams } from 'next/navigation';
-import MetaProducts, { MetaProductsFallback } from './MetaProducts';
-import SingleMetaProduct from './SingleMetaProduct';
-import findCategoryBySlug from './utils';
-import { Suspense, useState, useEffect } from 'react';
-
 import { categoryStructure as importedCategoryStructure } from '@/utils/categoryStructure';
-
-import ChildCategories from './ChildCategories';
-import MetaProductsByBrand from './MetaProductsByBrand';
-
+import { useState, useEffect } from 'react';
 import productService from '@/api/productService';
-import BasicBreadcrumbs from '@/components/breadcrumbs/BasicBreadcrumbs'
-import Typography from '@mui/material/Typography'
-
+import BasicBreadcrumbs from '@/components/breadcrumbs/BasicBreadcrumbs';
+import Typography from '@mui/material/Typography';
+import findCategoryBySlug from './utils';
 import updateCategoryTree from '@/core/utils/updateCategoryTree';
+import MetaProductsByBrand from './MetaProductsByBrand';
+import ChildCategories from './ChildCategories';
+import SingleMetaProduct from './SingleMetaProduct';
+import { usePathname } from 'next/navigation';
 
+import Viernulvier from './viernulvier';
 
 export default function CategoryOrMetaProducts() {
-  const params = useParams();
+  const tempPathname = usePathname();
+  const { category, subcategory, subsubcategory } = useParams();
   const categoryStructure = importedCategoryStructure.tree;
-  const [metaProducts, setMetaProducts] = useState([]);
-  const joinedParams = [params.category, params.subcategory, params.subsubcategory].filter(Boolean).join('/');
+  const joinedParams = [category, subcategory, subsubcategory].filter(Boolean).join('/');
+  const categorySlug = joinedParams.split('/').slice(0, -1).join('/');
   const lastParam = joinedParams.split('/').pop();
-  const category = findCategoryBySlug(joinedParams, categoryStructure);
+  const foundCategory = findCategoryBySlug(lastParam, categoryStructure);
+  const [metaProducts, setMetaProducts] = useState([]);
   const [categoryTree, setCategoryTree] = useState([]);
-
-  if (!categoryStructure) {
-    return <div>Loading...</div>;
-  }
-
-  useEffect(() => {
-    if (category) {
-      async function fetchMetaProductsData() {
-        try {
-          const data = await productService.fetchMetaProductsByCategoryAndBrand(category.slug);
-          setMetaProducts(data);
-        } catch (error) {
-          console.error('Error fetching MetaProducts:', error);
-        }
-      }
-
-      fetchMetaProductsData();
-    }
-  }, [category]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isProductNotFound, setIsProductNotFound] = useState(false);
+  const [productName, setProductName] = useState('');
 
 
 useEffect(() => {
-  if (category) {
-    const newCategoryTree = [];
-    let currentCategory = category;
-    while (currentCategory) {
-      newCategoryTree.unshift({
-        name: currentCategory.name,
-        url: currentCategory.slug,
-      });
-      currentCategory = currentCategory.parent;
+  async function fetchData() {
+    if (foundCategory) {
+      try {
+        const data = await productService.fetchMetaProductsByCategoryAndBrand(foundCategory.slug);
+        setMetaProducts(data);
+      } catch (error) {
+        console.error('Error fetching MetaProducts:', error);
+      } finally {
+        setIsLoading(false);
+      }
     }
-    setCategoryTree(newCategoryTree);
+
+    if (categoryStructure && categoryStructure.length > 0) {
+      const category = findCategoryBySlug(categorySlug, categoryStructure);
+      const newCategoryTree = [];
+
+      let currentCategory = category;
+      while (currentCategory) {
+        newCategoryTree.unshift({
+          name: currentCategory.name,
+          url: currentCategory.slug,
+        });
+        currentCategory = currentCategory.parent;
+      }
+
+      if (newCategoryTree.length === 0) {
+        const pathSegments = tempPathname.split('/').slice(0, -1);
+
+        let currentUrl = '';
+        for (const segment of pathSegments) {
+          currentUrl += `${segment}/`;
+          const currentCategory = findCategoryBySlug(segment, categoryStructure);
+          if (currentCategory) {
+            newCategoryTree.push({
+              name: currentCategory.name,
+              url: `.${currentUrl}`,
+            });
+          }
+        }
+      }
+
+      setCategoryTree(newCategoryTree);
+      console.log('newCatTree', newCategoryTree);
+    }
+
+    setIsLoading(false);
   }
-}, [category]);
+
+  fetchData();
+}, [foundCategory, categorySlug, tempPathname, categoryStructure]);
 
 
-if (category) {
-  // Render the category landing page
-  console.log('metaProducts', category.metaProducts);
-  return (
-    <div>
-      <BasicBreadcrumbs categoryTree={categoryTree} />
-      <Typography variant="h1">{lastParam}</Typography>
-      <MetaProductsByBrand
-        metaProducts={metaProducts}
-        category={category}
-        categoryStructure={categoryStructure}
-      />
-    </div>
-  );
-} else {
-  // Render the single meta product page if the last parameter is a MetaProduct
-  const paramsArray = joinedParams.split('/');
-  paramsArray.pop();
-  const newCategorySlug = paramsArray.join('/');
+  if (!categoryStructure || isLoading) {
+    return <div>Loading...</div>;
+  }
 
-  useEffect(() => {
-    // Update the categoryTree for the SingleMetaProduct page
-    updateCategoryTree(newCategorySlug, setCategoryTree);
-  }, [newCategorySlug]);
-
-  return (
-    <Suspense fallback={<MetaProductsFallback />}>
-      <BasicBreadcrumbs categoryTree={categoryTree} productName={lastParam} />
+  if (foundCategory) {
+    if (foundCategory.children && foundCategory.children.length > 0) {
+      return (
+        <div>
+          <BasicBreadcrumbs categoryTree={categoryTree} />
+          <Typography variant="h1">{lastParam}</Typography>
+          <ChildCategories categories={foundCategory.children} />
+        </div>
+      );
+    } else {
+      return (
+        <div>
+          <BasicBreadcrumbs categoryTree={categoryTree} />
+          <Typography variant="h1">{lastParam}</Typography>
+          {metaProducts.length === 0 ? (
+            <Typography variant="h6">This category doesn't have any products... yet</Typography>
+          ) : (
+            <MetaProductsByBrand
+              metaProducts={metaProducts}
+              category={foundCategory}
+              categoryStructure={categoryStructure}
+            />
+          )}
+        </div>
+      );
+    }
+  } else {
+    const categorySlug = tempPathname.split('/')[tempPathname.split('/').length - 2];
+    return (
+      <>
+      <BasicBreadcrumbs categoryTree={categoryTree} productName={productName} />
       <SingleMetaProduct
-        categorySlug={newCategorySlug}
+        categorySlug={categorySlug}
         metaProductSlug={lastParam}
+        onProductNotFound={() => setIsProductNotFound(true)}
+        onProductNameUpdate={(name) => setProductName(name)}
       />
-    </Suspense>
-  );
-}
+      </>
+    );
+  }
 
+  if (isProductNotFound) {
+    return (
+      <>
+      <BasicBreadcrumbs categoryTree={categoryTree} />
+      <Viernulvier />;
+      </>
+      ) 
+  }
 }

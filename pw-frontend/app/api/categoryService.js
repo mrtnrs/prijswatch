@@ -1,4 +1,18 @@
 const API_URL = 'http://localhost:3001/api/categories';
+import { getIdToken } from './authService';
+
+const createHeaders = async () => {
+  const idToken = await getIdToken();
+
+  if (!idToken) {
+    throw new Error('User is not authenticated');
+  }
+
+  return {
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${idToken}`,
+  };
+};
 
 // In your frontend, e.g., in a useEffect hook or a function called when the component is loaded
 export const fetchCategories = async () => {
@@ -15,8 +29,10 @@ console.log('categories:', categories);
 }
 
 export const fetchCategoryStructure = async () => {
-  const response = await fetch('/api/categoryStructure');
+  console.log('fetchdem');
+  const response = await fetch(`${API_URL}/categoryStructure`);
   const data = await response.json();
+  console.log('data', response);
   return data;
 };
 
@@ -48,11 +64,10 @@ export const handleAddCategory = async (categoryName, parentCategoryId = null) =
 export const createCategory = async (categoryData) => {
   console.log("createCategory");
   try {
+    const headers = await createHeaders();
     const response = await fetch(`${API_URL}`, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers,
       body: JSON.stringify(categoryData),
     });
 
@@ -70,8 +85,10 @@ export const createCategory = async (categoryData) => {
 
 export const deleteCategory = async (categoryId) => {
   try {
+    const headers = await createHeaders();
     const response = await fetch(`${API_URL}/${categoryId}`, {
       method: 'DELETE',
+      headers,
     });
 
     if (!response.ok) {

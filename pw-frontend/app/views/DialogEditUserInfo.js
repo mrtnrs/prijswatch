@@ -42,7 +42,10 @@ const DialogEditUserInfo = ({
   handleSave, 
   selectedScraper,
   handleUpdate,
-  onDelete } ) => {
+  onDelete,
+  apiKey,
+  apiEndpoint, 
+  apiPagination  } ) => {
 
   // ** States
   const [show, setShow] = useState(false)
@@ -67,6 +70,14 @@ const [puppeteerPaginationSelector, setPuppeteerPaginationSelector] = useState('
 const [puppeteerProductImageSelector, setPuppeteerProductImageSelector] = useState('');
 const [puppeteerContainerSelector, setPuppeteerContainerSelector] = useState('');
 
+const [apiKeyValue, setApiKeyValue] = useState(''); 
+const [apiEndpointValue, setApiEndpointValue] = useState('');
+const [apiPaginationValue, setApiPaginationValue] = useState('');
+const [pageParameterName, setPageParameterName] = useState('');
+const [pageSizeParameterName, setPageSizeParameterName] = useState('');
+const [pageSizeValue, setPageSizeValue] = useState('');
+const [dataPath, setDataPath] = useState('');
+const [productMappingFunction, setProductMappingFunction] = useState('');
 
 
 
@@ -190,6 +201,11 @@ const scraperSettings = {
     productPriceSelector: puppeteerProductPriceSelector,
     nextPageSelector: puppeteerPagination ? puppeteerPaginationSelector : '',
   }),
+  ...(scraperType === 'API' && {
+    apiKey: apiKeyValue,
+    apiEndpoint: apiEndpointValue,
+    apiPagination: apiPaginationValue,
+  }),
 };
 
 
@@ -213,6 +229,15 @@ const formData = {
       setShow(true);
     }
   }, [displayAddScraperDialog]);
+
+  useEffect(() => {
+    if (selectedScraper && selectedScraper.type === 'API') {
+      const { apiKey, apiEndpoint, apiPagination } = selectedScraper.settings;
+      setApiKeyValue(apiKey);
+      setApiEndpointValue(apiEndpoint);
+      setApiPaginationValue(apiPagination);
+    }
+  }, [selectedScraper]);
 
   const handleChange = event => {
     const {
@@ -395,41 +420,74 @@ const handleCategoryChange = (selectedCategoryId) => {
 
     { scraperType === 'API' && (
 
-      <Grid item xs={12}>
-    <FormControlLabel
-    control={<Switch checked={hasPagination} onChange={handlePaginationChange} />}
-    label='Api has pagination'
-    sx={{
-      '& .MuiFormControlLabel-label': {
-        color: 'text.secondary'
-      }
-    }}
-    />
-    </Grid>
-
-      )}
-
-    {scraperType === 'API' && hasPagination && (
-          <>
+     <>
             {/* API-specific form fields */}
-            <Grid item sm={6} xs={12}>
+            <Grid item xs={12}>
+              <FormControlLabel
+                control={<Switch checked={hasPagination} onChange={handlePaginationChange} />}
+                label="Api has pagination"
+                sx={{
+                  '& .MuiFormControlLabel-label': {
+                    color: 'text.secondary',
+                  },
+                }}
+              />
+              </Grid>
+    {scraperType === 'API' && hasPagination && (
+ <>
+                {/* API Pagination form fields */}
+                <Grid item sm={6} xs={12}>
+                  <TextField
+                    value={pageParameterName}
+                    onChange={(e) => setPageParameterName(e.target.value)}
+                    fullWidth
+                    label="Page Parameter Name"
+                    placeholder="page"
+                    required
+                  />
+                </Grid>
+                <Grid item sm={6} xs={12}>
+                  <TextField
+                    value={pageSizeParameterName}
+                    onChange={(e) => setPageSizeParameterName(e.target.value)}
+                    fullWidth
+                    label="Page Size Parameter Name"
+                    placeholder="pageSize"
+                    required
+                  />
+                </Grid>
+                <Grid item sm={6} xs={12}>
+                  <TextField
+                    value={pageSizeValue}
+                    onChange={(e) => setPageSizeValue(e.target.value)}
+                    fullWidth
+                    label="Page Size Value"
+                    placeholder="96"
+                    required
+                  />
+                </Grid>
+              </>
+            )}
+            <Grid item xs={12}>
               <TextField
-                value={paginationParameter}
-                onChange={(e) => setPaginationParameter(e.target.value)}
+                value={dataPath}
+                onChange={(e) => setDataPath(e.target.value)}
                 fullWidth
-                label="Pagination Parameter"
-                placeholder="page"
+                label="Data Path"
+                placeholder="data.products"
                 required
               />
             </Grid>
-            <Grid item sm={6} xs={12}>
+            <Grid item xs={12}>
               <TextField
-                value={pageSize}
-                onChange={(e) => setPageSize(e.target.value)}
+                value={productMappingFunction}
+                onChange={(e) => setProductMappingFunction(e.target.value)}
                 fullWidth
-                label="Page Size Parameter"
-                placeholder="&pageSize=96"
+                label="function(product) { return { productId: product.id, productName: product.title, productPrice: product.cost }; }"
+                placeholder="function(product) { /* mapping code */ }"
                 required
+                multiline
+                rows={4}
               />
             </Grid>
           </>

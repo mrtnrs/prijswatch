@@ -17,6 +17,7 @@ import Link from 'next/link';
 import BrandToggleButtons from './BrandToggleButtons'
 import { Fade } from '@mui/material';
 import { getProductUrl, getCategoryPath } from '@/core/utils/get-product-url';
+import { usePathname } from 'next/navigation';
 
 
 
@@ -28,6 +29,7 @@ const MetaProductsByBrand = ({
 }) => {
    
     console.log('metaProducts: ', metaProducts);
+    const locatie = usePathname();
     const sortedMetaProducts = useMemo(() => {
         const sorted = {};
         metaProducts.forEach((metaProduct) => {
@@ -139,7 +141,7 @@ const MetaProductsByBrand = ({
                 } >
                 { 
                     products.map((product) => { 
-                      const productUrl = `${categoryPath}/${product.slug}`;
+                      const productUrl = `${locatie}/${product.slug}`;
                       return (
                       <Box key={product.id}
                            sx={

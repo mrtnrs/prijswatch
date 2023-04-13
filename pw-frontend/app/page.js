@@ -17,7 +17,8 @@ import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
 import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
-
+import { useEffect } from 'react';
+import { categoryStructure } from '@/utils/categoryStructure';
 
 import { styled } from '@mui/system';
 // import { useSession, signIn, signOut } from "next-auth/react";
@@ -105,9 +106,6 @@ export default function Home() {
     
     handleSearch(query);
 }, 300); // 300ms delay
-
-
-
 
   const session = false;
 
