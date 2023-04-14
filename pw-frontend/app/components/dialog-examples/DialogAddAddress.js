@@ -22,7 +22,7 @@ import DialogActions from '@mui/material/DialogActions'
 import FormControlLabel from '@mui/material/FormControlLabel'
 
 // ** Icon Imports
-import Icon from '@/components/Icon'
+import CustomIcon from '@/vercelFix/Icon'
 
 // ** Hooks
 import useBgColor from 'src/@core/hooks/useBgColor'
@@ -42,7 +42,7 @@ const DialogAddAddress = () => {
   return (
     <Card>
       <CardContent sx={{ textAlign: 'center', '& svg': { mb: 2 } }}>
-        <Icon icon='mdi:home-outline' fontSize='2rem' />
+        <CustomIcon icon='mdi:home-outline' fontSize='2rem' />
         <Typography variant='h6' sx={{ mb: 4 }}>
           Add New Address
         </Typography>
@@ -68,7 +68,7 @@ const DialogAddAddress = () => {
             onClick={() => setShow(false)}
             sx={{ position: 'absolute', right: '1rem', top: '1rem' }}
           >
-            <Icon icon='mdi:close' />
+            <CustomIcon icon='mdi:close' />
           </IconButton>
           <Box sx={{ mb: 9, textAlign: 'center' }}>
             <Typography variant='h5' sx={{ mb: 3, lineHeight: '2rem' }}>
@@ -94,7 +94,7 @@ const DialogAddAddress = () => {
                 }}
               >
                 <Box sx={{ mb: 1, display: 'flex', alignItems: 'center', '& svg': { mr: 2 } }}>
-                  <Icon icon='mdi:home-outline' />
+                  <CustomIcon icon='mdi:home-outline' />
                   <Typography variant='h6' sx={{ ...(addressType === 'home' ? { color: 'primary.main' } : {}) }}>
                     Home
                   </Typography>
@@ -121,7 +121,7 @@ const DialogAddAddress = () => {
                 }}
               >
                 <Box sx={{ mb: 1, display: 'flex', alignItems: 'center', '& svg': { mr: 2 } }}>
-                  <Icon icon='mdi:briefcase-outline' />
+                  <CustomIcon icon='mdi:briefcase-outline' />
                   <Typography variant='h6' sx={{ ...(addressType === 'office' ? { color: 'primary.main' } : {}) }}>
                     Office
                   </Typography>

@@ -28,7 +28,7 @@ import DatePicker from 'react-datepicker'
 import { useForm, Controller } from 'react-hook-form'
 
 // ** Icon Imports
-import CustomIcon from '@/components/Icon'
+import CustomIcon from '@/vercelFix/Icon'
 
 const defaultValues = {
   dob: null,

@@ -3,7 +3,7 @@ import MuiBox from '@mui/material/Box'
 import { alpha, styled, useTheme } from '@mui/material/styles'
 
 // ** Custom Icon Import
-import CustomIcon from '@/components/Icon'
+import CustomIcon from '@/vercelFix/Icon'
 
 // Styled Box component
 const Box = styled(MuiBox)(() => ({

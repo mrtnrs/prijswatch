@@ -19,7 +19,7 @@ import InputAdornment from '@mui/material/InputAdornment'
 import FormHelperText from '@mui/material/FormHelperText'
 
 // ** Icon Imports
-import CustomIcon from '@/components/Icon'
+import CustomIcon from '@/vercelFix/Icon'
 
 const FormLayoutsBasic = () => {
   // ** States

@@ -8,7 +8,7 @@ import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 
 // ** Icon Imports
-import Icon from '@/components/Icon'
+import CustomIcon from '@/vercelFix/Icon'
 
 // ** Custom Avatar Component
 import CustomAvatar from '@/components/mui/avatar'
@@ -33,7 +33,7 @@ const TabDetails = () => {
         >
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <CustomAvatar skin='light' color='info' variant='rounded' sx={{ mr: 3, width: 48, height: 48 }}>
-              <Icon icon='mdi:briefcase-outline' />
+              <CustomIcon icon='mdi:briefcase-outline' />
             </CustomAvatar>
             <div>
               <Typography sx={{ color: 'text.secondary' }}>CRM Application</Typography>
@@ -50,7 +50,7 @@ const TabDetails = () => {
         >
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <CustomAvatar skin='light' color='success' variant='rounded' sx={{ mr: 3, width: 48, height: 48 }}>
-              <Icon icon='mdi:cart-outline' />
+              <CustomIcon icon='mdi:cart-outline' />
             </CustomAvatar>
             <div>
               <Typography sx={{ color: 'text.secondary' }}>Ecommerce Platforms</Typography>
@@ -67,7 +67,7 @@ const TabDetails = () => {
         >
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <CustomAvatar skin='light' color='error' variant='rounded' sx={{ mr: 3, width: 48, height: 48 }}>
-              <Icon icon='mdi:license' />
+              <CustomIcon icon='mdi:license' />
             </CustomAvatar>
             <div>
               <Typography sx={{ color: 'text.secondary' }}>Online Learning platform</Typography>

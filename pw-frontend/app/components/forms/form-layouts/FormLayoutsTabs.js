@@ -25,7 +25,7 @@ import Select from '@mui/material/Select'
 import DatePicker from 'react-datepicker'
 
 // ** Icon Imports
-import CustomIcon from '@/components/Icon'
+import CustomIcon from '@/vercelFix/Icon'
 
 const CustomInput = forwardRef((props, ref) => {
   return <TextField fullWidth {...props} inputRef={ref} label='Birth Date' autoComplete='off' />

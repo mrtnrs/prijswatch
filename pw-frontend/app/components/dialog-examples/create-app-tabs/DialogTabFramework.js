@@ -7,7 +7,7 @@ import Radio from '@mui/material/Radio'
 import Typography from '@mui/material/Typography'
 
 // ** Icon Imports
-import Icon from '@/components/Icon'
+import CustomIcon from '@/vercelFix/Icon'
 
 // ** Custom Avatar Component
 import CustomAvatar from '@/components/mui/avatar'
@@ -31,7 +31,7 @@ const TabFramework = () => {
         >
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <CustomAvatar skin='light' color='info' variant='rounded' sx={{ mr: 3, width: 48, height: 48 }}>
-              <Icon icon='mdi:react' />
+              <CustomIcon icon='mdi:react' />
             </CustomAvatar>
             <div>
               <Typography sx={{ color: 'text.secondary' }}>React Native</Typography>
@@ -49,7 +49,7 @@ const TabFramework = () => {
         >
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <CustomAvatar skin='light' color='error' variant='rounded' sx={{ mr: 3, width: 48, height: 48 }}>
-              <Icon icon='mdi:angular' />
+              <CustomIcon icon='mdi:angular' />
             </CustomAvatar>
             <div>
               <Typography sx={{ color: 'text.secondary' }}>Angular</Typography>
@@ -66,7 +66,7 @@ const TabFramework = () => {
         >
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <CustomAvatar skin='light' color='success' variant='rounded' sx={{ mr: 3, width: 48, height: 48 }}>
-              <Icon icon='mdi:vuejs' />
+              <CustomIcon icon='mdi:vuejs' />
             </CustomAvatar>
             <div>
               <Typography sx={{ color: 'text.secondary' }}>Vue</Typography>
@@ -83,7 +83,7 @@ const TabFramework = () => {
         >
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <CustomAvatar skin='light' color='warning' variant='rounded' sx={{ mr: 3, width: 48, height: 48 }}>
-              <Icon icon='mdi:laravel' />
+              <CustomIcon icon='mdi:laravel' />
             </CustomAvatar>
             <div>
               <Typography sx={{ color: 'text.secondary' }}>Laravel</Typography>

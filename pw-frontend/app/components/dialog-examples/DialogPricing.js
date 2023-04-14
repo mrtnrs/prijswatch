@@ -15,7 +15,7 @@ import Fade from '@mui/material/Fade'
 import DialogContent from '@mui/material/DialogContent'
 
 // ** Icon Imports
-import Icon from '@/components/Icon'
+import CustomIcon from '@/vercelFix/Icon'
 
 // ** Component Import
 import PricingPlans from 'src/views/pages/pricing/PricingPlans'
@@ -40,7 +40,7 @@ const DialogPricing = ({ data }) => {
   return (
     <Card>
       <CardContent sx={{ textAlign: 'center', '& svg': { mb: 2 } }}>
-        <Icon icon='mdi:currency-usd' fontSize='2rem' />
+        <CustomIcon icon='mdi:currency-usd' fontSize='2rem' />
         <Typography variant='h6' sx={{ mb: 4 }}>
           Pricing
         </Typography>
@@ -64,7 +64,7 @@ const DialogPricing = ({ data }) => {
             onClick={() => setShow(false)}
             sx={{ position: 'absolute', right: '1rem', top: '1rem' }}
           >
-            <Icon icon='mdi:close' />
+            <CustomIcon icon='mdi:close' />
           </IconButton>
           <Box sx={{ mb: 4, textAlign: 'center' }}>
             <Typography variant='h5' sx={{ mb: 3, lineHeight: '2rem' }}>

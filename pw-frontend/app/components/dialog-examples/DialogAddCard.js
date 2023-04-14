@@ -31,7 +31,7 @@ import CardWrapper from 'src/@core/styles/libs/react-credit-cards'
 import 'react-credit-cards/es/styles-compiled.css'
 
 // ** Icon Imports
-import Icon from '@/components/Icon'
+import CustomIcon from '@/vercelFix/Icon'
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Fade ref={ref} {...props} />
@@ -72,7 +72,7 @@ const DialogAddCard = () => {
   return (
     <Card>
       <CardContent sx={{ textAlign: 'center', '& svg': { mb: 2 } }}>
-        <Icon icon='mdi:credit-card-outline' fontSize='2rem' />
+        <CustomIcon icon='mdi:credit-card-outline' fontSize='2rem' />
         <Typography variant='h6' sx={{ mb: 4 }}>
           Add New Card
         </Typography>
@@ -94,7 +94,7 @@ const DialogAddCard = () => {
       >
         <DialogContent sx={{ pb: 6, px: { xs: 8, sm: 15 }, pt: { xs: 8, sm: 12.5 }, position: 'relative' }}>
           <IconButton size='small' onClick={handleClose} sx={{ position: 'absolute', right: '1rem', top: '1rem' }}>
-            <Icon icon='mdi:close' />
+            <CustomIcon icon='mdi:close' />
           </IconButton>
           <Box sx={{ mb: 4, textAlign: 'center' }}>
             <Typography variant='h5' sx={{ mb: 3, lineHeight: '2rem' }}>

@@ -21,7 +21,7 @@ import InputAdornment from '@mui/material/InputAdornment'
 import Select from '@mui/material/Select'
 
 // ** Icon Imports
-import CustomIcon from '@/components/Icon'
+import CustomIcon from '@/vercelFix/Icon'
 
 // ** Custom Components Imports
 import StepperCustomDot from './StepperCustomDot'

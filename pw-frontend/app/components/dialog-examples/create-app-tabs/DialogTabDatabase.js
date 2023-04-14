@@ -8,7 +8,7 @@ import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 
 // ** Icon Imports
-import Icon from '@/components/Icon'
+import CustomIcon from '@/vercelFix/Icon'
 
 // ** Custom Avatar Component
 import CustomAvatar from '@/components/mui/avatar'
@@ -33,7 +33,7 @@ const TabDatabase = () => {
         >
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <CustomAvatar skin='light' color='error' variant='rounded' sx={{ mr: 3, width: 48, height: 48 }}>
-              <Icon icon='mdi:firebase' />
+              <CustomIcon icon='mdi:firebase' />
             </CustomAvatar>
             <div>
               <Typography sx={{ color: 'text.secondary' }}>Firebase</Typography>
@@ -50,7 +50,7 @@ const TabDatabase = () => {
         >
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <CustomAvatar skin='light' color='warning' variant='rounded' sx={{ mr: 3, width: 48, height: 48 }}>
-              <Icon icon='mdi:aws' />
+              <CustomIcon icon='mdi:aws' />
             </CustomAvatar>
             <div>
               <Typography sx={{ color: 'text.secondary' }}>AWS</Typography>
@@ -67,7 +67,7 @@ const TabDatabase = () => {
         >
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <CustomAvatar skin='light' color='info' variant='rounded' sx={{ mr: 3, width: 48, height: 48 }}>
-              <Icon icon='mdi:database-outline' />
+              <CustomIcon icon='mdi:database-outline' />
             </CustomAvatar>
             <div>
               <Typography sx={{ color: 'text.secondary' }}>MySQL</Typography>

@@ -20,7 +20,7 @@ import InputAdornment from '@mui/material/InputAdornment'
 import IconButton from '@mui/material/IconButton'
 
 // ** Icon Imports
-import Icon from '@/components/Icon'
+import CustomIcon from '@/vercelFix/Icon'
 
 // ** Custom Components Imports
 import CustomAvatar from 'src/@core/components/mui/avatar'
@@ -61,7 +61,7 @@ const DialogReferEarn = () => {
   return (
     <Card>
       <CardContent sx={{ textAlign: 'center', '& svg': { mb: 2 } }}>
-        <Icon icon='mdi:gift-outline' fontSize='2rem' />
+        <CustomIcon icon='mdi:gift-outline' fontSize='2rem' />
         <Typography variant='h6' sx={{ mb: 4 }}>
           Refer & Earn
         </Typography>
@@ -87,7 +87,7 @@ const DialogReferEarn = () => {
             onClick={() => setShow(false)}
             sx={{ position: 'absolute', right: '1rem', top: '1rem' }}
           >
-            <Icon icon='mdi:close' />
+            <CustomIcon icon='mdi:close' />
           </IconButton>
           <Box sx={{ mb: 10, textAlign: 'center' }}>
             <Typography variant='h5' sx={{ mb: 3, lineHeight: '2rem' }}>
@@ -105,7 +105,7 @@ const DialogReferEarn = () => {
                   color='primary'
                   sx={{ mb: 2.5, width: [70, 100], height: [70, 100], '& svg': { fontSize: ['2.2rem', '2.5rem'] } }}
                 >
-                  <Icon icon='mdi:message-outline' />
+                  <CustomIcon icon='mdi:message-outline' />
                 </CustomAvatar>
                 <Typography sx={{ mb: 3, fontWeight: '600' }}>Send Invitation 👍🏻</Typography>
                 <Typography variant='body2' sx={{ textAlign: 'center', maxWidth: '200px' }}>
@@ -120,7 +120,7 @@ const DialogReferEarn = () => {
                   color='primary'
                   sx={{ mb: 2.5, width: [70, 100], height: [70, 100], '& svg': { fontSize: ['2.2rem', '2.5rem'] } }}
                 >
-                  <Icon icon='mdi:clipboard-outline' />
+                  <CustomIcon icon='mdi:clipboard-outline' />
                 </CustomAvatar>
                 <Typography sx={{ mb: 3, fontWeight: '600' }}>Registration 😎</Typography>
                 <Typography variant='body2' sx={{ textAlign: 'center', maxWidth: '200px' }}>
@@ -135,7 +135,7 @@ const DialogReferEarn = () => {
                   color='primary'
                   sx={{ mb: 2.5, width: [70, 100], height: [70, 100], '& svg': { fontSize: ['2.2rem', '2.5rem'] } }}
                 >
-                  <Icon icon='mdi:license' />
+                  <CustomIcon icon='mdi:license' />
                 </CustomAvatar>
                 <Typography sx={{ mb: 3, fontWeight: '600' }}>Free Trial 🎉</Typography>
                 <Typography variant='body2' sx={{ textAlign: 'center', maxWidth: '200px' }}>
@@ -214,13 +214,13 @@ const DialogReferEarn = () => {
               />
               <Box sx={{ mt: [2, 0], display: 'flex', alignItems: 'center' }}>
                 <FacebookBtn>
-                  <Icon icon='mdi:facebook' />
+                  <CustomIcon icon='mdi:facebook' />
                 </FacebookBtn>
                 <TwitterBtn>
-                  <Icon icon='mdi:twitter' />
+                  <CustomIcon icon='mdi:twitter' />
                 </TwitterBtn>
                 <LinkedInBtn>
-                  <Icon icon='mdi:linkedin' />
+                  <CustomIcon icon='mdi:linkedin' />
                 </LinkedInBtn>
               </Box>
             </Box>

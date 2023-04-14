@@ -1,8 +1,8 @@
 // ** Custom Icon Import
-import Icon from '@/components/Icon'
+import CustomIcon from '@/vercelFix/Icon'
 
 const UserIcon = ({ icon, ...rest }) => {
-  return <Icon icon={icon} {...rest} />
+  return <CustomIcon icon={icon} {...rest} />
 }
 
 export default UserIcon

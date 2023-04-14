@@ -25,7 +25,7 @@ import MuiAutocomplete from '@mui/material/Autocomplete'
 // import axios from 'axios'
 
 // ** Icon Imports
-import CustomIcon from '@/components/Icon'
+import CustomIcon from '@/vercelFix/Icon'
 
 // ** Configs Imports
 import themeConfig from '@/core/configs/themeConfig'

@@ -17,7 +17,7 @@ import Fade from '@mui/material/Fade'
 import DialogContent from '@mui/material/DialogContent'
 
 // ** Icon Imports
-import CustomIcon from '@/components/Icon'
+import CustomIcon from '@/vercelFix/Icon'
 
 // ** Hooks
 import useBgColor from 'src/@core/hooks/useBgColor'
