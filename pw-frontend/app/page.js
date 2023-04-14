@@ -32,7 +32,7 @@ const SERVER_URL = process.env.NEXT_PUBLIC_API_SERVER_URL;
 
 // ** Spinner Import
 import Spinner from '@/components/spinner'
-import Icon from '@/components/Icon'
+import CustomIcon from '@/vercelFix/Icon'
 
 
 const StyledCard = styled(Card)`

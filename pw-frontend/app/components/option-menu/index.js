@@ -13,7 +13,7 @@ import MenuItem from '@mui/material/MenuItem'
 import IconButton from '@mui/material/IconButton'
 
 // ** Icon Imports
-import Icon from '@/components/Icon'
+import CustomIcon from '@/vercelFix/Icon'
 
 // ** Hook Import
 import { useSettings } from '@/core/hooks/useSettings'
@@ -65,7 +65,7 @@ const OptionsMenu = props => {
   return (
     <>
       <IconButton aria-haspopup='true' onClick={handleClick} {...iconButtonProps}>
-        {icon ? icon : <Icon icon='mdi:dots-vertical' {...iconProps} />}
+        {icon ? icon : <CustomIcon icon='mdi:dots-vertical' {...iconProps} />}
       </IconButton>
       <Menu
         keepMounted

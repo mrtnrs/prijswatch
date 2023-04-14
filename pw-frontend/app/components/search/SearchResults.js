@@ -6,7 +6,7 @@ import Typography from '@mui/material/Typography';
 import Fade from '@mui/material/Fade';
 import CircularProgress from '@mui/material/CircularProgress';
 import Chip from '@mui/material/Chip'
-import Icon from '@/components/Icon'
+import CustomIcon from '@/vercelFix/Icon'
 import { categoryStructure } from '@/utils/categoryStructure';
 import { useTheme } from '@mui/material/styles';
 

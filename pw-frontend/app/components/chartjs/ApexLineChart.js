@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography'
 import CardContent from '@mui/material/CardContent'
 
 // ** Icon Imports
-import Icon from '@/components/Icon'
+import CustomIcon from '@/vercelFix/Icon'
 
 // ** Custom Components Imports
 import CustomChip from '@/components/mui/chip'
@@ -224,7 +224,7 @@ export default ApexLineChart
   //             sx={{ fontWeight: 500, borderRadius: 1, fontSize: '0.875rem' }}
   //             label={
   //               <Box sx={{ display: 'flex', alignItems: 'center', '& svg': { mr: 1 } }}>
-  //                 <Icon icon='mdi:arrow-up' fontSize='1rem' />
+  //                 <CustomIcon icon='mdi:arrow-up' fontSize='1rem' />
   //                 <span>22%</span>
   //               </Box>
   //             }

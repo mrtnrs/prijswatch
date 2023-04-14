@@ -3,7 +3,7 @@ import Box from '@mui/material/Box'
 import IconButton from '@mui/material/IconButton'
 
 // ** Icon Imports
-import Icon from '@/components/Icon'
+import CustomIcon from '@/vercelFix/Icon'
 
 // ** Components
 import Autocomplete from '@/components/layouts/components/Autocomplete.js'
@@ -118,7 +118,7 @@ const AppBarContent = props => {
       <Box className='actions-left' sx={{ mr: 2, display: 'flex', alignItems: 'center' }}>
         {hidden && !settings.navHidden ? (
           <IconButton color='inherit' sx={{ ml: -2.75 }} onClick={toggleNavVisibility}>
-            <Icon icon='mdi:menu' />
+            <CustomIcon icon='mdi:menu' />
           </IconButton>
         ) : null}
         <Autocomplete hidden={hidden} settings={settings} />

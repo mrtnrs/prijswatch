@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
-import Icon from '@/components/Icon'
+import CustomIcon from '@/vercelFix/Icon'
 import IconButton from '@mui/material/IconButton';
 
 
@@ -37,7 +37,7 @@ function SearchBar({ handleSearch, setSearchResults, searchQuery, setSearchQuery
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
-              <Icon icon='mdi:magnify' fontSize={24} />
+              <CustomIcon icon='mdi:magnify' fontSize={24} />
             </InputAdornment>
           ),
           endAdornment: searchQuery ? (
@@ -50,7 +50,7 @@ function SearchBar({ handleSearch, setSearchResults, searchQuery, setSearchQuery
                   setSearchResults([]);
                 }}
               >
-                <Icon icon='mdi:close' fontSize={24} />
+                <CustomIcon icon='mdi:close' fontSize={24} />
               </IconButton>
             </InputAdornment>
           ) : null,
