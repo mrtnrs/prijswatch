@@ -13,15 +13,17 @@ import Icon from '@/components/icon'
 import CustomChip from '@/components/mui/chip'
 import ReactApexcharts from '@/components/chartjs/react-apexcharts'
 
-const series = [
-  {
-    data: [280, 200, 220, 180, 270, 250, 70, 90, 200, 150, 160, 100, 150, 100, 50]
-  }
-]
+
 
 const ApexLineChart = ({ series }) => {
   // ** Hook
-  const theme = useTheme()
+  const theme = useTheme();
+
+//   const series = [
+//   {
+//     data: [280, 200, 220, 180, 270, 250, 70, 90, 200, 150, 160, 100, 150, 100, 50]
+//   }
+// ]
 
   // const options = {
   //   chart: {
@@ -86,23 +88,113 @@ const ApexLineChart = ({ series }) => {
   //   }
   // }
 
-  const options = {
-    chart: {
-      type: 'line',
-    },
-    xaxis: {
-      type: 'datetime',
-    },
-    yaxis: {
-      labels: {
-        formatter: (value) => {
-          return value.toFixed(2);
-        },
+  // const options = {
+  //   chart: {
+  //     type: 'line',
+  //   },
+  //   xaxis: {
+  //     type: 'datetime',
+  //   },
+  //   yaxis: {
+  //     labels: {
+  //       formatter: (value) => {
+  //         return value.toFixed(2);
+  //       },
+  //     },
+  //   },
+  // };
+
+const options = {
+  chart: {
+    type: 'area',
+    borderRadius: 10, // Add border radius to the chart
+    animations: {
+      enabled: true,
+      easing: 'easeinout',
+      speed: 800,
+      animateGradually: {
+        enabled: true,
+        delay: 150,
       },
     },
-  };
+  },dropShadow: { // Add dropShadow to create the appearance of rounded borders
+      enabled: true,
+      top: 0,
+      left: 0,
+      blur: 3,
+      opacity: 0.5,
+    },
+  xaxis: {
+    type: 'datetime',
+    labels: {
+      style: {
+        colors: theme.palette.text.secondary,
+      },
+    },
+    axisBorder: {
+      show: false,
+    },
+    axisTicks: {
+      show: false, // Remove stripes above the dates
+    },
+  },
+  yaxis: {
+    show: true,
+    labels: {
+      style: {
+        colors: theme.palette.text.secondary,
+      },
+      formatter: (value) => {
+        return '€' + parseInt(value); // Remove ".00" after each number
+      },
+    },
+  },
+  grid: {
+    show: false,
+    borderColor: theme.palette.divider,
+    strokeDashArray: 5,
+    xaxis: {
+      lines: {
+        show: false,
+      },
+    },
+  },
+  stroke: {
+    curve: 'smooth',
+    width: 0,
+  },
+  fill: {
+    type: 'gradient',
+    gradient: {
+      shadeIntensity: 1,
+      type: 'vertical', // Change the gradient type
+      shade: 'dark', // Change the gradient shade
+      gradientToColors: [theme.palette.primary.dark, theme.palette.secondary.dark], // Add gradientToColors for matching colors
+      opacityFrom: 0.7,
+      opacityTo: 0.5,
+      stops: [0, 90, 100],
+    },
+  },
+  markers: {
+    size: 0,
+    strokeWidth: 0,
+  },
+  dataLabels: {
+    enabled: false,
+  },
+  colors: [theme.palette.primary.main, theme.palette.secondary.main],
+  tooltip: {
+    theme: 'dark',
+  },
+  legend: {
+    showForSingleSeries: false,
+  },
+};
 
-  return <ReactApexcharts options={options} series={series} type="line" />;
+
+
+
+  return <ReactApexcharts options={options} series={series} type="area" />;
 
 }
 

@@ -14,6 +14,8 @@ import updateCategoryTree from '@/core/utils/updateCategoryTree';
 import productService from '@/api/productService';
 import priceService from '@/api/priceService';
 
+import Typography from '@mui/material/Typography';
+
 
 
 export default function SingleMetaProduct({ categorySlug, metaProductSlug, onProductNotFound, onProductNameUpdate }) {
@@ -93,7 +95,31 @@ export default function SingleMetaProduct({ categorySlug, metaProductSlug, onPro
     });
   };
 
-    const series = createSeriesArray(products);
+ const series = createSeriesArray(products);
+
+//     const series = [
+//   {
+//     name: "Product 1",
+//     data: [
+//       { x: "2023-01-01", y: 100 },
+//       { x: "2023-01-15", y: 120 },
+//       { x: "2023-02-01", y: 90 },
+//       { x: "2023-02-15", y: 150 },
+//       { x: "2023-03-01", y: 170 },
+//     ],
+//   },
+//   {
+//     name: "Product 2",
+//     data: [
+//       { x: "2023-01-01", y: 80 },
+//       { x: "2023-01-15", y: 110 },
+//       { x: "2023-02-01", y: 130 },
+//       { x: "2023-02-15", y: 140 },
+//       { x: "2023-03-01", y: 190 },
+//     ],
+//   },
+// ];
+
 
 
   if (loading) {
@@ -115,10 +141,11 @@ export default function SingleMetaProduct({ categorySlug, metaProductSlug, onPro
       <Grid container spacing={2}>
         <Grid item xs={12} md={6} lg={4}>
           <Box>
-            <h1>{metaProduct.name}</h1>
+          <Typography variant="h1">{metaProduct.name}</Typography>
+            
             <p>{metaProduct.brand}</p>
             {metaProduct.imageUrl && (
-              <img src={metaProduct.imageUrl} alt={metaProduct.name} />
+              <img src={`https://prijs.watch/${metaProduct.imageUrl}`} alt={metaProduct.name} />
             )}
             <p>{metaProduct.description}</p>
             <Button variant="outlined">Add to Favorites</Button>

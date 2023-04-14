@@ -79,7 +79,7 @@ const apiLimiter = rateLimit({
 });
 
 // Apply the rate limiter to all requests
-app.use(apiLimiter);
+// app.use(apiLimiter);
 
 
 // Use routes
