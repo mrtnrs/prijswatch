@@ -14,7 +14,7 @@ import MuiMenuItem from '@mui/material/MenuItem'
 import Typography from '@mui/material/Typography'
 
 // ** Icon Imports
-import Icon from '@/components/Icon'
+import CustomIcon from '@/vercelFix/Icon'
 
 // ** Third Party Components
 import PerfectScrollbar from 'react-perfect-scrollbar'
@@ -143,7 +143,7 @@ const NotificationDropdown = props => {
             '& .MuiBadge-badge': { top: 4, right: 4, boxShadow: theme => `0 0 0 2px ${theme.palette.background.paper}` }
           }}
         >
-          <Icon icon='mdi:bell-outline' />
+          <CustomIcon icon='mdi:bell-outline' />
         </Badge>
       </IconButton>
       <Menu

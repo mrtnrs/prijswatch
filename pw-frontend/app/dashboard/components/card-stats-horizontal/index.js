@@ -9,7 +9,7 @@ import CardContent from '@mui/material/CardContent'
 import CustomAvatar from 'src/@core/components/mui/avatar'
 
 // ** Icon Imports
-import Icon from '@/components/Icon'
+import CustomIcon from '@/vercelFix/Icon'
 
 // ** Styled Avatar component
 const Avatar = styled(CustomAvatar)(({ theme }) => ({
@@ -34,7 +34,7 @@ const CardStatsHorizontal = props => {
               <Typography variant='h6'>{stats}</Typography>
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <Box sx={{ display: 'inline-flex', color: trend === 'positive' ? 'success.main' : 'error.main' }}>
-                  <Icon icon={trend === 'positive' ? 'mdi:chevron-up' : 'mdi:chevron-down'} />
+                  <CustomIcon icon={trend === 'positive' ? 'mdi:chevron-up' : 'mdi:chevron-down'} />
                 </Box>
                 <Typography variant='caption' sx={{ color: trend === 'positive' ? 'success.main' : 'error.main' }}>
                   {trendNumber}

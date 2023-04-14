@@ -7,7 +7,7 @@ import { styled } from '@mui/material/styles'
 import Box from '@mui/material/Box'
 
 // ** Icon Imports
-import Icon from '@/components/Icon'
+import CustomIcon from '@/vercelFix/Icon'
 
 // ** Theme Config Import
 import themeConfig from '@/core/configs/themeConfig'
@@ -121,7 +121,7 @@ const VerticalLayout = props => {
       ) : (
         <ScrollToTop className='mui-fixed'>
           <Fab color='primary' size='small' aria-label='scroll back to top'>
-            <Icon icon='mdi:arrow-up' />
+            <CustomIcon icon='mdi:arrow-up' />
           </Fab>
         </ScrollToTop>
       )}

@@ -7,7 +7,7 @@ import CardHeader from '@mui/material/CardHeader'
 import CardContent from '@mui/material/CardContent'
 
 // ** Icon Imports
-import Icon from '@/components/Icon'
+import CustomIcon from '@/vercelFix/Icon'
 
 // ** Custom Components Imports
 import ReactApexcharts from '@/components/react-apexcharts'
@@ -83,7 +83,7 @@ const EcommerceLiveVisitors = () => {
             <Typography variant='body2' sx={{ color: 'success.main' }}>
               +78.2%
             </Typography>
-            <Icon icon='mdi:chevron-up' />
+            <CustomIcon icon='mdi:chevron-up' />
           </Box>
         }
       />

@@ -23,7 +23,7 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 import Select from '@mui/material/Select'
 
 // ** Icon Imports
-import Icon from '@/components/Icon'
+import CustomIcon from '@/vercelFix/Icon'
 import CategoryTree from '@/dashboard/components/CategoryTree'
 
 import {fetchCategories, createCategory} from '@/api/categoryService'
@@ -145,6 +145,12 @@ useEffect(() => {
       console.error(`No matching category found for ${selectedScraper.settings.category}`);
     }
   }
+  if (selectedScraper && scraperType === "API") {
+  const { dataPath, productMappingFunction } = selectedScraper.settings;
+  setDataPath(dataPath);
+  setProductMappingFunction(productMappingFunction);
+}
+
 }, [selectedScraper, categoryOptions]);
 
 
@@ -205,6 +211,8 @@ const scraperSettings = {
     apiKey: apiKeyValue,
     apiEndpoint: apiEndpointValue,
     apiPagination: apiPaginationValue,
+    dataPath,
+    productMappingFunction,
   }),
 };
 
@@ -350,7 +358,7 @@ const handleCategoryChange = (selectedCategoryId) => {
     onClick={() => { setShow(false); setDisplayAddScraperDialog(false);}}
     sx={{ position: 'absolute', right: '1rem', top: '1rem' }}
     >
-    <Icon icon='mdi:close' />
+    <CustomIcon icon='mdi:close' />
     </IconButton>
     <Box sx={{ mb: 8, textAlign: 'center' }}>
     <Typography variant='h5' sx={{ mb: 3, lineHeight: '2rem' }}>

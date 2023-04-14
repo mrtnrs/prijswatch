@@ -21,7 +21,7 @@ import clsx from 'clsx'
 import { usePopper } from 'react-popper'
 
 // ** Icon Imports
-import Icon from '@/components/Icon'
+import CustomIcon from '@/vercelFix/Icon'
 
 // ** Theme Config Import
 import themeConfig from '@/core/configs/themeConfig'
@@ -226,7 +226,7 @@ useEffect(() => {
                       sx={{ mr: 0.75, '& .MuiChip-label': { px: 2.5, lineHeight: 1.385, textTransform: 'capitalize' } }}
                     />
                   ) : null}
-                  <Icon icon={hasParent ? toggleIcon : 'mdi:chevron-down'} />
+                  <CustomIcon icon={hasParent ? toggleIcon : 'mdi:chevron-down'} />
                 </Box>
               </Box>
             </ListItem>

@@ -20,7 +20,7 @@ import ListItemButton from '@mui/material/ListItemButton'
 import clsx from 'clsx'
 
 // ** Icon Imports
-import Icon from '@/components/Icon'
+import CustomIcon from '@/vercelFix/Icon'
 
 // ** Configs Import
 import themeConfig from '@/core/configs/themeConfig'
@@ -278,7 +278,7 @@ const VerticalNavGroup = props => {
                     sx={{ mr: 0.75, '& .MuiChip-label': { px: 2.5, lineHeight: 1.385, textTransform: 'capitalize' } }}
                   />
                 ) : null}
-                <Icon icon={direction === 'ltr' ? 'mdi:chevron-right' : 'mdi:chevron-left'} />
+                <CustomIcon icon={direction === 'ltr' ? 'mdi:chevron-right' : 'mdi:chevron-left'} />
               </Box>
             </MenuItemTextWrapper>
           </ListItemButton>

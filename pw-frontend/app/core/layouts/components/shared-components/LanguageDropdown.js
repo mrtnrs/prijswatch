@@ -1,5 +1,5 @@
 // ** Icon Imports
-import Icon from '@/components/Icon'
+import CustomIcon from '@/vercelFix/Icon'
 
 // ** Third Party Import
 import { useTranslation } from 'react-i18next'
@@ -20,7 +20,7 @@ const LanguageDropdown = ({ settings, saveSettings }) => {
 
   return (
     <OptionsMenu
-      icon={<Icon icon='mdi:translate' />}
+      icon={<CustomIcon icon='mdi:translate' />}
       menuProps={{ sx: { '& .MuiMenu-paper': { mt: 4, minWidth: 130 } } }}
       iconButtonProps={{ color: 'inherit', sx: { ...(layout === 'vertical' ? { mr: 0.75 } : { mx: 0.75 }) } }}
       options={[

@@ -17,7 +17,7 @@ import clsx from 'clsx'
 import { useKeenSlider } from 'keen-slider/react'
 
 // ** Icon Imports
-import Icon from '@/components/Icon'
+import CustomIcon from '@/vercelFix/Icon'
 
 // ** Custom Components Imports
 import CustomAvatar from '@/components/mui/avatar'
@@ -142,7 +142,7 @@ const EcommerceMarketingSales = () => {
             <Typography variant='subtitle2' sx={{ color: 'success.main' }}>
               +25%
             </Typography>
-            <Icon icon='mdi:chevron-up' fontSize={20} />
+            <CustomIcon icon='mdi:chevron-up' fontSize={20} />
           </Box>
         }
         action={

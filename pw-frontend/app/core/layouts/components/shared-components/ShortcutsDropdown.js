@@ -18,7 +18,7 @@ import MuiMenu from '@mui/material/Menu'
 import MuiMenuItem from '@mui/material/MenuItem'
 
 // ** Icon Imports
-import Icon from '@/components/Icon'
+import CustomIcon from '@/vercelFix/Icon'
 
 // ** Third Party Components
 import PerfectScrollbarComponent from 'perfect-scrollbar'
@@ -87,7 +87,7 @@ const ShortcutsDropdown = props => {
   return (
     <Fragment>
       <IconButton color='inherit' aria-haspopup='true' onClick={handleDropdownOpen} aria-controls='customized-menu'>
-        <Icon icon='mdi:view-grid-outline' />
+        <CustomIcon icon='mdi:view-grid-outline' />
       </IconButton>
       <Menu
         anchorEl={anchorEl}
@@ -105,7 +105,7 @@ const ShortcutsDropdown = props => {
             <Typography sx={{ fontSize: '1.125rem', color: 'text.secondary', fontWeight: 600 }}>Shortcuts</Typography>
             <Tooltip title='Add Shortcut' placement='top'>
               <IconButton disableRipple>
-                <Icon icon='mdi:plus-circle-outline' />
+                <CustomIcon icon='mdi:plus-circle-outline' />
               </IconButton>
             </Tooltip>
           </Box>
@@ -144,7 +144,7 @@ const ShortcutsDropdown = props => {
                   }}
                 >
                   <CustomAvatar skin='light' color='secondary' sx={{ mb: 2, width: 50, height: 50 }}>
-                    <Icon icon={shortcut.icon} />
+                    <CustomIcon icon={shortcut.icon} />
                   </CustomAvatar>
                   <Typography sx={{ fontWeight: 600, color: 'text.secondary' }}>{shortcut.title}</Typography>
                   <Typography variant='body2' sx={{ color: 'text.disabled' }}>

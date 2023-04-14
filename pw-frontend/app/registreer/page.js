@@ -34,7 +34,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Alert from '@mui/material/Alert';
 
 // ** Icon Imports
-import Icon from '@/components/Icon'
+import CustomIcon from '@/vercelFix/Icon'
 
 // ** Configs
 import themeConfig from '@/core/configs/themeConfig'
@@ -314,7 +314,7 @@ const onFormDataSubmit = async (event) => {
                       onMouseDown={handleMouseDownPassword}
                       aria-label='toggle password visibility'
                     >
-                      <Icon icon={values.showPassword ? 'mdi:eye-outline' : 'mdi:eye-off-outline'} fontSize={20} />
+                      <CustomIcon icon={values.showPassword ? 'mdi:eye-outline' : 'mdi:eye-off-outline'} fontSize={20} />
                     </IconButton>
                   </InputAdornment>
                 }
@@ -383,10 +383,10 @@ const onFormDataSubmit = async (event) => {
             </Divider>
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <IconButton href='/' component={Link} sx={{ color: '#497ce2' }} onClick={e => e.preventDefault()}>
-                <Icon icon='mdi:facebook' />
+                <CustomIcon icon='mdi:facebook' />
               </IconButton>
               <IconButton href='/' component={Link} sx={{ color: '#db4437' }} onClick={e => e.preventDefault()}>
-                <Icon icon='mdi:google' />
+                <CustomIcon icon='mdi:google' />
               </IconButton>
             </Box>
           </form>

@@ -17,7 +17,7 @@ import { styled } from '@mui/material/styles'
 import Typography from '@mui/material/Typography'
 
 // ** Icon Imports
-import Icon from '@/components/Icon'
+import CustomIcon from '@/vercelFix/Icon'
 
 // ** Styled Components
 const BadgeContentSpan = styled('span')(({ theme }) => ({
@@ -128,32 +128,32 @@ const UserDropdown = props => {
         <Divider sx={{ mt: '0 !important' }} />
         <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose('/pages/user-profile/profile')}>
           <Box sx={styles}>
-            <Icon icon='mdi:bell-alert-outline' />
+            <CustomIcon icon='mdi:bell-alert-outline' />
             Alerts
           </Box>
         </MenuItem>
         <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose('/apps/email')}>
           <Box sx={styles}>
-            <Icon icon='mdi:star-outline' />
+            <CustomIcon icon='mdi:star-outline' />
             Favorieten
           </Box>
         </MenuItem>
         <Divider />
         <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose('/pages/account-settings/account')}>
           <Box sx={styles}>
-            <Icon icon='mdi:cog-outline' />
+            <CustomIcon icon='mdi:cog-outline' />
             Instellingen
           </Box>
         </MenuItem>
         <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose('/pages/pricing')}>
           <Box sx={styles}>
-            <Icon icon='mdi:currency-usd' />
+            <CustomIcon icon='mdi:currency-usd' />
             Premium
           </Box>
         </MenuItem>
         <MenuItem sx={{ p: 0 }} onClick={() => handleDropdownClose('/pages/faq')}>
           <Box sx={styles}>
-            <Icon icon='mdi:help-circle-outline' />
+            <CustomIcon icon='mdi:help-circle-outline' />
             FAQ & Contact
           </Box>
         </MenuItem>
@@ -165,7 +165,7 @@ const UserDropdown = props => {
           }}
           sx={{ py: 2, '& svg': { mr: 2, fontSize: '1.375rem', color: 'text.primary' } }}
         >
-          <Icon icon='mdi:logout-variant' />
+          <CustomIcon icon='mdi:logout-variant' />
           Logout
         </MenuItem>
       )}

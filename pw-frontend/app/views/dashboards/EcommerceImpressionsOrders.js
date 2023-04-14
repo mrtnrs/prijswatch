@@ -7,7 +7,7 @@ import CardContent from '@mui/material/CardContent'
 import CircularProgress from '@mui/material/CircularProgress'
 
 // ** Icon Imports
-import Icon from '@/components/Icon'
+import CustomIcon from '@/vercelFix/Icon'
 
 const EcommerceImpressionsOrders = () => {
   return (
@@ -45,7 +45,7 @@ const EcommerceImpressionsOrders = () => {
                 color: 'primary.main'
               }}
             >
-              <Icon icon='mdi:cellphone-link' fontSize={20} />
+              <CustomIcon icon='mdi:cellphone-link' fontSize={20} />
             </Box>
           </Box>
           <div>
@@ -57,7 +57,7 @@ const EcommerceImpressionsOrders = () => {
                 <Typography variant='subtitle2' sx={{ color: 'error.main' }}>
                   -24%
                 </Typography>
-                <Icon icon='mdi:chevron-down' fontSize='1.25rem' />
+                <CustomIcon icon='mdi:chevron-down' fontSize='1.25rem' />
               </Box>
             </Box>
             <Typography variant='body2'>Total Impressions</Typography>
@@ -88,7 +88,7 @@ const EcommerceImpressionsOrders = () => {
               sx={{ '& .MuiCircularProgress-circle': { strokeWidth: 4, strokeLinecap: 'round' } }}
             />
             <Box sx={{ mt: -3, ml: -2.5, position: 'absolute', top: '50%', left: '50%', color: 'warning.main' }}>
-              <Icon icon='mdi:shopping-outline' fontSize={20} />
+              <CustomIcon icon='mdi:shopping-outline' fontSize={20} />
             </Box>
           </Box>
           <div>
@@ -100,7 +100,7 @@ const EcommerceImpressionsOrders = () => {
                 <Typography variant='subtitle2' sx={{ color: 'success.main' }}>
                   +15%
                 </Typography>
-                <Icon icon='mdi:chevron-up' fontSize='1.25rem' />
+                <CustomIcon icon='mdi:chevron-up' fontSize='1.25rem' />
               </Box>
             </Box>
             <Typography variant='body2'>Total Orders</Typography>

@@ -8,7 +8,7 @@ import { styled, useTheme } from '@mui/material/styles'
 import Typography from '@mui/material/Typography'
 
 // ** Custom Icon Import
-import Icon from '@/components/Icon'
+import CustomIcon from '@/vercelFix/Icon'
 
 // ** Configs
 import themeConfig from '@/core/configs/themeConfig'
@@ -196,7 +196,7 @@ const VerticalNavHeader = props => {
           onClick={toggleNavVisibility}
           sx={{ p: 0, backgroundColor: 'transparent !important' }}
         >
-          <Icon icon='mdi:close' fontSize={20} />
+          <CustomIcon icon='mdi:close' fontSize={20} />
         </IconButton>
       ) : userMenuLockedIcon === null && userMenuUnlockedIcon === null ? null : (
         <IconButton

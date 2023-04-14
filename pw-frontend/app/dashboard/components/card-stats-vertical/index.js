@@ -9,7 +9,7 @@ import CustomChip from 'src/@core/components/mui/chip'
 import CustomAvatar from 'src/@core/components/mui/avatar'
 
 // ** Icon Imports
-import Icon from '@/components/Icon'
+import CustomIcon from '@/vercelFix/Icon'
 
 const CardStatsVertical = props => {
   // ** Props
@@ -28,7 +28,7 @@ const CardStatsVertical = props => {
             <Typography variant='subtitle2' sx={{ color: trend === 'positive' ? 'success.main' : 'error.main' }}>
               {trendNumber}
             </Typography>
-            <Icon icon={trend === 'positive' ? 'mdi:chevron-up' : 'mdi:chevron-down'} fontSize='1.25rem' />
+            <CustomIcon icon={trend === 'positive' ? 'mdi:chevron-up' : 'mdi:chevron-down'} fontSize='1.25rem' />
           </Box>
         </Box>
         <Typography variant='h6' sx={{ mb: 1 }}>

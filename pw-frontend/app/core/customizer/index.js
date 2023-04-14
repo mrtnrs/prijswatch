@@ -15,7 +15,7 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 import MuiDrawer from '@mui/material/Drawer'
 
 // ** Icon Imports
-import Icon from '@/components/Icon'
+import CustomIcon from '@/vercelFix/Icon'
 
 // ** Hook Import
 import { useSettings } from '../hooks/useSettings'
@@ -96,7 +96,7 @@ const Customizer = () => {
   return (
     <div className='customizer'>
       <Toggler className='customizer-toggler' onClick={() => setOpen(true)}>
-        <Icon icon='mdi:cog-outline' fontSize={20} />
+        <CustomIcon icon='mdi:cog-outline' fontSize={20} />
       </Toggler>
       <Drawer open={open} hideBackdrop anchor='right' variant='persistent'>
         <Box
@@ -121,7 +121,7 @@ const Customizer = () => {
               transform: 'translateY(-50%)'
             }}
           >
-            <Icon icon='mdi:close' fontSize={20} />
+            <CustomIcon icon='mdi:close' fontSize={20} />
           </IconButton>
         </Box>
           <CustomizerSpacing className='customizer-body'>
@@ -173,7 +173,7 @@ const Customizer = () => {
                     ...(themeColor === 'primary' ? { boxShadow: 9 } : { '&:hover': { boxShadow: 4 } })
                   }}
                 >
-                  {themeColor === 'primary' ? <Icon icon='mdi:check' fontSize='1.25rem' /> : null}
+                  {themeColor === 'primary' ? <CustomIcon icon='mdi:check' fontSize='1.25rem' /> : null}
                 </ColorBox>
                 <ColorBox
                   onClick={() => handleChange('themeColor', 'secondary')}
@@ -182,7 +182,7 @@ const Customizer = () => {
                     ...(themeColor === 'secondary' ? { boxShadow: 9 } : { '&:hover': { boxShadow: 4 } })
                   }}
                 >
-                  {themeColor === 'secondary' ? <Icon icon='mdi:check' fontSize='1.25rem' /> : null}
+                  {themeColor === 'secondary' ? <CustomIcon icon='mdi:check' fontSize='1.25rem' /> : null}
                 </ColorBox>
                 <ColorBox
                   onClick={() => handleChange('themeColor', 'success')}
@@ -191,7 +191,7 @@ const Customizer = () => {
                     ...(themeColor === 'success' ? { boxShadow: 9 } : { '&:hover': { boxShadow: 4 } })
                   }}
                 >
-                  {themeColor === 'success' ? <Icon icon='mdi:check' fontSize='1.25rem' /> : null}
+                  {themeColor === 'success' ? <CustomIcon icon='mdi:check' fontSize='1.25rem' /> : null}
                 </ColorBox>
                 <ColorBox
                   onClick={() => handleChange('themeColor', 'error')}
@@ -200,7 +200,7 @@ const Customizer = () => {
                     ...(themeColor === 'error' ? { boxShadow: 9 } : { '&:hover': { boxShadow: 4 } })
                   }}
                 >
-                  {themeColor === 'error' ? <Icon icon='mdi:check' fontSize='1.25rem' /> : null}
+                  {themeColor === 'error' ? <CustomIcon icon='mdi:check' fontSize='1.25rem' /> : null}
                 </ColorBox>
                 <ColorBox
                   onClick={() => handleChange('themeColor', 'warning')}
@@ -209,7 +209,7 @@ const Customizer = () => {
                     ...(themeColor === 'warning' ? { boxShadow: 9 } : { '&:hover': { boxShadow: 4 } })
                   }}
                 >
-                  {themeColor === 'warning' ? <Icon icon='mdi:check' fontSize='1.25rem' /> : null}
+                  {themeColor === 'warning' ? <CustomIcon icon='mdi:check' fontSize='1.25rem' /> : null}
                 </ColorBox>
                 <ColorBox
                   onClick={() => handleChange('themeColor', 'info')}
@@ -219,7 +219,7 @@ const Customizer = () => {
                     ...(themeColor === 'info' ? { boxShadow: 9 } : { '&:hover': { boxShadow: 4 } })
                   }}
                 >
-                  {themeColor === 'info' ? <Icon icon='mdi:check' fontSize='1.25rem' /> : null}
+                  {themeColor === 'info' ? <CustomIcon icon='mdi:check' fontSize='1.25rem' /> : null}
                 </ColorBox>
               </Box>
             </div>
