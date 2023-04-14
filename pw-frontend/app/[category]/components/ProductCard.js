@@ -11,7 +11,8 @@ import LinearProgress from '@mui/material/LinearProgress'
 import Button from '@mui/material/Button'
 
 // ** Icon Imports
-import CustomIcon from '@/components/Icon';
+import CustomIcon from '../../../components/Icon';
+
 import Link from 'next/link';
 
 // ** Custom Components Imports
