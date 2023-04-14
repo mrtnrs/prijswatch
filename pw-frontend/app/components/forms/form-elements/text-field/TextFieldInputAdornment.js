@@ -11,7 +11,7 @@ import FormHelperText from '@mui/material/FormHelperText'
 import InputAdornment from '@mui/material/InputAdornment'
 
 // ** Icon Imports
-import Icon from '@/components/Icon'
+import CustomIcon from '@/components/Icon'
 
 const TextFieldInputAdornment = () => {
   // ** State
@@ -71,7 +71,7 @@ const TextFieldInputAdornment = () => {
                 onMouseDown={handleMouseDownPassword}
                 aria-label='toggle password visibility'
               >
-                <Icon fontSize={20} icon={values.showPassword ? 'mdi:eye-outline' : 'mdi:eye-off-outline'} />
+                <CustomIcon fontSize={20} icon={values.showPassword ? 'mdi:eye-outline' : 'mdi:eye-off-outline'} />
               </IconButton>
             </InputAdornment>
           }

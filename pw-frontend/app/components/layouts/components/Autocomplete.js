@@ -495,7 +495,7 @@ const AutocompleteComponent = ({ hidden, settings }) => {
                           '& svg': { mr: 2.5, color: 'text.primary' }
                         }}
                       >
-                        <CustomIconfontSize={20} icon={option.icon || themeConfig.navSubItemIcon} />
+                        <CustomIcon fontSize={20} icon={option.icon || themeConfig.navSubItemIcon} />
                         <Typography variant='body2' sx={{ color: 'text.primary' }}>
                           {option.title}
                         </Typography>

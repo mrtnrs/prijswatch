@@ -105,7 +105,7 @@ import FormHelperText from '@mui/material/FormHelperText'
 import InputAdornment from '@mui/material/InputAdornment'
 
 // ** Icon Imports
-import Icon from '@/components/Icon'
+import CustomIcon from '@/components/Icon'
 
 const TextFieldInputAdornment = () => {
   // ** State
@@ -165,7 +165,7 @@ const TextFieldInputAdornment = () => {
                 onMouseDown={handleMouseDownPassword}
                 aria-label='toggle password visibility'
               >
-                <Icon fontSize={20} icon={values.showPassword ? 'mdi:eye-outline' : 'mdi:eye-off-outline'} />
+                <CustomIcon fontSize={20} icon={values.showPassword ? 'mdi:eye-outline' : 'mdi:eye-off-outline'} />
               </IconButton>
             </InputAdornment>
           }
@@ -278,7 +278,7 @@ import FormControl from '@mui/material/FormControl'
 import InputAdornment from '@mui/material/InputAdornment'
 
 // ** Icon Imports
-import Icon from '@/components/Icon'
+import CustomIcon from '@/components/Icon'
 
 const TextFieldIcons = () => {
   return (
@@ -289,7 +289,7 @@ const TextFieldIcons = () => {
           id='input-with-icon-adornment'
           startAdornment={
             <InputAdornment position='start'>
-              <Icon icon='mdi:account-circle-outline' />
+              <CustomIcon icon='mdi:account-circle-outline' />
             </InputAdornment>
           }
         />
@@ -301,7 +301,7 @@ const TextFieldIcons = () => {
         InputProps={{
           startAdornment: (
             <InputAdornment position='start'>
-              <Icon icon='mdi:account-circle-outline' />
+              <CustomIcon icon='mdi:account-circle-outline' />
             </InputAdornment>
           )
         }}
@@ -309,7 +309,7 @@ const TextFieldIcons = () => {
       <div>
         <Grid container spacing={2} alignItems='flex-end'>
           <Grid item sx={{ '& svg': { color: 'action.active' } }}>
-            <Icon icon='mdi:account-circle-outline' />
+            <CustomIcon icon='mdi:account-circle-outline' />
           </Grid>
           <Grid item>
             <TextField variant='standard' id='input-with-icon-grid' label='With a grid' />
