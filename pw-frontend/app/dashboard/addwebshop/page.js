@@ -21,7 +21,10 @@ const FormLayouts = () => {
 
 
 const router = useRouter();
-const { selectedWebshop, setSelectedWebshop } = useContext(WebshopContext);
+const contextValue = useContext(WebshopContext);
+const selectedWebshop = contextValue ? contextValue.selectedWebshop : undefined;
+
+
 
 
 const handleSubmit = async (event, webshop) => {
