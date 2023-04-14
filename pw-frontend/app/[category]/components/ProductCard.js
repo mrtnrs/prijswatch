@@ -18,7 +18,7 @@ import Link from 'next/link';
 import CustomChip from '@/components/mui/chip'
 import OptionsMenu from '@/components/option-menu'
 // ** Icon Imports
-import CustomIcon from '@/components/Icon';
+import CustomIcon from '@/vercelFix/Icon';
 
 const ProductCard = ({
             name,
