@@ -24,14 +24,27 @@ Sentry.init({
 app.use(Sentry.Handlers.errorHandler());
 
 
-TO BE SET:
+const allowedOrigins = [
+  'https://prijs.watch',
+  'https://www.prijs.watch',
+  'https://prijswatch-zyzx.vercel.app',
+  'https://prijswatch-zyzx-git-main-mrtnrs.vercel.app',
+  'https://prijswatch-zyzx-oru3oy0io-mrtnrs.vercel.app',
+];
+
 const corsOptions = {
-  origin: 'https://prijs.watch',
+  origin: function (origin, callback) {
+    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 };
-Enable CORS for all routes
-app.use(cors());
+
+app.use(cors(corsOptions));
 
 
 // Import routes
@@ -74,7 +87,6 @@ const apiLimiter = rateLimit({
   max: 150, // Limit each IP to 100 requests per windowMs
 });
 
-Apply the rate limiter to all requests
 app.use(apiLimiter);
 
 
