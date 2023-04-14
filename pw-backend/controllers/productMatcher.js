@@ -19,10 +19,6 @@ exports.sanitizeTitleAndExtractMetadata = async (productName, scrapedProduct) =>
   });
 
   const resultText = response.data.choices[0].message.content.trim();
-    
-  console.log('*************');
-  console.log(resultText);
-  console.log('*************');
 
   try {
     const result = JSON.parse(resultText);

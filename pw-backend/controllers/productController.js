@@ -40,9 +40,7 @@ exports.getAllProductsHandler = async (req, res) => {
 };
 
 exports.getMetaProductByIdHandler = async (req, res) => {
-  console.log('checky');
   try {
-    console.log('no checki');
     const id = req.params.id;
     const metaProduct = await MetaProduct.findByPk(id);
 
@@ -60,7 +58,6 @@ exports.getMetaProductByIdHandler = async (req, res) => {
 
 
 const getProductsForMetaProduct = async (metaProductId) => {
-    console.log('productconroller 2');
   const products = await Product.findAll({ where: { metaProductId } });
   return products;
 };

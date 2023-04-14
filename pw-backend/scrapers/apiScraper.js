@@ -14,7 +14,6 @@ class ApiScraper extends BaseScraper {
   async scrape() {
     try {
       const fetchProductsForPage = async (page) => {
-        console.log('FETCHPRODUCTSFORPAGE');
         let url = this.url;
 
         if (this.apiConfig.pagination) {

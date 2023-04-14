@@ -60,7 +60,6 @@ class ScraperManager {
   
 
   async setupMiniSearch() {
-    console.log('setupMiniSearch');
     const miniSearchOptions = {
       fields: ['name', 'description'],
       storeFields: ['name', 'imageUrl', 'slug', 'brand', 'category'],
@@ -113,10 +112,7 @@ class ScraperManager {
 
 
   async search(query) {
-    console.log('managerSearch: ' + query);
     const miniSearchInstance = await this.setupMiniSearch();
-    console.log('C');
-    console.log(miniSearchInstance.search(query))
     // const autoSuggestions = miniSearchInstance.autoSuggest(query, { fuzzy: 0.2, top: 10 });
 
     return miniSearchInstance.search(query).slice(0, 10);;
@@ -134,8 +130,6 @@ class ScraperManager {
         where: { metaProductId: null },
       });
 
-      console.log(`Number of unlinked products: ${unlinkedProducts.length}`);
-
       unlinkedProductsBatch = await Product.findAll({
         where: { metaProductId: null },
         limit: BATCH_SIZE,
@@ -146,14 +140,9 @@ class ScraperManager {
         try {
           const { sanitizedTitle, metadata } = await sanitizeTitleAndExtractMetadata(scrapedProduct.name, scrapedProduct);
 
-          console.log('sanitizedTitle:', sanitizedTitle);
-          console.log('metadata:', metadata);
-
           const categoryMetaProducts = await MetaProduct.findAll({
            where: { category: scrapedProduct.category },
          });
-
-          console.log('categoryMetaProducts:', categoryMetaProducts);
 
         // local check
           const localMatch = await this.findLocalMatchingMetaProduct(
@@ -161,11 +150,7 @@ class ScraperManager {
             categoryMetaProducts
             );
 
-          console.log('localMatch:', localMatch);
-
           if (localMatch) {
-            console.log('Match found; updating metaProductId');
-            console.log(localMatch);
             await Product.update(
             {
               metaProductId: localMatch,
@@ -183,9 +168,12 @@ class ScraperManager {
             }
 
           } else {
-            console.log('No Match found; creating new MetaProduct');
             const slug = generateSlug(sanitizedTitle);
             const brand = scrapedProduct.brand || (metadata && metadata.brand) || null;
+
+            const category = await Category.findOne({
+              where: { id: scrapedProduct.category },
+            });
 
             const newMetaProduct = await MetaProduct.create({
               name: sanitizedTitle,
@@ -194,8 +182,6 @@ class ScraperManager {
               slug,
               imageUrl: scrapedProduct.imageUrl,
             });
-
-            console.log('newMetaProduct:', newMetaProduct);
 
             await Product.update(
             {

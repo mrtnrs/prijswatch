@@ -9,8 +9,6 @@ async function buildCategoryTree(categoryId) {
   const category = await Category.findByPk(categoryId);
   const subcategories = await Category.findAll({ where: { parentId: categoryId } });
 
-  console.log(`Subcategories for ${categoryId}:`, subcategories);
-
   if (subcategories.length === 0) {
     return { ...category.toJSON(), children: [] };
   }
@@ -31,7 +29,6 @@ async function buildFullCategoryTree() {
 
     return categoryTree;
   } catch (error) {
-    console.error('Error fetching category tree:', error);
     throw error;
   }
 }
@@ -49,7 +46,6 @@ exports.getFullCategoryTree = async (req, res) => {
 
 
 exports.createCategory = async (req, res) => {
-  console.log('createCategory loaded');
   try {
     const { name, parentId } = req.body; // Update the property name here
 
@@ -130,7 +126,6 @@ exports.deleteCategory = async (req, res) => {
 
 
 exports.getCategoryStructure = async (req, res) => {
-  console.log('getCatStructure');
   try {
     const filePath = path.resolve(__dirname, '../categoryStructure.json');
     const data = fs.readFileSync(filePath, 'utf8');

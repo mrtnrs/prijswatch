@@ -15,11 +15,8 @@ router.patch('/update-active-state/:scraperId', authenticateUser('admin'), scrap
 
 // Test scraper
 router.post('/test', authenticateUser('admin'), async (req, res) => {
-  console.log('test succes');
-  console.log('received data:', req.body);
   try {
     const result = await scraperController.testScraper(req, res);
-    console.log("testing...");
     res.status(200).json(result);
   } catch (error) {
     res.status(500).json({ error: error.message });

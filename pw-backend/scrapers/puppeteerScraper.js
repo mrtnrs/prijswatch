@@ -80,16 +80,10 @@ const imageUrls = productImageSelector
     )
   : [];
 
-
-// Add this line to log the image URLs fetched
-console.log('Image URLs fetched:', imageUrls);
-
 const pageItems = await Promise.all(names.map(async (name, index) => {
   let resizedImageUrl = null;
   try {
     resizedImageUrl = imageUrls[index] ? await resizeAndUpload(imageUrls[index]) : null;
-    // Add this log in the main scraping code after resizing and uploading the image
-console.log("Resized image URL:", resizedImageUrl);
   } catch (error) {
     console.error(`Error resizing and uploading image: ${error}`);
   }
@@ -104,7 +98,6 @@ console.log("Resized image URL:", resizedImageUrl);
     imageUrl: resizedImageUrl,
   }
 }));
-
 
       items.push(...pageItems);
 
@@ -128,8 +121,6 @@ console.log("Resized image URL:", resizedImageUrl);
     }
 
     await browser.close();
-    console.log('items:');
-    console.log(items);
     return items;
   }
 }

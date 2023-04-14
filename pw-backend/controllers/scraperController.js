@@ -60,10 +60,7 @@ exports.runScraper = async (req, res, saveData = true) => {
   try {
     const scrapedData = await scraperInstance.scrape(); // Run the scraper
     const errorList = scraperInstance.errors || [];
-    console.log('lets save data');
     if (saveData) {
-      console.log('saveData');
-      console.log(saveData);
       const category = await Category.findByPk(scraperSettings.settings.category);
       const savedProducts = await Promise.all(
         scrapedData.map(async (data) => {
@@ -79,8 +76,6 @@ exports.runScraper = async (req, res, saveData = true) => {
           }
 
           const product = await productController.createOrUpdateProduct(productData); // Save the product
-          console.log("Product data:", productData);
-          console.log("Created or updated product:", product);
 
 
           // Fetch the last price associated with the product
@@ -116,8 +111,6 @@ exports.runScraper = async (req, res, saveData = true) => {
         },
         { where: { id: scraperId } }
       );
-
-      console.log('hey');
 
       const maxErrorEntries = 100;
       const errorPromises = [];

@@ -7,10 +7,6 @@ const db = require('./models');
 const cors = require('cors');
 const rateLimit = require('express-rate-limit');
 
-console.log('kaka');
-console.log(db.ScraperError);
-console.log('Expected table name:', db.ScraperError.getTableName());
-
 // const passport = require('passport');
 // const session = require('express-session');
 // const passportConfig = require('./passportConfig');
@@ -28,13 +24,13 @@ Sentry.init({
 app.use(Sentry.Handlers.errorHandler());
 
 
-// TO BE SET:
-// const corsOptions = {
-//   origin: 'https://your-frontend-domain.com',
-//   methods: ['GET', 'POST', 'PUT', 'DELETE'],
-//   allowedHeaders: ['Content-Type', 'Authorization'],
-// };
-// Enable CORS for all routes
+TO BE SET:
+const corsOptions = {
+  origin: 'https://prijs.watch',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+};
+Enable CORS for all routes
 app.use(cors());
 
 
@@ -55,7 +51,7 @@ sequelize
   .authenticate()
   .then(() => {
     console.log('Database connection has been established successfully.');
-    sequelize.sync(); // Add this line after establishing the connection
+    sequelize.sync();
   })
   .catch((err) => {
     console.error('Unable to connect to the database:', err);
@@ -75,11 +71,11 @@ db.ScraperError.create({
 
 const apiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // Limit each IP to 100 requests per windowMs
+  max: 150, // Limit each IP to 100 requests per windowMs
 });
 
-// Apply the rate limiter to all requests
-// app.use(apiLimiter);
+Apply the rate limiter to all requests
+app.use(apiLimiter);
 
 
 // Use routes
@@ -90,7 +86,3 @@ app.use('/api/scrapers', scraperRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/search', searchRoutes);
 app.use('/api/categories', categoryRoutes);
-
-app.listen(port, () => {
-  console.log(`Server listening at http://localhost:${port}`);
-});

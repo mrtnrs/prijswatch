@@ -11,7 +11,6 @@ async function fetchMetaProducts() {
 }
 
 function createMiniSearch(metaProducts) {
-  console.log('createMiniSearch');
   const miniSearchInstance = new MiniSearch({
     fields: ['name', 'description'],
     storeFields: ['name', 'imageUrl', 'slug', 'brand', 'category'],
