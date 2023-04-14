@@ -5,7 +5,7 @@ import Footer from './components/Footer';
 // import "./api/auth/[...nextauth]";
 import UserLayout from '@/components/layouts/UserLayout'
 
-import { SettingsConsumer, SettingsProvider } from '@/core/context/SettingsContext'
+import { SettingsConsumer, SettingsProvider } from '@/vercelFix/context/SettingsContext'
 import { AuthProvider } from '@/context/AuthContext'
 import ThemeComponent from '@/core/theme/ThemeComponent'
 

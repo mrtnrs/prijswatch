@@ -5,7 +5,7 @@ import { useAuth } from '@/context/AuthContext';
 
 import Button from '@mui/material/Button'
 import { styled } from '@mui/material/styles'
-import Icon from '@/components/Icon'
+import CustomIcon from '@/vercelFix/Icon'
 
 import AddWebshop from '@/components/AddWebshop'
 import { getAllWebshops, deleteWebshop } from '@/api/webshopService';
