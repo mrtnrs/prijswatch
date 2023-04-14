@@ -3,7 +3,7 @@ import MuiBox from '@mui/material/Box'
 import { alpha, styled, useTheme } from '@mui/material/styles'
 
 // ** Custom Icon Import
-import Icon from '@/components/Icon'
+import CustomIcon from '@/components/Icon'
 
 // Styled Box component
 const Box = styled(MuiBox)(() => ({
@@ -21,9 +21,9 @@ const StepperCustomDot = props => {
   // ** Hooks
   const theme = useTheme()
   if (error) {
-    return <Icon icon='mdi:alert' fontSize={20} color={theme.palette.error.main} transform='scale(1.2)' />
+    return <CustomIcon icon='mdi:alert' fontSize={20} color={theme.palette.error.main} transform='scale(1.2)' />
   } else if (completed) {
-    return <Icon icon='mdi:check-circle' fontSize={20} color={theme.palette.primary.main} transform='scale(1.2)' />
+    return <CustomIcon icon='mdi:check-circle' fontSize={20} color={theme.palette.primary.main} transform='scale(1.2)' />
   } else {
     return (
       <Box

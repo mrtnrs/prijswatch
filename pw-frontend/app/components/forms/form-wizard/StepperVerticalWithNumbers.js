@@ -15,7 +15,7 @@ import StepContent from '@mui/material/StepContent'
 
 // ** Third Party Imports
 import clsx from 'clsx'
-import { Toast } from './core/CustomHotToast';
+import { Toast } from '@/core/CustomHotToast';
 
 
 // ** Custom Components Imports

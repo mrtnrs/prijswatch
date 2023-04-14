@@ -72,7 +72,7 @@ const ProductCard = ({
           </AvatarGroup>
           <Box sx={{ display: 'flex', alignItems: 'center', '& svg': { mr: 1, color: 'text.secondary' } }}>
           <Link href={url} target="_blank">
-        <Button fullWidth variant='contained' endIcon={<Icon icon='mdi:arrow-right' />}>
+        <Button fullWidth variant='contained' endIcon={<CustomIcon icon='mdi:arrow-right' />}>
           Ga naar webshop
         </Button>
         </Link>

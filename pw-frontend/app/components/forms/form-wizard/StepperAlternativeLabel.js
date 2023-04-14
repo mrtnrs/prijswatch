@@ -21,13 +21,13 @@ import InputAdornment from '@mui/material/InputAdornment'
 import Select from '@mui/material/Select'
 
 // ** Icon Imports
-import Icon from '@/components/Icon'
+import CustomIcon from '@/components/Icon'
 
 // ** Custom Components Imports
 import StepperCustomDot from './StepperCustomDot'
 
 // ** Third Party Imports
-import { Toast } from './core/CustomHotToast';
+import { Toast } from '@/core/CustomHotToast';
 
 
 // ** Styled Component
@@ -168,7 +168,7 @@ const StepperAlternativeLabel = () => {
                         onMouseDown={handleMouseDownPassword}
                         aria-label='toggle password visibility'
                       >
-                        <Icon icon={state.showPassword ? 'mdi:eye-outline' : 'mdi:eye-off-outline'} />
+                        <CustomIcon icon={state.showPassword ? 'mdi:eye-outline' : 'mdi:eye-off-outline'} />
                       </IconButton>
                     </InputAdornment>
                   }
@@ -192,7 +192,7 @@ const StepperAlternativeLabel = () => {
                         onClick={handleClickShowConfirmPassword}
                         onMouseDown={handleMouseDownConfirmPassword}
                       >
-                        <Icon icon={state.showPassword2 ? 'mdi:eye-outline' : 'mdi:eye-off-outline'} />
+                        <CustomIcon icon={state.showPassword2 ? 'mdi:eye-outline' : 'mdi:eye-off-outline'} />
                       </IconButton>
                     </InputAdornment>
                   }

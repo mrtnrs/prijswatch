@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography'
 import CardContent from '@mui/material/CardContent'
 
 // ** Icon Imports
-import Icon from '@/components/Icon'
+import CustomIcon from '@/components/Icon'
 
 // ** Custom Components Imports
 import CustomAvatar from '@/components/mui/avatar'
@@ -18,19 +18,19 @@ const salesData = [
     stats: '8,458',
     color: 'primary',
     title: 'Customers',
-    icon: <Icon icon='mdi:account-outline' />
+    icon: <CustomIcon icon='mdi:account-outline' />
   },
   {
     stats: '$28.5k',
     color: 'warning',
     title: 'Total Profit',
-    icon: <Icon icon='mdi:poll' />
+    icon: <CustomIcon icon='mdi:poll' />
   },
   {
     color: 'info',
     stats: '2,450k',
     title: 'Transactions',
-    icon: <Icon icon='mdi:trending-up' />
+    icon: <CustomIcon icon='mdi:trending-up' />
   }
 ]
 
@@ -73,7 +73,7 @@ const EcommerceSalesOverview = () => {
             <Typography variant='subtitle2' sx={{ color: 'success.main' }}>
               +18%
             </Typography>
-            <Icon icon='mdi:chevron-up' fontSize={20} />
+            <CustomIcon icon='mdi:chevron-up' fontSize={20} />
           </Box>
         }
       />

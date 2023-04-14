@@ -19,7 +19,7 @@ import Typography from '@mui/material/Typography'
 import TableContainer from '@mui/material/TableContainer'
 
 // ** Icon Imports
-import Icon from '@/components/Icon'
+import CustomIcon from '@/components/Icon'
 
 // ** Custom Components
 import CustomChip from '@/components/mui/chip'
@@ -288,7 +288,7 @@ const EcommerceSalesOverviewWithTabs = () => {
                     backgroundColor: theme => hexToRGBA(theme.palette.secondary.main, 0.12)
                   }}
                 >
-                  <Icon icon='mdi:plus' />
+                  <CustomIcon icon='mdi:plus' />
                 </Box>
               </Avatar>
             }

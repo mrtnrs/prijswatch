@@ -8,7 +8,7 @@ import CardContent from '@mui/material/CardContent'
 import InputAdornment from '@mui/material/InputAdornment'
 
 // ** Icon Imports
-import Icon from '@/components/Icon'
+import CustomIcon from '@/components/Icon'
 
 const FormLayoutsIcons = () => {
   return (
@@ -25,7 +25,7 @@ const FormLayoutsIcons = () => {
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position='start'>
-                      <Icon icon='mdi:account-outline' />
+                      <CustomIcon icon='mdi:account-outline' />
                     </InputAdornment>
                   )
                 }}
@@ -41,7 +41,7 @@ const FormLayoutsIcons = () => {
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position='start'>
-                      <Icon icon='mdi:email-outline' />
+                      <CustomIcon icon='mdi:email-outline' />
                     </InputAdornment>
                   )
                 }}
@@ -56,7 +56,7 @@ const FormLayoutsIcons = () => {
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position='start'>
-                      <Icon icon='mdi:phone' />
+                      <CustomIcon icon='mdi:phone' />
                     </InputAdornment>
                   )
                 }}
@@ -73,7 +73,7 @@ const FormLayoutsIcons = () => {
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position='start'>
-                      <Icon icon='mdi:message-outline' />
+                      <CustomIcon icon='mdi:message-outline' />
                     </InputAdornment>
                   )
                 }}

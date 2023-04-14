@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography'
 import CardContent from '@mui/material/CardContent'
 
 // ** Icon Imports
-import Icon from '@/components/Icon'
+import CustomIcon from '@/components/Icon'
 
 // ** Custom Components Imports
 import CustomAvatar from '@/components/mui/avatar'
@@ -95,7 +95,7 @@ const EcommerceVisitsByDay = () => {
             <Typography variant='body2'>Total 62.4k Visits on Thursday</Typography>
           </Box>
           <CustomAvatar skin='light' variant='rounded'>
-            <Icon icon='mdi:chevron-right' />
+            <CustomIcon icon='mdi:chevron-right' />
           </CustomAvatar>
         </Box>
       </CardContent>

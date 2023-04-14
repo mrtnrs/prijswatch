@@ -25,7 +25,7 @@ import MuiAutocomplete from '@mui/material/Autocomplete'
 // import axios from 'axios'
 
 // ** Icon Imports
-import Icon from '@/components/Icon'
+import CustomIcon from '@/components/Icon'
 
 // ** Configs Imports
 import themeConfig from '@/core/configs/themeConfig'
@@ -172,7 +172,7 @@ const NoResult = ({ value, setOpenDialog }) => {
   return (
     <Box sx={{ display: 'flex', alignItems: 'center', flexDirection: 'column', justifyContent: 'center' }}>
       <Box sx={{ mb: 2.5, color: 'text.primary' }}>
-        <Icon icon='mdi:file-remove-outline' fontSize='5rem' />
+        <CustomIcon icon='mdi:file-remove-outline' fontSize='5rem' />
       </Box>
       <Typography variant='h6' sx={{ mb: 11.5, wordWrap: 'break-word' }}>
         No results for{' '}
@@ -197,7 +197,7 @@ const NoResult = ({ value, setOpenDialog }) => {
             }}
           >
             <Box sx={{ mr: 2.5, display: 'flex', color: 'text.primary' }}>
-              <Icon icon='mdi:cart-outline' fontSize={20} />
+              <CustomIcon icon='mdi:cart-outline' fontSize={20} />
             </Box>
             <Typography variant='body2' sx={{ color: 'text.primary' }}>
               CRM Dashboard
@@ -216,7 +216,7 @@ const NoResult = ({ value, setOpenDialog }) => {
             }}
           >
             <Box sx={{ mr: 2.5, display: 'flex', color: 'text.primary' }}>
-              <Icon icon='mdi:account-outline' fontSize={20} />
+              <CustomIcon icon='mdi:account-outline' fontSize={20} />
             </Box>
             <Typography variant='body2' sx={{ color: 'text.primary' }}>
               User Profile
@@ -235,7 +235,7 @@ const NoResult = ({ value, setOpenDialog }) => {
             }}
           >
             <Box sx={{ mr: 2.5, display: 'flex', color: 'text.primary' }}>
-              <Icon icon='mdi:account-cog-outline' fontSize={20} />
+              <CustomIcon icon='mdi:account-cog-outline' fontSize={20} />
             </Box>
             <Typography variant='body2' sx={{ color: 'text.primary' }}>
               Account Settings
@@ -271,7 +271,7 @@ const DefaultSuggestions = ({ setOpenDialog }) => {
                     '&:hover > *': { color: 'primary.main' }
                   }}
                 >
-                  <Icon icon={suggestionItem.icon} fontSize={20} />
+                  <CustomIcon icon={suggestionItem.icon} fontSize={20} />
                   <Typography variant='body2' sx={{ color: 'text.primary' }}>
                     {suggestionItem.suggestion}
                   </Typography>
@@ -398,7 +398,7 @@ const AutocompleteComponent = ({ hidden, settings }) => {
         sx={{ display: 'flex', cursor: 'pointer', alignItems: 'center' }}
       >
         <IconButton color='inherit' sx={!hidden && layout === 'vertical' ? { mr: 1, ml: -2.75 } : {}}>
-          <Icon icon='mdi:magnify' />
+          <CustomIcon icon='mdi:magnify' />
         </IconButton>
         {!hidden && layout === 'vertical' ? (
           <Typography sx={{ userSelect: 'none', color: 'text.disabled' }}>Search (Ctrl+/)</Typography>
@@ -452,7 +452,7 @@ const AutocompleteComponent = ({ hidden, settings }) => {
                         sx: { p: `${theme.spacing(3.75, 6)} !important` },
                         startAdornment: (
                           <InputAdornment position='start' sx={{ color: 'text.primary' }}>
-                            <Icon icon='mdi:magnify' />
+                            <CustomIcon icon='mdi:magnify' />
                           </InputAdornment>
                         ),
                         endAdornment: (
@@ -463,7 +463,7 @@ const AutocompleteComponent = ({ hidden, settings }) => {
                           >
                             {!hidden ? <Typography sx={{ mr: 2.5, color: 'text.disabled' }}>[esc]</Typography> : null}
                             <IconButton size='small' sx={{ p: 1 }}>
-                              <Icon icon='mdi:close' fontSize={20} />
+                              <CustomIcon icon='mdi:close' fontSize={20} />
                             </IconButton>
                           </InputAdornment>
                         )
@@ -478,7 +478,7 @@ const AutocompleteComponent = ({ hidden, settings }) => {
                       key={option.title}
                       className={`suggestion ${props.className}`}
                       onClick={() => handleOptionClick(option)}
-                      secondaryAction={<Icon icon='mdi:subdirectory-arrow-left' fontSize={20} />}
+                      secondaryAction={<CustomIcon icon='mdi:subdirectory-arrow-left' fontSize={20} />}
                       sx={{
                         '& .MuiListItemSecondaryAction-root': {
                           '& svg': {
@@ -495,7 +495,7 @@ const AutocompleteComponent = ({ hidden, settings }) => {
                           '& svg': { mr: 2.5, color: 'text.primary' }
                         }}
                       >
-                        <Icon fontSize={20} icon={option.icon || themeConfig.navSubItemIcon} />
+                        <CustomIconfontSize={20} icon={option.icon || themeConfig.navSubItemIcon} />
                         <Typography variant='body2' sx={{ color: 'text.primary' }}>
                           {option.title}
                         </Typography>

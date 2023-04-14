@@ -25,7 +25,7 @@ import Select from '@mui/material/Select'
 import DatePicker from 'react-datepicker'
 
 // ** Icon Imports
-import Icon from '@/components/Icon'
+import CustomIcon from '@/components/Icon'
 
 const CustomInput = forwardRef((props, ref) => {
   return <TextField fullWidth {...props} inputRef={ref} label='Birth Date' autoComplete='off' />
@@ -181,7 +181,7 @@ const FormLayoutsTabs = () => {
                             onMouseDown={handleMouseDownPassword}
                             aria-label='toggle password visibility'
                           >
-                            <Icon icon={values.showPassword ? 'mdi:eye-outline' : 'mdi:eye-off-outline'} />
+                            <CustomIcon icon={values.showPassword ? 'mdi:eye-outline' : 'mdi:eye-off-outline'} />
                           </IconButton>
                         </InputAdornment>
                       }
@@ -205,7 +205,7 @@ const FormLayoutsTabs = () => {
                             onClick={handleClickShowConfirmPassword}
                             onMouseDown={handleMouseDownConfirmPassword}
                           >
-                            <Icon icon={values.showPassword2 ? 'mdi:eye-outline' : 'mdi:eye-off-outline'} />
+                            <CustomIcon icon={values.showPassword2 ? 'mdi:eye-outline' : 'mdi:eye-off-outline'} />
                           </IconButton>
                         </InputAdornment>
                       }

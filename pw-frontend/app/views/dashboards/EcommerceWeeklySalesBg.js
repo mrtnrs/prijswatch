@@ -15,7 +15,7 @@ import clsx from 'clsx'
 import { useKeenSlider } from 'keen-slider/react'
 
 // ** Icon Imports
-import Icon from '@/components/Icon'
+import CustomIcon from '@/components/Icon'
 
 // ** Custom Components Imports
 import CustomAvatar from '@/components/mui/avatar'
@@ -69,7 +69,7 @@ const Slides = () => {
               <Typography variant='subtitle2' sx={{ color: 'success.main' }}>
                 +62%
               </Typography>
-              <Icon icon='mdi:chevron-up' fontSize={20} />
+              <CustomIcon icon='mdi:chevron-up' fontSize={20} />
             </Box>
             <Grid container>
               <Grid item xs={12} sm={6} lg={8} sx={{ order: [2, 1] }}>

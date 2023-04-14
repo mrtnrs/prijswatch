@@ -23,7 +23,7 @@ import Select from '@mui/material/Select'
 import DatePicker from 'react-datepicker'
 
 // ** Icon Imports
-import Icon from '@/components/Icon'
+import CustomIcon from '@/components/Icon'
 
 
 const CustomInput = forwardRef((props, ref) => {

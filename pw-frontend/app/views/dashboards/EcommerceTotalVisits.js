@@ -10,7 +10,7 @@ import LinearProgress from '@mui/material/LinearProgress'
 import CustomAvatar from '@/components/mui/avatar'
 
 // ** Icon Imports
-import Icon from '@/components/Icon'
+import CustomIcon from '@/components/Icon'
 
 const EcommerceTotalVisits = () => {
   return (
@@ -25,7 +25,7 @@ const EcommerceTotalVisits = () => {
             <Typography variant='subtitle2' sx={{ color: 'success.main' }}>
               +18.4%
             </Typography>
-            <Icon icon='mdi:chevron-up' />
+            <CustomIcon icon='mdi:chevron-up' />
           </Box>
         </Box>
         <Box sx={{ mb: 5, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -37,7 +37,7 @@ const EcommerceTotalVisits = () => {
                 variant='rounded'
                 sx={{ mr: 1.5, height: 24, width: 24, borderRadius: '6px' }}
               >
-                <Icon icon='mdi:cellphone' fontSize='0.875rem' />
+                <CustomIcon icon='mdi:cellphone' fontSize='0.875rem' />
               </CustomAvatar>
               <Typography variant='body2'>Mobile</Typography>
             </Box>
@@ -61,7 +61,7 @@ const EcommerceTotalVisits = () => {
                 Desktop
               </Typography>
               <CustomAvatar skin='light' variant='rounded' sx={{ height: 24, width: 24, borderRadius: '6px' }}>
-                <Icon icon='mdi:monitor' fontSize='0.875rem' />
+                <CustomIcon icon='mdi:monitor' fontSize='0.875rem' />
               </CustomAvatar>
             </Box>
             <Typography variant='h6'>76.5%</Typography>

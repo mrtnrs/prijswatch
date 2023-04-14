@@ -5,7 +5,7 @@ import Typography from '@mui/material/Typography'
 import { DataGrid } from '@mui/x-data-grid'
 
 // ** Icon Imports
-import Icon from '@/components/Icon'
+import CustomIcon from '@/components/Icon'
 
 // ** Custom Components
 import CustomChip from '@/components/mui/chip'
@@ -18,35 +18,35 @@ const roleObj = {
   admin: {
     icon: (
       <Box component='span' sx={{ mr: 2, display: 'flex', color: 'error.main' }}>
-        <Icon icon='mdi:laptop' />
+        <CustomIcon icon='mdi:laptop' />
       </Box>
     )
   },
   author: {
     icon: (
       <Box component='span' sx={{ mr: 2, display: 'flex', color: 'warning.main' }}>
-        <Icon icon='mdi:cog' />
+        <CustomIcon icon='mdi:cog' />
       </Box>
     )
   },
   maintainer: {
     icon: (
       <Box component='span' sx={{ mr: 2, display: 'flex', color: 'success.main' }}>
-        <Icon icon='mdi:chart-donut' />
+        <CustomIcon icon='mdi:chart-donut' />
       </Box>
     )
   },
   editor: {
     icon: (
       <Box component='span' sx={{ mr: 2, display: 'flex', color: 'info.main' }}>
-        <Icon icon='mdi:pencil-outline' />
+        <CustomIcon icon='mdi:pencil-outline' />
       </Box>
     )
   },
   subscriber: {
     icon: (
       <Box component='span' sx={{ mr: 2, display: 'flex', color: 'primary.main' }}>
-        <Icon icon='mdi:account-outline' />
+        <CustomIcon icon='mdi:account-outline' />
       </Box>
     )
   }
