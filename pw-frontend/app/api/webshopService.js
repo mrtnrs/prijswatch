@@ -1,4 +1,5 @@
-const API_URL = 'http://localhost:3001/api/webshops';
+const API_URL = '/api/webshops';
+const SERVER_URL = process.env.NEXT_PUBLIC_API_SERVER_URL;
 import { getIdToken } from './authService';
 
 export const createWebshop = async (webshopData) => {
@@ -9,7 +10,7 @@ export const createWebshop = async (webshopData) => {
   }
 
   try {
-    const response = await fetch(`${API_URL}`, {
+    const response = await fetch(`${SERVER_URL}${API_URL}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -31,7 +32,7 @@ export const createWebshop = async (webshopData) => {
 
 export const getAllWebshops = async () => {
   try {
-    const response = await fetch(`${API_URL}`);
+    const response = await fetch(`${SERVER_URL}${API_URL}`);
 
     if (!response.ok) {
       throw new Error(`Error fetching webshops: ${response.statusText}`);
@@ -52,7 +53,7 @@ export async function updateWebshop(webshopId, webshopData) {
   }
 
   try {
-    const response = await fetch(`${API_URL}/${webshopId}`, {
+    const response = await fetch(`${SERVER_URL}${API_URL}/${webshopId}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -80,7 +81,7 @@ export const deleteWebshop = async (id) => {
   }
 
   try {
-    const response = await fetch(`${API_URL}/${id}`, {
+    const response = await fetch(`${SERVER_URL}${API_URL}/${id}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',

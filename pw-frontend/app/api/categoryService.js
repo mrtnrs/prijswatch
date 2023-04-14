@@ -1,4 +1,6 @@
-const API_URL = 'http://localhost:3001/api/categories';
+const API_URL = '/api/categories';
+const SERVER_URL = process.env.NEXT_PUBLIC_API_SERVER_URL;
+
 import { getIdToken } from './authService';
 
 const createHeaders = async () => {
@@ -18,7 +20,7 @@ const createHeaders = async () => {
 export const fetchCategories = async () => {
   console.log("fetchCategories");
   try {
-    const response = await fetch(`${API_URL}`);
+    const response = await fetch(`${SERVER_URL}${API_URL}`);
     const categories = await response.json();
 console.log('categories:', categories);
     return categories;
@@ -30,7 +32,7 @@ console.log('categories:', categories);
 
 export const fetchCategoryStructure = async () => {
   console.log('fetchdem');
-  const response = await fetch(`${API_URL}/categoryStructure`);
+  const response = await fetch(`${SERVER_URL}${API_URL}/categoryStructure`);
   const data = await response.json();
   console.log('data', response);
   return data;
@@ -39,7 +41,7 @@ export const fetchCategoryStructure = async () => {
 export const handleAddCategory = async (categoryName, parentCategoryId = null) => {
   try {
     // Send a POST request to your API with the category data
-    const response = await fetch(`${API_URL}`, {
+    const response = await fetch(`${SERVER_URL}${API_URL}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -65,7 +67,7 @@ export const createCategory = async (categoryData) => {
   console.log("createCategory");
   try {
     const headers = await createHeaders();
-    const response = await fetch(`${API_URL}`, {
+    const response = await fetch(`${SERVER_URL}${API_URL}`, {
       method: 'POST',
       headers,
       body: JSON.stringify(categoryData),
@@ -86,7 +88,7 @@ export const createCategory = async (categoryData) => {
 export const deleteCategory = async (categoryId) => {
   try {
     const headers = await createHeaders();
-    const response = await fetch(`${API_URL}/${categoryId}`, {
+    const response = await fetch(`${SERVER_URL}${API_URL}/${categoryId}`, {
       method: 'DELETE',
       headers,
     });

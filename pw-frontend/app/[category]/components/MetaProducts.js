@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+const SERVER_URL = process.env.NEXT_PUBLIC_API_SERVER_URL;
 
 async function getAllMetaProducts(category) {
   try {
-    const res = await fetch(`http://localhost:3001/api/products/${category}/meta-product`);
+    const res = await fetch(`${SERVER_URL}/api/products/${category}/meta-product`);
     return res.json();
   } catch (error) {
     console.error(`Error in fetch request: ${error.message}`);

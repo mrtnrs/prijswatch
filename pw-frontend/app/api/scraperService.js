@@ -1,4 +1,5 @@
-const API_URL = 'http://localhost:3001/api/scrapers';
+const API_URL = '/api/scrapers';
+const SERVER_URL = process.env.NEXT_PUBLIC_API_SERVER_URL;
 import { getIdToken } from './authService';
 
 const createHeaders = async () => {
@@ -17,7 +18,7 @@ const createHeaders = async () => {
 export const testScraper = async (webshopId, scraperSettings) => {
   try {
     const headers = await createHeaders();
-    const response = await fetch(`${API_URL}/test`, {
+    const response = await fetch(`${SERVER_URL}${API_URL}/test`, {
       method: 'POST',
       headers,
       body: JSON.stringify({ webshopId, scraperSettings }),
@@ -35,7 +36,7 @@ export const testScraper = async (webshopId, scraperSettings) => {
 export const saveScraper = async (webshopId, scraperSettings) => {
   try {
     const headers = await createHeaders();
-    const response = await fetch(`${API_URL}/save`, {
+    const response = await fetch(`${SERVER_URL}${API_URL}/save`, {
       method: 'POST',
       headers,
       body: JSON.stringify({ webshopId, scraperSettings }),
@@ -54,7 +55,7 @@ export const saveScraper = async (webshopId, scraperSettings) => {
 export const updateScraper = async (scraperId, webshopId, scraperSettings) => {
   try {
     const headers = await createHeaders();
-    const response = await fetch(`${API_URL}/update/${scraperId}`, {
+    const response = await fetch(`${SERVER_URL}${API_URL}/update/${scraperId}`, {
       method: 'PUT',
       headers,
       body: JSON.stringify({ webshopId, scraperSettings }),
@@ -73,7 +74,7 @@ export const updateScraper = async (scraperId, webshopId, scraperSettings) => {
 export const getAllScrapers = async () => {
   try {
     const headers = await createHeaders();
-    const response = await fetch(`${API_URL}/`, {
+    const response = await fetch(`${SERVER_URL}${API_URL}/`, {
       headers,
     });
 
@@ -91,7 +92,7 @@ export const getAllScrapers = async () => {
 export const deleteScraper = async (scraperId) => {
   try {
     const headers = await createHeaders();
-    const response = await fetch(`${API_URL}/delete/${scraperId}`, {
+    const response = await fetch(`${SERVER_URL}${API_URL}/delete/${scraperId}`, {
       method: 'DELETE',
       headers,
     });
@@ -107,7 +108,7 @@ export const deleteScraper = async (scraperId) => {
 export const updateScraperActiveState = async (scraperId, active) => {
   try {
     const headers = await createHeaders();
-    const response = await fetch(`${API_URL}/update-active-state/${scraperId}`, {
+    const response = await fetch(`${SERVER_URL}${API_URL}/update-active-state/${scraperId}`, {
       method: 'PATCH',
       headers,
       body: JSON.stringify({ active }),
@@ -126,7 +127,7 @@ export const updateScraperActiveState = async (scraperId, active) => {
 export const runOnce = async (scraperId) => {
   try {
     const headers = await createHeaders();
-    const response = await fetch(`${API_URL}/run-once/${scraperId}`, {
+    const response = await fetch(`${SERVER_URL}${API_URL}/run-once/${scraperId}`, {
       method: 'POST',
       headers,
     });

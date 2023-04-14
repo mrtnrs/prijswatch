@@ -15,6 +15,9 @@ import productService from '@/api/productService';
 import priceService from '@/api/priceService';
 
 import Typography from '@mui/material/Typography';
+const SERVER_URL = process.env.NEXT_PUBLIC_API_SERVER_URL;
+
+
 
 
 
@@ -27,7 +30,7 @@ export default function SingleMetaProduct({ categorySlug, metaProductSlug, onPro
   useEffect(() => {
     async function fetchMetaProduct() {
       try {
-        const res = await fetch(`http://localhost:3001/api/products/${categorySlug}/${metaProductSlug}/meta-product`);
+        const res = await fetch(`${SERVER_URL}/api/products/${categorySlug}/${metaProductSlug}/meta-product`);
         if (res.ok) {
           const data = await res.json();
           if(data?.length === 0){

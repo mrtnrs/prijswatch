@@ -1,7 +1,6 @@
 require('dotenv').config();
 
-module.exports = {
-  development: {
+const config = {
     username: process.env.COCKROACHDB_USERNAME,
     password: process.env.COCKROACHDB_PASSWORD,
     database: process.env.COCKROACHDB_DATABASE,
@@ -15,5 +14,9 @@ module.exports = {
         rejectUnauthorized: false,
       },
     },
-  },
+};
+
+module.exports = {
+  development: config,
+  production: config,
 };

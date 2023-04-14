@@ -1,8 +1,9 @@
-const API_URL = 'http://localhost:3001/api/products';
+const API_URL = '/api/products';
+const SERVER_URL = process.env.NEXT_PUBLIC_API_SERVER_URL;
 
 async function fetchMetaProduct(category, slug) {
   try {
-  const response = await fetch(`${API_URL}/${category}/${slug}/meta-product`);
+  const response = await fetch(`${SERVER_URL}${API_URL}/${category}/${slug}/meta-product`);
   const metaProduct = await response.json();
   return metaProduct;
   } catch (error) {
@@ -14,7 +15,7 @@ async function fetchMetaProduct(category, slug) {
 async function fetchProducts(metaProductId) {
   try {
     // Update the fetch URL to use the new route
-    const response = await fetch(`${API_URL}/by-meta-product-id/${metaProductId}`);
+    const response = await fetch(`${SERVER_URL}${API_URL}/by-meta-product-id/${metaProductId}`);
     const data = await response.json();
     return data;
   } catch (error) {
@@ -24,7 +25,7 @@ async function fetchProducts(metaProductId) {
 
 async function fetchMetaProductsByCategoryAndBrand(categorySlug) {
   try {
-    const response = await fetch(`${API_URL}/${categorySlug}/grouped-by-brand`);
+    const response = await fetch(`${SERVER_URL}${API_URL}/${categorySlug}/grouped-by-brand`);
     const data = await response.json();
     console.log(data);
     return data;

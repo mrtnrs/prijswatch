@@ -27,7 +27,8 @@ import SearchBar from '@/components/search/SearchBar'
 import SearchResults from '@/components/search/SearchResults';
 
 
-const API_URL = 'http://localhost:3001/api/search';
+const API_URL = '/api/search';
+const SERVER_URL = process.env.NEXT_PUBLIC_API_SERVER_URL;
 
 // ** Spinner Import
 import Spinner from '@/components/spinner'
@@ -66,7 +67,7 @@ export default function Home() {
   const handleSearch = (query) => {
     console.log(query);
     try {
-      fetch(`${API_URL}/?q=${query}`)
+      fetch(`${SERVER_URL}${API_URL}/?q=${query}`)
       .then((response) => {
         if (!response.ok) {
           console.log(response);
