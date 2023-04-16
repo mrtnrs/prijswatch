@@ -117,7 +117,7 @@ const SearchResults = ({ searchResults, queryLength, isLoading }) => {
                         color="primary"
                         variant="outlined"
                         icon={
-                          <Icon
+                          <CustomIcon
                             icon="mdi:arrow-right-thin-circle-outline"
                             fontSize={20}
                           />
