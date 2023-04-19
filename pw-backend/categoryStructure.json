@@ -1,5 +1,5 @@
 {
-  "version": 1681389908990,
+  "version": 1681715820918,
   "tree": [
     {
       "id": "236d2f38-caa7-4e16-927c-4efdebfeae89",
@@ -51,6 +51,13 @@
       "slug": "gaming",
       "parentId": null,
       "children": [
+        {
+          "id": "09030793-b4f3-47f2-a329-465fe3876667",
+          "name": "VR",
+          "slug": "vr",
+          "parentId": "54e267de-4d9a-4b4a-8cb2-2a5cfc2a2b71",
+          "children": []
+        },
         {
           "id": "a6bf5c2f-7320-4b8c-94c4-26ad6dc8beb8",
           "name": "Console",

@@ -1,5 +1,19 @@
 const API_URL = '/api/products';
 const SERVER_URL = process.env.NEXT_PUBLIC_API_SERVER_URL;
+import { getIdToken } from './authService';
+
+const createHeaders = async () => {
+  const idToken = await getIdToken();
+
+  if (!idToken) {
+    throw new Error('User is not authenticated');
+  }
+
+  return {
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${idToken}`,
+  };
+};
 
 async function fetchMetaProduct(category, slug) {
   try {
@@ -35,9 +49,35 @@ async function fetchMetaProductsByCategoryAndBrand(categorySlug) {
   }
 }
 
+async function fetchProductsToReview() {
+  console.log("fetchProductsToReview");
+  try {
+    const headers = await createHeaders();
+    console.log(headers);
+    const response = await fetch(`${SERVER_URL}${API_URL}/needs-review`, {
+      headers,
+    });
+
+    if (!response.ok) {
+      console.log("Error in response:", response.status, response.statusText);
+      throw new Error(`HTTP error ${response.status}: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    console.log("datas: ", data);
+    return data;
+  } catch (error) {
+    console.log(error);
+    console.error("Error fetching products to review:", error);
+  }
+}
+
+
+
 export default {
   fetchMetaProduct,
   fetchProducts,
   fetchMetaProductsByCategoryAndBrand,
+  fetchProductsToReview,
 };
 

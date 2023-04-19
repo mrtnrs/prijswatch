@@ -6,6 +6,14 @@ const ScraperManager = require("../scrapers/scraperManager");
 const scraperManager = new ScraperManager();
 const authenticateUser = require("../middleware/authenticateUser");
 
+const apiKeyMiddleware = (req, res, next) => {
+  const apiKey = req.get('X-API-KEY');
+  if (apiKey && apiKey === process.env.SCRAPER_API_KEY) {
+    next();
+  } else {
+    res.status(401).json({ message: 'Unauthorized' });
+  }
+};
 
 router.get('/', authenticateUser('admin'), scraperController.getAllScrapers);
 router.put('/update/:scraperId', authenticateUser('admin'), scraperController.updateScraper);
@@ -49,10 +57,12 @@ router.post('/run-once/:id', authenticateUser('admin'), async (req, res) => {
   }
 });
 
+router.post('/run-due-scrapers', apiKeyMiddleware, scraperManager.runDueScrapers);
 
 
-router.post("/remove", authenticateUser('admin'), scraperController.removeScraper);
-router.get("/:name", authenticateUser('admin'), scraperController.getScraper);
+
+//router.post("/remove", authenticateUser('admin'), scraperController.removeScraper);
+// router.get("/:name", authenticateUser('admin'), scraperController.getScraper);
 router.get("/run/:name", authenticateUser('admin'), scraperController.runScraper);
 
 

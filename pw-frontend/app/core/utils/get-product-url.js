@@ -9,6 +9,8 @@ import slugify from 'slugify';
 
     for (const category of categoryStructure) {
     // Sanitize the category slug
+        console.log('category:', category);
+  console.log('category.slug:', category.slug);
       const sanitizedCategorySlugInStructure = slugify(category.slug, { lower: true, strict: true });
 
       if (sanitizedCategorySlugInStructure === sanitizedCategorySlug) {

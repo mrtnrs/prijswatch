@@ -7,8 +7,8 @@ const slugify = require('slugify');
 const ApiScraper = require('../scrapers/apiScraper');
 const PuppeteerScraper = require('../scrapers/puppeteerScraper');
 
-const ScraperManager = require("../scrapers/scraperManager");
-const scraperManager = new ScraperManager();
+// const ScraperManager = require("../scrapers/scraperManager");
+// const scraperManager = new ScraperManager();
 const { findMatchingMetaProduct, MIN_SIMILARITY_SCORE } = require('./productMatcher');
 
 const resizeAndUpload = require("../util/resizeAndUpload");
@@ -21,7 +21,6 @@ exports.getAllScrapers = async (req, res) => {
   try {
     console.log('hey');
     const scrapers = await Scraper.findAll();
-    console.log(scrapers);
     return res.status(200).json({scrapers: scrapers});
   } catch (error) {
     return res.status(500).json({ message: 'Error fetching scrapers', error });
@@ -322,18 +321,18 @@ exports.testScraper = async (req, res) => {
 
 
 // Remove a scraper
-exports.removeScraper = async (req, res) => {
-  const { name } = req.body;
-  scraperManager.unregisterScraper(name);
-  res.status(200).send({ message: "Scraper removed successfully." });
-};
+// exports.removeScraper = async (req, res) => {
+//   const { name } = req.body;
+//   scraperManager.unregisterScraper(name);
+//   res.status(200).send({ message: "Scraper removed successfully." });
+// };
 
 // Get a scraper
-exports.getScraper = async (req, res) => {
-  const { name } = req.params;
-  const scraper = scraperManager.getScraper(name);
-  res.status(200).send(scraper);
-};
+// exports.getScraper = async (req, res) => {
+//   const { name } = req.params;
+//   const scraper = scraperManager.getScraper(name);
+//   res.status(200).send(scraper);
+// };
 
 // create new Scraper
 

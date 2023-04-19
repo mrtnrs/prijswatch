@@ -134,7 +134,7 @@ export default function Home() {
 
 
     {/* Search results */}
-   <Grid item xs={12} lg={6} order={{ xs: 2, lg: 1 }} sx={{ position: 'relative' }}>
+   <Grid item xs={12} lg={6} order={{ xs: 2, lg: 1 }} sx={{  }}>
    <SearchResults 
    searchResults={searchResults}
    queryLength={searchQuery.length}

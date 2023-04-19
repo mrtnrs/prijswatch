@@ -16,6 +16,7 @@ import priceService from '@/api/priceService';
 
 import Typography from '@mui/material/Typography';
 const SERVER_URL = process.env.NEXT_PUBLIC_API_SERVER_URL;
+const IMG_SERVER = process.env.NEXT_PUBLIC_IMG_SERVER;
 
 
 
@@ -27,31 +28,36 @@ export default function SingleMetaProduct({ categorySlug, metaProductSlug, onPro
   const [loading, setLoading] = useState(true);
   const categoryStructure = importedCategoryStructure.tree;
 
-  useEffect(() => {
-    async function fetchMetaProduct() {
-      try {
-        const res = await fetch(`${SERVER_URL}/api/products/${categorySlug}/${metaProductSlug}/meta-product`);
-        if (res.ok) {
-          const data = await res.json();
-          if(data?.length === 0){
-            onProductNotFound();
-            setMetaProduct(null);
-            setLoading(false);
-          } else {
-            setMetaProduct(data);
-            onProductNameUpdate(data.name);
-            setLoading(false);
-          }
-        } else {
-          setMetaProduct(null);
-        }
-      } catch (error) {
-        console.error(`Error in fetch request: ${error.message}`);
-      }
-    }
 
-    fetchMetaProduct();
-  }, [categorySlug, metaProductSlug, onProductNotFound]);
+  useEffect(() => {
+  async function fetchMetaProduct() {
+    try {
+      const res = await fetch(`${SERVER_URL}/api/products/${categorySlug}/${metaProductSlug}/meta-product`);
+      if (res.ok) {
+        const data = await res.json();
+        if (data && data.name) { // Check if data object has a name property
+          setMetaProduct(data);
+          onProductNameUpdate(data.name);
+          setLoading(false);
+        } else {
+          onProductNotFound();
+          setMetaProduct(null);
+          setLoading(false);
+        }
+      } else {
+        setMetaProduct(null);
+      }
+    } catch (error) {
+      onProductNotFound();
+      setMetaProduct(null);
+      setLoading(false);
+      console.error(`Error in fetch request: ${error.message}`);
+    }
+  }
+
+  fetchMetaProduct();
+}, [categorySlug, metaProductSlug, onProductNotFound]);
+
 
   useEffect(() => {
     if (metaProduct && metaProduct.id) {
@@ -148,7 +154,7 @@ export default function SingleMetaProduct({ categorySlug, metaProductSlug, onPro
             
             <p>{metaProduct.brand}</p>
             {metaProduct.imageUrl && (
-              <img src={`https://prijs.watch/${metaProduct.imageUrl}`} alt={metaProduct.name} />
+              <img src={`${IMG_SERVER}${metaProduct.imageUrl}`} alt={metaProduct.name} />
             )}
             <p>{metaProduct.description}</p>
             <Button variant="outlined">Add to Favorites</Button>

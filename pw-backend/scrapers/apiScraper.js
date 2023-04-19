@@ -2,6 +2,7 @@
 const BaseScraper = require('./baseScraper');
 const axios = require("axios");
 const resizeAndUpload = require("../util/resizeAndUpload");
+const getExistingProduct = require("../util/getExistingProduct");
 
 class ApiScraper extends BaseScraper {
   constructor(scraperSettings, apiConfig) {
@@ -9,6 +10,7 @@ class ApiScraper extends BaseScraper {
     this.apiConfig = apiConfig;
     this.dataPath = apiConfig.dataPath; // Add this line
     this.productMappingFunction = apiConfig.productMappingFunction;
+    this.categoryId = scraperSettings.categoryId;
   }
 
   async scrape() {
@@ -21,8 +23,6 @@ class ApiScraper extends BaseScraper {
         }
 
         const { data } = await axios.get(url);
-        console.log('API response data:', data); // Log the response data
-
         const products = this.dataPath.split('.').reduce((obj, path) => obj[path], data);
 
 
@@ -33,15 +33,25 @@ class ApiScraper extends BaseScraper {
         return await Promise.all(products.map(async (product) => {
           const mappedProduct = eval(`(${this.productMappingFunction})`)(product);
 
-          const imageUrl = mappedProduct.imageUrl;
-          let resizedImageUrl = null;
-          try {
-            resizedImageUrl = imageUrl ? await resizeAndUpload(imageUrl, 200, 200) : null;
-          } catch (error) {
-            console.error(`Error resizing and uploading image: ${error}`);
-          }
 
-          mappedProduct.imageUrl = resizedImageUrl;
+
+const existingProduct = await getExistingProduct(mappedProduct.url, this.categoryId);
+if (existingProduct) {
+  if (!existingProduct.imageUrl && mappedProduct.imageUrl) {
+    try {
+      const resizedImageUrl = await resizeAndUpload(mappedProduct.imageUrl, mappedProduct.name);
+      mappedProduct.imageUrl = resizedImageUrl;
+    } catch (error) {
+      console.error(`Error resizing and uploading image: ${error}`);
+    }
+  } else {
+    console.log('imageUrl already exists');
+    mappedProduct.imageUrl = existingProduct.imageUrl;
+  }
+}
+
+
+
           return mappedProduct;
         }));
       }

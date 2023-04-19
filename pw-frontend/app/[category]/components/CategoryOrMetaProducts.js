@@ -98,7 +98,7 @@ useEffect(() => {
       return (
         <div>
           <BasicBreadcrumbs categoryTree={categoryTree} />
-          <Typography variant="h1">{lastParam}</Typography>
+          <Typography variant="h1" sx={{textTransform: 'capitalize', mt: 5}}>{lastParam}</Typography>
           {metaProducts.length === 0 ? (
             <Typography variant="h6">This category doesn't have any products... yet</Typography>
           ) : (

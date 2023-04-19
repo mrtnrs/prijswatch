@@ -112,6 +112,39 @@ exports.getAllMetaProductsByCategory = async (req, res) => {
   }
 };
 
+// productController.js
+
+exports.fetchNeedReviewProducts = async (req, res) => {
+  console.log('fetchNeedReview');
+  try {
+    const needReviewProducts = await Product.findAll({
+      where: {
+        needsreview: true,
+      },
+      include: [
+        {
+          model: Webshop,
+          as: 'webshop',
+        },
+      ],
+    });
+
+    // Format the products without including the latest price
+    const formattedProducts = needReviewProducts.map((product) => {
+      return {
+        ...product.toJSON(),
+      };
+    });
+    console.log('ABC: ', formattedProducts);
+    res.status(200).json(formattedProducts);
+  } catch (error) {
+    console.error('Error fetching products that need review:', error);
+    res.status(500).json({ message: 'Error fetching products that need review' });
+  }
+};
+
+
+
 // Get products by MetaProduct
 
 exports.getProductsByMetaProductId = async (req, res) => {

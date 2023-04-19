@@ -31,7 +31,7 @@ const ProductCard = ({
           price}) => {
   return (
     <Card>
-      <CardMedia sx={{ height: 200 }} image={`https://prijs.watch/${image}`} />
+      <CardMedia sx={{ height: 200 }} image={`${image}`} />
       <CardContent>
         <Box sx={{ mb: 3.5, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>

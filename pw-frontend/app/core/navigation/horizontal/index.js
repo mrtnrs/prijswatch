@@ -1,28 +1,68 @@
 const navigation = () => {
   return [
     {
-      icon: 'mdi:devices',
-      title: 'Phone & Tablet',
+      icon: 'mdi:projector',
+      title: 'Beeld & video',
       children: [
         {
-          icon: 'mdi:cellphone',
-          title: 'Smartphones',
-          path: '/smartphones'
+          title: 'Video',
+          icon: 'mdi:record-rec',
+          path: '/apps/email',
+          children: [
+            {
+              title: "Action camera's",
+              icon: 'mdi:camera-gopro',
+              path: '/apps/invoice/list'
+            },
+            {
+              title: 'Drones',
+              icon: 'mdi:quadcopter',
+              path: '/apps/invoice/preview'
+            }
+          ]
         },
         {
-          icon: 'mdi:tablet',
-          title: 'Tablets',
-          path: '/tablets'
+          title: 'TV & projector',
+          icon: 'mdi:projector-screen-outline',
+          path: '/apps/chat',
+          children: [
+            {
+              title: 'Televisies',
+              icon: 'mdi:television',
+              path: '/apps/invoice/list'
+            },
+            {
+              title: 'Projectors',
+              icon: 'mdi:projector',
+              path: '/apps/invoice/preview'
+            },
+            {
+              title: 'Monitors',
+              icon: 'mdi:monitor-screenshot',
+              path: '/apps/invoice/preview'
+            }
+          ]
         },
         {
-          icon: 'mdi:watch-variant',
-          title: 'Smartwatches',
-          path: '/smartwatches'
+          title: 'Fotografie',
+          icon: 'mdi:panorama-outline',
+          children: [
+            {
+              title: "Camera's",
+              icon: 'mdi:camera',
+              path: '/apps/invoice/list'
+            },
+            {
+              title: 'Lenzen',
+              icon: 'mdi:camera-iris',
+              path: '/apps/invoice/preview'
+            }
+          ]
         }
       ]
     },
     {
-      icon: 'mdi:music-note-eighth',
+      icon: 'mdi:speaker-wireless',
       title: 'Audio',
       children: [
         {
@@ -48,6 +88,11 @@ const navigation = () => {
               path: '/apps/invoice/preview'
             }
           ]
+        },
+        {
+          title: 'Soundbars',
+          icon: 'mdi:soundbar',
+          path: '/apps/chat'
         }
       ]
     },
@@ -77,440 +122,124 @@ const navigation = () => {
           ]
         },
                 {
-          title: 'Typography',
-          icon: 'mdi:format-letter-case',
+          title: 'VR',
+          icon: 'mdi:safety-goggles',
           path: '/ui/typography'
         },
         {
-          title: 'Icons',
-          path: '/ui/icons',
-          icon: 'mdi:google-circles-extended'
-        },
-        {
-          title: 'Components',
-          icon: 'mdi:archive-outline',
-          children: [
-            {
-              title: 'Accordion',
-              path: '/components/accordion'
-            },
-            {
-              title: 'Alerts',
-              path: '/components/alerts'
-            },
-            {
-              title: 'Avatars',
-              path: '/components/avatars'
-            },
-            {
-              title: 'Badges',
-              path: '/components/badges'
-            },
-            {
-              title: 'Buttons',
-              path: '/components/buttons'
-            },
-            {
-              title: 'Button Group',
-              path: '/components/button-group'
-            },
-            {
-              title: 'Chips',
-              path: '/components/chips'
-            },
-            {
-              title: 'Dialogs',
-              path: '/components/dialogs'
-            },
-            {
-              title: 'List',
-              path: '/components/list'
-            },
-            {
-              title: 'Menu',
-              path: '/components/menu'
-            },
-            {
-              title: 'Pagination',
-              path: '/components/pagination'
-            },
-            {
-              title: 'Ratings',
-              path: '/components/ratings'
-            },
-            {
-              title: 'Snackbar',
-              path: '/components/snackbar'
-            },
-            {
-              title: 'Swiper',
-              path: '/components/swiper'
-            },
-            {
-              title: 'Tabs',
-              path: '/components/tabs'
-            },
-            {
-              title: 'Timeline',
-              path: '/components/timeline'
-            },
-            {
-              title: 'Toasts',
-              path: '/components/toast'
-            },
-            {
-              title: 'Tree View',
-              path: '/components/tree-view'
-            },
-            {
-              title: 'More',
-              path: '/components/more'
-            },
-          ]
+          title: 'Gaming accessoires',
+          path: '/ui/headset-dock',
+          icon: 'mdi:headset-dock'
         }
       ]
     },
     {
-      icon: 'mdi:file-document-outline',
-      title: 'Pages',
+      icon: 'mdi:devices',
+      title: 'Smarthpones & Tablets',
       children: [
         {
-          title: 'User Profile',
-          icon: 'mdi:card-account-details-outline',
-          children: [
-            {
-              title: 'Profile',
-              path: '/pages/user-profile/profile'
-            },
-            {
-              title: 'Teams',
-              path: '/pages/user-profile/teams'
-            },
-            {
-              title: 'Projects',
-              path: '/pages/user-profile/projects'
-            },
-            {
-              title: 'Connections',
-              path: '/pages/user-profile/connections'
-            }
-          ]
+          title: 'Smarthpones',
+          path: '/ui/headset-dock',
+          icon: 'mdi:card-account-details-outline'
         },
         {
           icon: 'mdi:account-cog-outline',
-          title: 'Account Settings',
-          children: [
-            {
-              title: 'Account',
-              path: '/pages/account-settings/account'
-            },
-            {
-              title: 'Security',
-              path: '/pages/account-settings/security'
-            },
-            {
-              title: 'Billing',
-              path: '/pages/account-settings/billing'
-            },
-            {
-              title: 'Notifications',
-              path: '/pages/account-settings/notifications'
-            },
-            {
-              title: 'Connections',
-              path: '/pages/account-settings/connections'
-            }
-          ]
+          path: '/ui/headset-dock',
+          title: 'Tablets'
         },
         {
-          title: 'FAQ',
+          title: 'Wearables',
           path: '/pages/faq',
           icon: 'mdi:help-circle-outline'
-        },
-        {
-          title: 'Help Center',
-          icon: 'mdi:help-circle-outline',
-          path: '/pages/help-center'
-        },
-        {
-          title: 'Pricing',
-          icon: 'mdi:currency-usd',
-          path: '/pages/pricing'
-        },
-        {
-          title: 'Miscellaneous',
-          icon: 'mdi:file-outline',
-          children: [
-            {
-              openInNewTab: true,
-              title: 'Coming Soon',
-              path: '/pages/misc/coming-soon'
-            },
-            {
-              openInNewTab: true,
-              title: 'Under Maintenance',
-              path: '/pages/misc/under-maintenance'
-            },
-            {
-              openInNewTab: true,
-              title: 'Page Not Found - 404',
-              path: '/pages/misc/404-not-found'
-            },
-            {
-              openInNewTab: true,
-              title: 'Not Authorized - 401',
-              path: '/pages/misc/401-not-authorized'
-            },
-            {
-              openInNewTab: true,
-              title: 'Server Error - 500',
-              path: '/pages/misc/500-server-error'
-            }
-          ]
-        },
-        {
-          title: 'Auth Pages',
-          icon: 'mdi:lock-outline',
-          children: [
-            {
-              title: 'Login',
-              children: [
-                {
-                  openInNewTab: true,
-                  title: 'Login v1',
-                  path: '/pages/auth/login-v1'
-                },
-                {
-                  openInNewTab: true,
-                  title: 'Login v2',
-                  path: '/pages/auth/login-v2'
-                },
-                {
-                  openInNewTab: true,
-                  title: 'Login With AppBar',
-                  path: '/pages/auth/login-with-appbar'
-                }
-              ]
-            },
-            {
-              title: 'Register',
-              children: [
-                {
-                  openInNewTab: true,
-                  title: 'Register v1',
-                  path: '/pages/auth/register-v1'
-                },
-                {
-                  openInNewTab: true,
-                  title: 'Register v2',
-                  path: '/pages/auth/register-v2'
-                },
-                {
-                  openInNewTab: true,
-                  title: 'Register Multi-Steps',
-                  path: '/pages/auth/register-multi-steps'
-                }
-              ]
-            },
-            {
-              title: 'Verify Email',
-              children: [
-                {
-                  openInNewTab: true,
-                  title: 'Verify Email v1',
-                  path: '/pages/auth/verify-email-v1'
-                },
-                {
-                  openInNewTab: true,
-                  title: 'Verify Email v2',
-                  path: '/pages/auth/verify-email-v2'
-                }
-              ]
-            },
-            {
-              title: 'Forgot Password',
-              children: [
-                {
-                  openInNewTab: true,
-                  title: 'Forgot Password v1',
-                  path: '/pages/auth/forgot-password-v1'
-                },
-                {
-                  openInNewTab: true,
-                  title: 'Forgot Password v2',
-                  path: '/pages/auth/forgot-password-v2'
-                }
-              ]
-            },
-            {
-              title: 'Reset Password',
-              children: [
-                {
-                  openInNewTab: true,
-                  title: 'Reset Password v1',
-                  path: '/pages/auth/reset-password-v1'
-                },
-                {
-                  openInNewTab: true,
-                  title: 'Reset Password v2',
-                  path: '/pages/auth/reset-password-v2'
-                }
-              ]
-            },
-            {
-              title: 'Two Steps',
-              children: [
-                {
-                  openInNewTab: true,
-                  title: 'Two Steps v1',
-                  path: '/pages/auth/two-steps-v1'
-                },
-                {
-                  openInNewTab: true,
-                  title: 'Two Steps v2',
-                  path: '/pages/auth/two-steps-v2'
-                }
-              ]
-            }
-          ]
-        },
-        {
-          title: 'Wizard Examples',
-          icon: 'mdi:transit-connection-horizontal',
-          children: [
-            {
-              title: 'Checkout',
-              path: '/pages/wizard-examples/checkout'
-            },
-            {
-              title: 'Property Listing',
-              path: '/pages/wizard-examples/property-listing'
-            },
-            {
-              title: 'Create Deal',
-              path: '/pages/wizard-examples/create-deal'
-            }
-          ]
-        },
-        {
-          icon: 'mdi:vector-arrange-below',
-          title: 'Dialog Examples',
-          path: '/pages/dialog-examples'
         }
       ]
     },
     {
-      title: 'Forms & Tables',
-      icon: 'mdi:checkbox-marked-outline',
+      title: 'Computers',
+      icon: 'mdi:laptop',
       children: [
         {
-          title: 'Form Elements',
+          title: 'Laptops',
           icon: 'mdi:form-select',
-          children: [
-            {
-              title: 'Text Field',
-              path: '/forms/form-elements/text-field'
-            },
-            {
-              title: 'Select',
-              path: '/forms/form-elements/select'
-            },
-            {
-              title: 'Checkbox',
-              path: '/forms/form-elements/checkbox'
-            },
-            {
-              title: 'Radio',
-              path: '/forms/form-elements/radio'
-            },
-            {
-              title: 'Custom Inputs',
-              path: '/forms/form-elements/custom-inputs'
-            },
-            {
-              title: 'Textarea',
-              path: '/forms/form-elements/textarea'
-            },
-            {
-              title: 'Autocomplete',
-              path: '/forms/form-elements/autocomplete'
-            },
-            {
-              title: 'Date Pickers',
-              path: '/forms/form-elements/pickers'
-            },
-            {
-              title: 'Switch',
-              path: '/forms/form-elements/switch'
-            },
-            {
-              title: 'File Uploader',
-              path: '/forms/form-elements/file-uploader'
-            },
-            {
-              title: 'Editor',
-              path: '/forms/form-elements/editor'
-            },
-            {
-              title: 'Slider',
-              path: '/forms/form-elements/slider'
-            },
-            {
-              title: 'Input Mask',
-              path: '/forms/form-elements/input-mask'
-            },
-          ]
-        },
-        {
-          icon: 'mdi:cube-outline',
-          title: 'Form Layouts',
           path: '/forms/form-layouts'
         },
         {
-          title: 'Form Validation',
+          icon: 'mdi:cube-outline',
+          title: 'Desktops',
+          path: '/forms/form-layouts'
+        },
+        {
+          title: 'Computeraccessoires',
           path: '/forms/form-validation',
           icon: 'mdi:checkbox-marked-circle-outline'
-        },
-        {
-          title: 'Form Wizard',
-          path: '/forms/form-wizard',
-          icon: 'mdi:transit-connection-horizontal'
-        },
-        {
-          title: 'Table',
-          icon: 'mdi:grid-large',
-          path: '/tables/mui'
-        },
-        {
-          title: 'Mui DataGrid',
-          icon: 'mdi:grid',
-          path: '/tables/data-grid'
         }
       ]
     },
     {
-      title: 'Charts',
-      icon: 'mdi:chart-donut',
+      title: 'Huishouden',
+      icon: 'mdi:sofa-single-outline',
       children: [
         {
-          title: 'Apex',
-          icon: 'mdi:chart-line',
-          path: '/charts/apex-charts'
+          title: 'Smart Home',
+          icon: 'mdi:lock-smart',
+          path: '/charts/apex-charts',
+          children: [
+            {
+              path: '/acl',
+              subject: 'acl-page',
+              icon: 'mdi:cctv',
+              title: 'Veiligheid'
+            },
+            {
+              path: '/acl',
+              subject: 'acl-page',
+              icon: 'mdi:doorbell',
+              title: 'Deurbellen'
+            }
+          ]
         },
         {
-          title: 'Recharts',
-          icon: 'mdi:chart-bell-curve-cumulative',
-          path: '/charts/recharts'
+          title: 'Keuken',
+          icon: 'mdi:chef-hat',
+          path: '/charts/recharts',
+          children: [
+            {
+              path: '/acl',
+              subject: 'acl-page',
+              icon: 'mdi:coffee-maker-outline',
+              title: 'Koffiemachines'
+            },
+            {
+              path: '/acl',
+              subject: 'acl-page',
+              icon: 'mdi:blender',
+              title: 'Keukenapparaten'
+            }
+          ]
         },
         {
-          title: 'ChartJS',
+          title: 'Huishouden',
           path: '/charts/chartjs',
-          icon: 'mdi:chart-bell-curve'
+          icon: 'mdi:vacuum-outline',
+          children: [
+            {
+              path: '/acl',
+              subject: 'acl-page',
+              icon: 'mdi:robot-vacuum',
+              title: 'Stofzuigers'
+            },
+            {
+              path: '/acl',
+              subject: 'acl-page',
+              icon: 'mdi:air-conditioner',
+              title: 'Airco'
+            }
+          ]
         }
       ]
     },
     {
-      title: 'Others',
+      title: 'Meer',
       icon: 'mdi:dots-horizontal',
       children: [
         {

@@ -9,10 +9,12 @@ import Chip from '@mui/material/Chip'
 import CustomIcon from '@/vercelFix/Icon'
 import { categoryStructure } from '@/utils/categoryStructure';
 import { useTheme } from '@mui/material/styles';
+import Box from '@mui/material/Box';
 
 import Link from 'next/link'
 
 import { getProductUrl, getCategoryPath, calculateCatPathForHome } from '@/core/utils/get-product-url';
+const IMG_SERVER = process.env.NEXT_PUBLIC_IMG_SERVER;
 
 const SearchResults = ({ searchResults, queryLength, isLoading }) => {
 
@@ -20,10 +22,9 @@ const SearchResults = ({ searchResults, queryLength, isLoading }) => {
   const mode = theme.palette.mode;
 
   return (
+    <Box sx={{ flexGrow: 1, height: '100%', position: 'absolute', right: 0, left: 0 }}>
     <Grid container spacing={2} sx={{
-    position: 'absolute',
     overflow: 'auto',
-    height: '100%',
     alignItems: 'flex-start', // Align grid items to the top
   }}>
     {isLoading ? (
@@ -49,6 +50,7 @@ const SearchResults = ({ searchResults, queryLength, isLoading }) => {
               display: 'flex',
               flexDirection: 'column',
               flexGrow: 1,
+              alignItems: 'flex-start',
               padding: '0',
               transition: 'all 1s ease-in-out',
               '&:hover': {
@@ -63,7 +65,7 @@ const SearchResults = ({ searchResults, queryLength, isLoading }) => {
                   {productUrl ? (
                     <Link href={productUrl}>
                       <img
-                        src={result.imageUrl}
+                        src={`${IMG_SERVER}${result.imageUrl}`}
                         alt={result.name}
                         style={{
                           width: '5rem',
@@ -77,7 +79,7 @@ const SearchResults = ({ searchResults, queryLength, isLoading }) => {
                     </Link>
                   ) : (
                     <img
-                      src={result.imageUrl}
+                      src={`${IMG_SERVER}/${result.imageUrl}`}
                       alt={result.name}
                       style={{
                         width: '5rem',
@@ -145,14 +147,18 @@ const SearchResults = ({ searchResults, queryLength, isLoading }) => {
           </Card>
         </Fade>
       </Grid>
+
     );
+      
   })
+
 ) : searchResults.length === 0 && queryLength > 0 ? (
   <Grid item xs={12}>
     <Typography variant="subtitle1">Geen resultaten gevonden.</Typography>
   </Grid>
 ) : null}
 </Grid>
+</Box>
 );
 
 };

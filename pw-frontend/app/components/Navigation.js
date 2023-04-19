@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 
 function Navigation() {
   return (
@@ -6,7 +7,7 @@ function Navigation() {
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center">
           <div className="text-xl font-semibold text-gray-900">
-            <Link href="/">prijs.watch</Link>
+            <Link href="/"><Image src="prijswatchlogo.png" /></Link>
           </div>
           <ul className="flex space-x-4">
             <li>

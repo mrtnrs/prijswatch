@@ -20,6 +20,12 @@ import { styled, useTheme } from '@mui/material/styles'
 import ListItemButton from '@mui/material/ListItemButton'
 import InputAdornment from '@mui/material/InputAdornment'
 import MuiAutocomplete from '@mui/material/Autocomplete'
+import { getCategoryPath, getProductUrl } from '@/core/utils/get-product-url';
+import { categoryStructure } from '@/utils/categoryStructure';
+
+const API_URL = '/api/search';
+const SERVER_URL = process.env.NEXT_PUBLIC_API_SERVER_URL;
+
 
 // ** Third Party Imports
 // import axios from 'axios'
@@ -292,16 +298,77 @@ const AutocompleteComponent = ({ hidden, settings }) => {
   const [searchValue, setSearchValue] = useState('')
   const [openDialog, setOpenDialog] = useState(false)
   const [options, setOptions] = useState([])
+  const [searchInProgress, setSearchInProgress] = useState(false);
+  const [hasSearchBeenCalled, setHasSearchBeenCalled] = useState(false);
+
+
 
   // ** Hooks & Vars
   const theme = useTheme()
   const router = useRouter()
   const { layout } = settings
   const wrapper = useRef(null)
-  const fullScreenDialog = useMediaQuery(theme.breakpoints.down('sm'))
+  const fullScreenDialog = useMediaQuery(theme.breakpoints.down('sm'));
+
+const getProductURLFromData = (data) => {
+  const categoryPath = getCategoryPath(data.category, categoryStructure.tree);
+  const productSlug = data.slug;
+  return categoryPath ? `/${categoryPath.join('/')}/${productSlug}` : `/${productSlug}`;
+};
 
 
+    useEffect(() => {
+    if (searchValue) {
+      const handleSearch = (query) => {
+        setSearchInProgress(true);
+        // ... your existing handleSearch logic ...
+            try {
+      fetch(`${SERVER_URL}${API_URL}/?q=${query}`)
+      .then((response) => {
+        if (!response.ok) {
+          console.log(response);
+          throw new Error('Failed to fetch search results');
+        }
+        console.log(response);
+        return response.json();
+      })
+      .then((data) => { 
+        setOptions(data);
+        setHasSearchBeenCalled(true);
+        console.log(data);
+      })
+      .catch((error) => { 
+        console.error(error);
+      })
+      .finally(() => {
+        setSearchInProgress(false);
+      });
+    } catch (error) {
+      console.error(`Error in fetch request for ${error.message}`);
+      throw error;
+    }
+      };
 
+      const debounce = (func, wait) => {
+            let timeout;
+    return (...args) => {
+      const later = () => {
+        clearTimeout(timeout);
+        func(...args);
+      };
+
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+    };
+      };
+
+      const debouncedHandleSearch = debounce((query) => {
+        handleSearch(query);
+      }, 300);
+
+      debouncedHandleSearch(searchValue);
+    }
+  }, [searchValue]);
 
 /*
   // Get all data using API
@@ -343,20 +410,23 @@ const AutocompleteComponent = ({ hidden, settings }) => {
     if (!openDialog) {
       setSearchValue('')
     }
-  }, [openDialog])
+  }, [openDialog]);
+
   useEffect(() => {
     setIsMounted(true)
     return () => setIsMounted(false)
   }, [])
 
   // Handle click event on a list item in search result
-  const handleOptionClick = obj => {
-    setSearchValue('')
-    setOpenDialog(false)
-    if (obj.url) {
-      router.push(obj.url)
-    }
+const handleOptionClick = obj => {
+  setSearchValue('');
+  setOpenDialog(false);
+  const productUrl = getProductURLFromData(obj);
+  if (productUrl) {
+    router.push(productUrl);
   }
+};
+
 
   // Handle ESC & shortcut keys keydown events
   const handleKeydown = useCallback(
@@ -388,6 +458,8 @@ const AutocompleteComponent = ({ hidden, settings }) => {
       document.removeEventListener('keyup', handleKeyUp)
     }
   }, [handleKeyUp, handleKeydown])
+
+
   if (!isMounted) {
     return null
   } else {
@@ -407,6 +479,7 @@ const AutocompleteComponent = ({ hidden, settings }) => {
           <Dialog fullWidth open={openDialog} fullScreen={fullScreenDialog} onClose={() => setOpenDialog(false)}>
             <Box sx={{ top: 0, width: '100%', position: 'sticky' }}>
               <Autocomplete
+              filterOptions={(options) => options}
                 autoHighlight
                 disablePortal
                 options={options}
@@ -414,8 +487,18 @@ const AutocompleteComponent = ({ hidden, settings }) => {
                 isOptionEqualToValue={() => true}
                 onInputChange={(event, value) => setSearchValue(value)}
                 onChange={(event, obj) => handleOptionClick(obj)}
-                noOptionsText={<NoResult value={searchValue} setOpenDialog={setOpenDialog} />}
-                getOptionLabel={option => option.title}
+                noOptionsText={
+            
+  options.length === 0 && hasSearchBeenCalled ? (
+    searchInProgress ? (
+      "Searching..."
+    ) : (
+      "No results found"
+    )
+  ) : null
+}
+
+                getOptionLabel={option => option.name}
                 groupBy={option => (searchValue.length ? categoryTitle[option.category] : '')}
                 sx={{
                   '& + .MuiAutocomplete-popper': {
@@ -475,7 +558,7 @@ const AutocompleteComponent = ({ hidden, settings }) => {
                   return searchValue.length ? (
                     <ListItem
                       {...props}
-                      key={option.title}
+                      key={option.id}
                       className={`suggestion ${props.className}`}
                       onClick={() => handleOptionClick(option)}
                       secondaryAction={<CustomIcon icon='mdi:subdirectory-arrow-left' fontSize={20} />}
@@ -495,9 +578,9 @@ const AutocompleteComponent = ({ hidden, settings }) => {
                           '& svg': { mr: 2.5, color: 'text.primary' }
                         }}
                       >
-                        <CustomIcon fontSize={20} icon={option.icon || themeConfig.navSubItemIcon} />
+                        <CustomIcon fontSize={20} icon='mdi:chevron-double-right' />
                         <Typography variant='body2' sx={{ color: 'text.primary' }}>
-                          {option.title}
+                          {option.name} <span style={{opacity: .6}}>{`- ${option.category}`}</span>
                         </Typography>
                       </ListItemButton>
                     </ListItem>

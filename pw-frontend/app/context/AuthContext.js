@@ -1,5 +1,7 @@
+'use client'
 import React, { createContext, useState, useContext, useEffect } from 'react';
-import { onAuthStateChanged, signInUserWithEmailAndPassword, signOutUser } from './../../firebase/auth'; // Update the import path according to your project structure
+import {auth, onAuthStateChanged, signInUserWithEmailAndPassword, signOutUser } from './../../firebase/auth'; // Update the import path according to your project structure
+import { setPersistence, inMemoryPersistence, browserLocalPersistence } from 'firebase/auth';
 
 const AuthContext = createContext();
 
@@ -22,6 +24,8 @@ export const AuthProvider = ({ children }) => {
 
   const signInWithEmailAndPassword = async (email, password, rememberMe) => {
     try {
+          const persistence = rememberMe ? browserLocalPersistence : inMemoryPersistence;
+    await setPersistence(auth, persistence);
       const user = await signInUserWithEmailAndPassword(email, password, rememberMe);
       if (!user.emailVerified) {
         // Handle the case when the email is not verified

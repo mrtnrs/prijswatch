@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const productController = require('../controllers/productController');
+const authenticateUser = require("../middleware/authenticateUser");
 
 
 
@@ -13,6 +14,7 @@ router.get('/:category/grouped-by-brand', productController.getMetaProductsByCat
 router.post('/scrape-and-store', productController.createOrUpdateProductHandler);
 router.get('/', productController.getAllProductsHandler);
 
+router.get('/needs-review', authenticateUser('admin'), productController.fetchNeedReviewProducts);
 
 
 router.get('/meta-product/:id', productController.getMetaProductByIdHandler);

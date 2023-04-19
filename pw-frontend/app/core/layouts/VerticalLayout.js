@@ -1,5 +1,5 @@
 // ** React Imports
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 // ** MUI Imports
 import Fab from '@mui/material/Fab'
@@ -46,6 +46,7 @@ const ContentWrapper = styled('main')(({ theme }) => ({
 const VerticalLayout = props => {
   // ** Props
   const { hidden, settings, children, scrollToTop, footerProps, contentHeightFixed, verticalLayoutProps } = props
+  const [loaded, setLoaded] = useState(false);
 
   // ** Vars
   const { skin, navHidden, contentWidth } = settings
@@ -60,36 +61,46 @@ const VerticalLayout = props => {
   // ** Toggle Functions
   const toggleNavVisibility = () => setNavVisible(!navVisible)
 
+  useEffect(() => {
+  setLoaded(true);
+}, []);
+
   return (
     <>
-      <VerticalLayoutWrapper className='layout-wrapper'>
-        {navHidden && !(navHidden && settings.lastLayout === 'horizontal') ? null : (
-          <Navigation
-            navWidth={navWidth}
-            navVisible={navVisible}
-            setNavVisible={setNavVisible}
-            collapsedNavWidth={collapsedNavWidth}
-            toggleNavVisibility={toggleNavVisibility}
-            navigationBorderWidth={navigationBorderWidth}
-            navMenuContent={verticalLayoutProps.navMenu.content}
-            navMenuBranding={verticalLayoutProps.navMenu.branding}
-            menuLockedIcon={verticalLayoutProps.navMenu.lockedIcon}
-            verticalNavItems={verticalLayoutProps.navMenu.navItems}
-            navMenuProps={verticalLayoutProps.navMenu.componentProps}
-            menuUnlockedIcon={verticalLayoutProps.navMenu.unlockedIcon}
-            afterNavMenuContent={verticalLayoutProps.navMenu.afterContent}
-            beforeNavMenuContent={verticalLayoutProps.navMenu.beforeContent}
-            {...props}
-          />
-        )}
+    <VerticalLayoutWrapper className="layout-wrapper">
+      {navHidden && !(navHidden && settings.lastLayout === "horizontal") ? null : loaded && (
+        <Navigation
+          navWidth={navWidth}
+          navVisible={navVisible}
+          setNavVisible={setNavVisible}
+          collapsedNavWidth={collapsedNavWidth}
+          toggleNavVisibility={toggleNavVisibility}
+          navigationBorderWidth={navigationBorderWidth}
+          navMenuContent={verticalLayoutProps?.navMenu?.content || null}
+          navMenuBranding={verticalLayoutProps?.navMenu?.branding || null}
+          menuLockedIcon={verticalLayoutProps?.navMenu?.lockedIcon || null}
+          verticalNavItems={verticalLayoutProps?.navMenu?.navItems || []}
+          navMenuProps={verticalLayoutProps?.navMenu?.componentProps || {}}
+          menuUnlockedIcon={verticalLayoutProps?.navMenu?.unlockedIcon || null}
+          afterNavMenuContent={verticalLayoutProps?.navMenu?.afterContent || null}
+          beforeNavMenuContent={verticalLayoutProps?.navMenu?.beforeContent || null}
+          hidden={hidden}
+          style={{
+            width: hidden ? '0px' : navVisible ? `${navWidth}px` : `${collapsedNavWidth}px`,
+            minWidth: hidden ? '0px' : navVisible ? `${navWidth}px` : `${collapsedNavWidth}px`,
+            display: "none",
+          }}
+          {...props}
+        />
+      )}
         <MainContentWrapper
           className='layout-content-wrapper'
           sx={{ ...(contentHeightFixed && { maxHeight: '100vh' }) }}
         >
           <AppBar
             toggleNavVisibility={toggleNavVisibility}
-            appBarContent={verticalLayoutProps.appBar?.content}
-            appBarProps={verticalLayoutProps.appBar?.componentProps}
+            appBarContent={verticalLayoutProps?.appBar?.content}
+            appBarProps={verticalLayoutProps?.appBar?.componentProps}
             {...props}
           />
 
@@ -113,8 +124,6 @@ const VerticalLayout = props => {
           <Footer footerStyles={footerProps?.sx} footerContent={footerProps?.content} {...props} />
         </MainContentWrapper>
       </VerticalLayoutWrapper>
-
-      {disableCustomizer || hidden ? null : <Customizer />}
 
       {scrollToTop ? (
         scrollToTop(props)

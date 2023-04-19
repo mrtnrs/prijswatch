@@ -7,6 +7,10 @@ const db = require('./models');
 const cors = require('cors');
 const rateLimit = require('express-rate-limit');
 
+console.log('kaka');
+console.log(db.ScraperError);
+console.log('Expected table name:', db.ScraperError.getTableName());
+
 // const passport = require('passport');
 // const session = require('express-session');
 // const passportConfig = require('./passportConfig');
@@ -23,13 +27,13 @@ Sentry.init({
 });
 app.use(Sentry.Handlers.errorHandler());
 
-
 const allowedOrigins = [
   'https://prijs.watch',
   'https://www.prijs.watch',
   'https://prijswatch-zyzx.vercel.app',
   'https://prijswatch-zyzx-git-main-mrtnrs.vercel.app',
   'https://prijswatch-zyzx-oru3oy0io-mrtnrs.vercel.app',
+  'http://localhost:3000',
 ];
 
 const corsOptions = {
@@ -40,12 +44,11 @@ const corsOptions = {
       callback(new Error('Not allowed by CORS'));
     }
   },
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 };
 
 app.use(cors(corsOptions));
-
 
 // Import routes
 const productRoutes = require('./routes/productRoutes');
@@ -64,7 +67,7 @@ sequelize
   .authenticate()
   .then(() => {
     console.log('Database connection has been established successfully.');
-    sequelize.sync();
+    sequelize.sync(); // Add this line after establishing the connection
   })
   .catch((err) => {
     console.error('Unable to connect to the database:', err);
@@ -98,3 +101,7 @@ app.use('/api/scrapers', scraperRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/search', searchRoutes);
 app.use('/api/categories', categoryRoutes);
+
+app.listen(port, () => {
+  console.log(`Server listening at http://localhost:${port}`);
+});

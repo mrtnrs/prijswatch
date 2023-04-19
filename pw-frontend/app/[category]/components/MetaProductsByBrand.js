@@ -19,6 +19,7 @@ import { Fade } from '@mui/material';
 import { getProductUrl, getCategoryPath } from '@/core/utils/get-product-url';
 import { usePathname } from 'next/navigation';
 
+const IMG_SERVER = process.env.NEXT_PUBLIC_IMG_SERVER;
 
 
 
@@ -33,7 +34,7 @@ const MetaProductsByBrand = ({
     const sortedMetaProducts = useMemo(() => {
         const sorted = {};
         metaProducts.forEach((metaProduct) => {
-            const brand = metaProduct.brand;
+            const brand = metaProduct.brand.toLowerCase();
             if (!sorted[brand]) {
                 sorted[brand] = [];
             }
@@ -51,7 +52,7 @@ const MetaProductsByBrand = ({
     }, [metaProducts]);
 
     const uniqueBrands = useMemo(() => {
-        const brands = new Set(metaProducts.map((metaProduct) => metaProduct.brand));
+        const brands = new Set(metaProducts.map((metaProduct) => metaProduct.brand.toLowerCase()));
         return Array.from(brands);
     }, [metaProducts]);
 
@@ -68,13 +69,13 @@ const MetaProductsByBrand = ({
           />
         {
             Object.entries(sortedMetaProducts)
-            .filter(([brand]) => selectedBrands.length === 0 || selectedBrands.includes(brand))
+            .filter(([brand]) => selectedBrands.length === 0 || selectedBrands.includes(brand.toLowerCase()))
             .map(([brand, products]) => ( 
               <Fade in={true} timeout={500} key={brand}>
               <Box key = {brand}
                 sx = {
                     {
-                        borderBottom: '1px solid red',
+                        borderBottom: '1px solid white',
                         paddingBottom: '1rem',
                         marginBottom: '2rem',
                     }
@@ -117,17 +118,9 @@ const MetaProductsByBrand = ({
                 /> <
                 Box >
                 <
-                Typography variant = "h4" > {
-                    brand
-                } < /Typography> <
+                Typography variant = "h4" sx={{textTransform: 'capitalize'}}> {brand} < /Typography> <
                 Typography variant = "subtitle1"
-                color = "text.secondary" > {
-                    products.length
-                }
-                smartphones found
-                for {
-                    brand
-                } <
+                color = "text.secondary"> { products.length}  products found for {brand} <
                 /Typography> <
                 /Box> <
                 /Box> <
@@ -141,6 +134,7 @@ const MetaProductsByBrand = ({
                 } >
                 { 
                     products.map((product) => { 
+                      const image = product.imageUrl ? `${IMG_SERVER}${product.imageUrl}` : "https://via.placeholder.com/140x140";
                       const productUrl = `${locatie}/${product.slug}`;
                       return (
                       <Box key={product.id}
@@ -172,7 +166,7 @@ const MetaProductsByBrand = ({
                             <Link href={productUrl}>
                             <CardMedia 
                               component="img"
-                              image = {product.imageUrl || "https://via.placeholder.com/140x140"}
+                              image = {image}
                               alt = {product.name}
                               sx = {
                                 {

@@ -9,6 +9,8 @@ import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import ApexLineChart from './ApexLineChart';
 
+const IMG_SERVER = process.env.NEXT_PUBLIC_IMG_SERVER;
+
 
 export default function MetaProductPage() {
   const router = useRouter();
@@ -37,7 +39,7 @@ export default function MetaProductPage() {
   return (
     <div>
       <h1>{metaProduct.name}</h1>
-      <img src={metaProduct.imageUrl} alt={metaProduct.name} />
+      <img src={`${IMG_SERVER}${product.imageUrl}`} alt={metaProduct.name} />
       <p>{metaProduct.description}</p>
       <ProductGrid products={metaProduct.products} />
     </div>

@@ -1,7 +1,6 @@
 'use client'
 import './styles/globals.css'
 // import Navigation from './components/Navigation';
-import Footer from './components/Footer';
 // import "./api/auth/[...nextauth]";
 import UserLayout from '@/components/layouts/UserLayout'
 
@@ -36,7 +35,6 @@ export default function RootLayout({ Component, pageProps, children, session }) 
                   <body>
                   <GoogleAnalytics trackPageViews />
                     <UserLayout>{children}</UserLayout>
-                    <Footer />
                     <ReactHotToast>
                       <Toaster position={settings.toastPosition} toastOptions={{ className: 'react-hot-toast' }} />
                     </ReactHotToast>

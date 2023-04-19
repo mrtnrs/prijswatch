@@ -1,3 +1,5 @@
+'use client'
+
 // ** MUI Imports
 import { deepmerge } from '@mui/utils'
 import CssBaseline from '@mui/material/CssBaseline'
