@@ -16,3 +16,4 @@ out
 
 pw-backend/firebase.json
 pw-frontend/app/api/analytics.json
+pw-backend/.cache
