@@ -34,7 +34,6 @@ exports.runScraper = async (req, res, saveData = true) => {
   console.log("Running scraper... scraperController");
   const scraperId = req.params.id;
   console.log(scraperId);
-
   const scraperSettings = await Scraper.findByPk(scraperId);
   console.log(scraperSettings);
   if (!scraperSettings) {
@@ -53,8 +52,13 @@ exports.runScraper = async (req, res, saveData = true) => {
   }
 
   const startTime = new Date();
-    let totalProducts = 0;
-    let changedProducts = 0;
+  let totalProducts = 0;
+  let changedProducts = 0;
+
+  let response = {
+    message: saveData ? "Scraper ran successfully" : "Scraper test ran successfully",
+    data: []
+  };
 
   try {
     const scrapedData = await scraperInstance.scrape(); // Run the scraper
@@ -63,52 +67,58 @@ exports.runScraper = async (req, res, saveData = true) => {
       const category = await Category.findByPk(scraperSettings.settings.category);
       const savedProducts = await Promise.all(
         scrapedData.map(async (data) => {
-          const { price, ...productData } = data;
-          productData.webshopId = scraperSettings.webshopId;
-          productData.categoryId = scraperSettings.settings.category;
-          productData.category = category.name;
+          try {
+            const { price, ...productData } = data;
+            productData.webshopId = scraperSettings.webshopId;
+            productData.categoryId = scraperSettings.settings.category;
+            productData.category = category.name;
 
-          
-          if (!productData.url) {
-            console.error("Missing URL:", productData);
-            return null;
-          }
+            if (!productData.url) {
+              console.error("Missing URL:", productData);
+              return null;
+            }
 
-          const product = await productController.createOrUpdateProduct(productData); // Save the product
+            const product = await productController.createOrUpdateProduct(productData); // Save the product
 
-
-          // Fetch the last price associated with the product
-          const lastPrice = await Price.findOne({
-            where: { productId: product.id },
-            order: [["createdAt", "DESC"]],
-          });
-
-          totalProducts++;
-          console.log(totalProducts);
-
-          if (!lastPrice || lastPrice.value !== price.value) {
-            changedProducts++;
-            const savedPrice = await Price.create({
-              ...price,
-              productId: product.id,
+            // Fetch the last price associated with the product
+            const lastPrice = await Price.findOne({
+              where: { productId: product.id },
+              order: [["createdAt", "DESC"]],
             });
 
-            return {
-              product,
-              price: savedPrice,
-            };
+            totalProducts++;
+            console.log(totalProducts);
+
+            if (!lastPrice || lastPrice.value !== price.value) {
+              changedProducts++;
+              const savedPrice = await Price.create({
+                ...price,
+                productId: product.id,
+              });
+
+              return {
+                product,
+                price: savedPrice,
+              };
+            } else {
+              console.log('Price is the same, nothing changed');
+            }
+          } catch (error) {
+            console.error('Error processing product:', error);
           }
         })
-      );
+        );
+
+      response.data = savedProducts.filter((product) => product !== null);
 
       await Scraper.update(
-        {
-          lastRun: startTime,
-          lastRunStatus: "success",
-          totalProducts,
-          changedProducts,
-        },
-        { where: { id: scraperId } }
+      {
+        lastRun: startTime,
+        lastRunStatus: "success",
+        totalProducts,
+        changedProducts,
+      },
+      { where: { id: scraperId } }
       );
 
       const maxErrorEntries = 100;
@@ -126,7 +136,7 @@ exports.runScraper = async (req, res, saveData = true) => {
         offset: maxErrorEntries - 1,
       });
 
-      if (errorsToDelete.length > 0) {
+    if (errorsToDelete.length > 0) {
         await ScraperError.destroy({
           where: {
             id: {
@@ -135,22 +145,15 @@ exports.runScraper = async (req, res, saveData = true) => {
           },
         });
       }
-
-      res.status(200).json({
-        message: saveData ? "Scraper ran successfully" : "Scraper test ran successfully",
-        data: savedProducts,
-      });
-    } else {
-      res.status(200).json({
-        message: "Scraper test ran successfully",
-        data: scrapedData,
-      });
     }
+    if (res) {
+      res.status(200).json(response); // Move this line here, outside of the if (saveData) block
+    }
+    console.log('scraping finished successfully')
   } catch (error) {
     console.log(error);
     await Scraper.update(
       {
-        lastRun: startTime,
         lastRunStatus: "failure",
         totalProducts,
         changedProducts,
@@ -166,103 +169,105 @@ exports.runScraper = async (req, res, saveData = true) => {
   }
 };
 
+
+
 // update scraper
 
-exports.updateScraper = async (req, res) => {
-  try {
-    const { scraperId } = req.params;
-    const { webshopId, scraperSettings } = req.body;
-    const { url, scrapeInterval, category, type, saveStatus, pagination, paginationParameter, pageSize } = scraperSettings;
+  exports.updateScraper = async (req, res) => {
+    try {
+      const { scraperId } = req.params;
+      const { webshopId, scraperSettings } = req.body;
+      const { url, scrapeInterval, category, type, saveStatus, pagination, paginationParameter, pageSize } = scraperSettings;
 
     // You can add validation for the input data if needed
 
-    const updatedScraper = await Scraper.update({
-      type: type.toLowerCase(),
-      settings: {
-        url,
-        category,
-        pagination,
-        paginationParameter,
-        pageSize,
-        ...(type === 'Puppeteer' && {
-        urlSelector: scraperSettings.urlSelector,
-        productNameSelector: scraperSettings.productNameSelector,
-        productPriceSelector: scraperSettings.productPriceSelector,
-        nextPageSelector: scraperSettings.nextPageSelector,
-        containerSelector: scraperSettings.containerSelector,
-        productImageSelector: scraperSettings.productImageSelector,
-      }),
-      },
-      interval: scrapeInterval,
-      webshopId,
-      active: saveStatus === 'active',
-    }, {
-      where: { id: scraperId },
-      returning: true,
-      plain: true,
-    });
+      const updatedScraper = await Scraper.update({
+        type: type.toLowerCase(),
+        settings: {
+          url,
+          category,
+          pagination,
+          paginationParameter,
+          pageSize,
+          ...(type === 'Puppeteer' && {
+            urlSelector: scraperSettings.urlSelector,
+            productNameSelector: scraperSettings.productNameSelector,
+            productPriceSelector: scraperSettings.productPriceSelector,
+            nextPageSelector: scraperSettings.nextPageSelector,
+            containerSelector: scraperSettings.containerSelector,
+            productImageSelector: scraperSettings.productImageSelector,
+          }),
+        },
+        interval: scrapeInterval,
+        webshopId,
+        active: saveStatus === 'active',
+      }, {
+        where: { id: scraperId },
+        returning: true,
+        plain: true,
+      });
 
-    res.status(200).json({ message: "Scraper updated successfully", scraper: updatedScraper[1] });
-  } catch (error) {
-    console.error("Error updating scraper:", error);
-    res.status(500).json({ error: error.message });
-  }
-};
+      res.status(200).json({ message: "Scraper updated successfully", scraper: updatedScraper[1] });
+    } catch (error) {
+      console.error("Error updating scraper:", error);
+      res.status(500).json({ error: error.message });
+    }
+  };
 
 
 // delete scraper 
 
-exports.deleteScraper = async (req, res) => {
-  try {
-    const { id } = req.params;
+  exports.deleteScraper = async (req, res) => {
+    try {
+      const { id } = req.params;
 
-    const scraper = await Scraper.findByPk(id);
+      const scraper = await Scraper.findByPk(id);
 
-    if (!scraper) {
-      return res.status(404).json({ message: 'Scraper not found' });
+      if (!scraper) {
+        return res.status(404).json({ message: 'Scraper not found' });
+      }
+
+      await scraper.destroy();
+
+      res.status(200).json({ message: 'Scraper deleted successfully' });
+    } catch (error) {
+      console.error('Error deleting scraper:', error);
+      res.status(500).json({ error: error.message });
     }
-
-    await scraper.destroy();
-
-    res.status(200).json({ message: 'Scraper deleted successfully' });
-  } catch (error) {
-    console.error('Error deleting scraper:', error);
-    res.status(500).json({ error: error.message });
-  }
-};
+  };
 
 // set scraper to run
 
-exports.updateActiveState = async (req, res) => {
-  try {
-    const { scraperId } = req.params;
-    const { active } = req.body;
+  exports.updateActiveState = async (req, res) => {
+    try {
+      const { scraperId } = req.params;
+      const { active } = req.body;
 
-    await Scraper.update(
-      { active },
-      { where: { id: scraperId } }
-    );
+      await Scraper.update(
+        { active },
+        { where: { id: scraperId } }
+        );
 
-    res.status(200).json({ message: 'Scraper active state updated successfully' });
-  } catch (error) {
-    console.error('Error updating scraper active state:', error);
-    res.status(500).json({ error: error.message });
-  }
-};
+      res.status(200).json({ message: 'Scraper active state updated successfully' });
+    } catch (error) {
+      console.error('Error updating scraper active state:', error);
+      res.status(500).json({ error: error.message });
+    }
+  };
 
 
 
 
 // save scraper
 
-exports.saveScraper = async (req, res) => {
-  try {
-    const { webshopId, scraperSettings } = req.body;
-    const { url, scrapeInterval, category, type, saveStatus, pagination, paginationParameter, pageSize } = scraperSettings;
-    const randomNum = Math.floor(Math.random() * 10000);
+  exports.saveScraper = async (req, res) => {
+    try {
+      const { webshopId, scraperSettings } = req.body;
+      const { url, scrapeInterval, category, type, saveStatus, pagination, paginationParameter, pageSize } = scraperSettings;
+      const randomNum = Math.floor(Math.random() * 10000);
     // You can add validation for the input data if needed
 
-    const newScraper = await Scraper.create({
+      const newScraper = await Scraper.create({
       name: `${type}-${category}-${randomNum}`, // You can customize the name as needed
       type: type.toLowerCase(),
       settings: {
@@ -272,52 +277,52 @@ exports.saveScraper = async (req, res) => {
         paginationParameter,
         pageSize,
         ...(type === 'Puppeteer' && {
-        urlSelector: scraperSettings.urlSelector,
-        productNameSelector: scraperSettings.productNameSelector,
-        productPriceSelector: scraperSettings.productPriceSelector,
-        nextPageSelector: scraperSettings.nextPageSelector,
-        containerSelector: scraperSettings.containerSelector,
-        productImageSelector: scraperSettings.productImageSelector,
-      }),
+          urlSelector: scraperSettings.urlSelector,
+          productNameSelector: scraperSettings.productNameSelector,
+          productPriceSelector: scraperSettings.productPriceSelector,
+          nextPageSelector: scraperSettings.nextPageSelector,
+          containerSelector: scraperSettings.containerSelector,
+          productImageSelector: scraperSettings.productImageSelector,
+        }),
       },
       interval: scrapeInterval,
       webshopId,
       active: saveStatus === 'active',
     });
 
-    res.status(201).json({ message: "Scraper created successfully", scraper: newScraper });
-  } catch (error) {
-    console.error("Error saving scraper:", error);
-    res.status(500).json({ error: error.message });
-  }
-};
+      res.status(201).json({ message: "Scraper created successfully", scraper: newScraper });
+    } catch (error) {
+      console.error("Error saving scraper:", error);
+      res.status(500).json({ error: error.message });
+    }
+  };
 
 
 // test scraper
 
-exports.testScraper = async (req, res) => {
-  try {
-    const scraperSettings = req.body.scraperSettings;
-    const { type } = scraperSettings;
+  exports.testScraper = async (req, res) => {
+    try {
+      const scraperSettings = req.body.scraperSettings;
+      const { type } = scraperSettings;
 
-    let scraperInstance;
-    console.log('haki');
-    if (type === 'API') {
-      scraperInstance = new apiScraper(scraperSettings);
-    } else if (type === 'Puppeteer') {
-      scraperInstance = new PuppeteerScraper(scraperSettings);
-    } else {
-      return res.status(400).json({ message: 'Invalid scraper type' });
+      let scraperInstance;
+      console.log('haki');
+      if (type === 'API') {
+        scraperInstance = new apiScraper(scraperSettings);
+      } else if (type === 'Puppeteer') {
+        scraperInstance = new PuppeteerScraper(scraperSettings);
+      } else {
+        return res.status(400).json({ message: 'Invalid scraper type' });
+      }
+
+      const scrapedData = await scraperInstance.scrape();
+
+      return res.status(200).json({ scrapedData });
+    } catch (error) {
+      console.error('Error testing scraper:', error);
+      return res.status(500).json({ error: error.message });
     }
-
-    const scrapedData = await scraperInstance.scrape();
-
-    return res.status(200).json({ scrapedData });
-  } catch (error) {
-    console.error('Error testing scraper:', error);
-    return res.status(500).json({ error: error.message });
-  }
-};
+  };
 
 
 // Remove a scraper
@@ -336,52 +341,52 @@ exports.testScraper = async (req, res) => {
 
 // create new Scraper
 
-function createScraperInstance(type, settings) {
-  switch (type) {
+  function createScraperInstance(type, settings) {
+    switch (type) {
     case 'api':
       return new ApiScraper(settings);
     case 'puppeteer':
       return new PuppeteerScraper(settings);
     default:
       return null;
+    }
   }
-}
 
-exports.handleScrapedProduct = async (scrapedProduct) => {
-  const allMetaProducts = await MetaProduct.findAll({ where: { category: scrapedProduct.category } });
-  const result = await findMatchingMetaProduct(scrapedProduct, allMetaProducts);
+  exports.handleScrapedProduct = async (scrapedProduct) => {
+    const allMetaProducts = await MetaProduct.findAll({ where: { category: scrapedProduct.category } });
+    const result = await findMatchingMetaProduct(scrapedProduct, allMetaProducts);
 
-  const generateSlug = (productName) => {
-    return slugify(productName, {
-      lower: true,
-      replacement: '-',
-      remove: /[*+~.()'"!:@]/g,
-    });
-  };
+    const generateSlug = (productName) => {
+      return slugify(productName, {
+        lower: true,
+        replacement: '-',
+        remove: /[*+~.()'"!:@]/g,
+      });
+    };
 
-  let metaProduct;
-  if (result.match) {
+    let metaProduct;
+    if (result.match) {
     // Update the product with the matched MetaProduct ID
-    metaProduct = result.match;
-  } else if (result.create) {
+      metaProduct = result.match;
+    } else if (result.create) {
     // Create a new MetaProduct with the sanitized title
-    const slug = generateSlug(result.create.sanitizedTitle);
+      const slug = generateSlug(result.create.sanitizedTitle);
 
-    metaProduct = await MetaProduct.create({
-      name: result.create.sanitizedTitle,
-      brand: scrapedProduct.brand,
-      category: scrapedProduct.category,
-      imageUrl: scrapedProduct.imageUrl,
-      needsReview: true,
-      slug,
-    });
+      metaProduct = await MetaProduct.create({
+        name: result.create.sanitizedTitle,
+        brand: scrapedProduct.brand,
+        category: scrapedProduct.category,
+        imageUrl: scrapedProduct.imageUrl,
+        needsReview: true,
+        slug,
+      });
 
-  } else {
-    throw new Error('Unexpected result from findMatchingMetaProduct');
-  }
+    } else {
+      throw new Error('Unexpected result from findMatchingMetaProduct');
+    }
 
   // Update the product with the MetaProduct ID and additional information
-  await Product.update({ metaProductId: metaProduct.id, ...result.create.additionalInfo }, { where: { id: scrapedProduct.id } });
-};
+    await Product.update({ metaProductId: metaProduct.id, ...result.create.additionalInfo }, { where: { id: scrapedProduct.id } });
+  };
 
 

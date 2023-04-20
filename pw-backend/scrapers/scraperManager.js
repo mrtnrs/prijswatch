@@ -79,7 +79,7 @@ static async loadScrapers() {
   }
   
 
-  async setupMiniSearch() {
+  static async setupMiniSearch() {
     const miniSearchOptions = {
       fields: ['name', 'description'],
       storeFields: ['name', 'imageUrl', 'slug', 'brand', 'category'],
@@ -147,7 +147,9 @@ static async loadScrapers() {
 
 
 async search(query) {
-  const miniSearchInstance = await this.setupMiniSearch();
+  console.log('search entered')
+  const miniSearchInstance = await ScraperManager.setupMiniSearch();
+  console.log('miniSearchInstance', miniSearchInstance);
 
   // Search for product names
   const productNameResults = miniSearchInstance.search(query, { fields: ['name'] }).slice(0, 10);
@@ -274,7 +276,7 @@ async search(query) {
 
 
 
-  intervalToMinutes(interval) {
+  static intervalToMinutes(interval) {
   if (interval.endsWith('h')) {
     const hours = parseInt(interval.slice(0, -1), 10);
     return hours * 60;
@@ -292,14 +294,14 @@ async search(query) {
     const scrapers = await ScraperManager.loadScrapers();
     for (const scraper of scrapers) {
       const { interval, lastRun, id } = scraper;
-      const intervalInMinutes = intervalToMinutes(interval);
+      const intervalInMinutes = ScraperManager.intervalToMinutes(interval);
       const currentTime = new Date();
       const nextRun = new Date(lastRun.getTime() + intervalInMinutes * 60 * 1000);
       console.log('calculating if needs to run');
       if (currentTime >= nextRun) {
         try {
           console.log('running scraper');
-          await scraperController.runScraper({ params: { scraperId: id } }, null, false);
+          await scraperController.runScraper({ params: { id } }, null, false);
           await Scraper.update(
             { lastRun: currentTime },
             { where: { id: id } }
@@ -317,7 +319,7 @@ async search(query) {
     const lastUpdateTime = fs.existsSync(INDEX_FILE) ? fs.statSync(INDEX_FILE).mtime : new Date(0);
     const daysSinceLastUpdate = (today - lastUpdateTime) / (1000 * 60 * 60 * 24);
     if (daysSinceLastUpdate >= 7) {
-      const miniSearchInstance = await this.setupMiniSearch();
+      const miniSearchInstance = await ScraperManager.setupMiniSearch();
       await ScraperManager.checkForChangesAndUpdateIndex(miniSearchInstance);
     }
     res.status(200).json({ message: "Scraper saved successfully" });

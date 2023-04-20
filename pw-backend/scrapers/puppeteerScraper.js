@@ -2,6 +2,8 @@ const BaseScraper = require('./baseScraper');
 const puppeteer = require('puppeteer');
 const resizeAndUpload = require("../util/resizeAndUpload");
 const getExistingProduct = require("../util/getExistingProduct");
+const puppeteerConfig = require('../puppeteer.config.js');
+
 
 
 function extractBaseUrl(url) {
@@ -76,7 +78,12 @@ async waitForImageLoad(page, selector, timeout = 5000) {
 
 
   async scrape() {
-    const browser = await puppeteer.launch({ headless: true });
+    console.log(puppeteerConfig);
+    const browser = await puppeteer.launch({
+      executablePath: process.env.PUPPETEER_EXECUTABLE_PATH,
+      args: process.env.PUPPETEER_ARGS.split(' '),
+      headless: true
+    });
     const page = await browser.newPage();
 
     await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.82 Safari/537.36');
@@ -89,6 +96,7 @@ async waitForImageLoad(page, selector, timeout = 5000) {
     const pagination = this.scraperSettings.pagination;
     const productImageSelector = this.scraperSettings.productImageSelector;
     const containerSelector = this.scraperSettings.containerSelector;
+    const decategorie = this.scraperSettings.category;
 
 
     let items = [];
@@ -130,7 +138,7 @@ const imageElements = productImageSelector ? await page.$$(this.getCombinedSelec
 const pageItems = await Promise.allSettled(names.map(async (name, index) => {
   
 const productUrl = this.prependUrl(urls[index]);
-const existingProduct = await getExistingProduct(productUrl, this.categoryId);
+const existingProduct = await getExistingProduct(productUrl, decategorie);
 let resizedImageUrl = null;
 if (existingProduct) {
   if (!existingProduct.imageUrl && imageUrls[index]) {
