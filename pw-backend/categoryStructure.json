@@ -1,27 +1,12 @@
 {
-  "version": 1681715820918,
+  "version": 1682335611276,
   "tree": [
     {
       "id": "236d2f38-caa7-4e16-927c-4efdebfeae89",
       "name": "Audio",
       "slug": "audio",
       "parentId": null,
-      "children": [
-        {
-          "id": "05e2c6a3-38a6-494c-87dc-459cf8de9567",
-          "name": "Speakers",
-          "slug": "speakers",
-          "parentId": "236d2f38-caa7-4e16-927c-4efdebfeae89",
-          "children": []
-        },
-        {
-          "id": "a55ef16d-40bf-4bce-ae58-c1458517293c",
-          "name": "Kak",
-          "slug": "kak",
-          "parentId": "236d2f38-caa7-4e16-927c-4efdebfeae89",
-          "children": []
-        }
-      ]
+      "children": []
     },
     {
       "id": "43bb420f-c02f-4b43-b32c-20ad07dd123c",
@@ -37,13 +22,6 @@
           "children": []
         }
       ]
-    },
-    {
-      "id": "545cb7d3-8a7e-45fc-a02b-6fcf7617839d",
-      "name": "Smartphones",
-      "slug": "smartphones",
-      "parentId": null,
-      "children": []
     },
     {
       "id": "54e267de-4d9a-4b4a-8cb2-2a5cfc2a2b71",
@@ -63,7 +41,15 @@
           "name": "Console",
           "slug": "console",
           "parentId": "54e267de-4d9a-4b4a-8cb2-2a5cfc2a2b71",
-          "children": []
+          "children": [
+            {
+              "id": "25d4ff3d-30d7-495d-b5bf-84cfd6b9a1c9",
+              "name": "PlayStation",
+              "slug": "playstation",
+              "parentId": "a6bf5c2f-7320-4b8c-94c4-26ad6dc8beb8",
+              "children": []
+            }
+          ]
         }
       ]
     },

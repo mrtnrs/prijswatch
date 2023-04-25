@@ -18,67 +18,60 @@ export default function CategoryOrMetaProducts() {
   const { category, subcategory, subsubcategory } = useParams();
   const categoryStructure = importedCategoryStructure.tree;
   const joinedParams = [category, subcategory, subsubcategory].filter(Boolean).join('/');
-  const categorySlug = joinedParams.split('/').slice(0, -1).join('/');
   const lastParam = joinedParams.split('/').pop();
-  const foundCategory = findCategoryBySlug(lastParam, categoryStructure);
+  const depth = tempPathname.split('/').filter(segment => segment.length > 0).length;
+  const foundCategory = depth <= 3 ? findCategoryBySlug(lastParam, categoryStructure) : null;
   const [metaProducts, setMetaProducts] = useState([]);
   const [categoryTree, setCategoryTree] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isProductNotFound, setIsProductNotFound] = useState(false);
   const [productName, setProductName] = useState('');
 
-
-useEffect(() => {
-  async function fetchData() {
-    if (foundCategory) {
-      try {
-        const data = await productService.fetchMetaProductsByCategoryAndBrand(foundCategory.slug);
-        setMetaProducts(data);
-      } catch (error) {
-        console.error('Error fetching MetaProducts:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-
-    if (categoryStructure && categoryStructure.length > 0) {
-      const category = findCategoryBySlug(categorySlug, categoryStructure);
-      const newCategoryTree = [];
-
-      let currentCategory = category;
-      while (currentCategory) {
-        newCategoryTree.unshift({
-          name: currentCategory.name,
-          url: currentCategory.slug,
-        });
-        currentCategory = currentCategory.parent;
-      }
-
-      if (newCategoryTree.length === 0) {
-        const pathSegments = tempPathname.split('/').slice(0, -1);
-
-        let currentUrl = '';
-        for (const segment of pathSegments) {
-          currentUrl += `${segment}/`;
-          const currentCategory = findCategoryBySlug(segment, categoryStructure);
-          if (currentCategory) {
-            newCategoryTree.push({
-              name: currentCategory.name,
-              url: `.${currentUrl}`,
-            });
-          }
+  useEffect(() => {
+    async function fetchData() {
+      if (foundCategory) {
+        try {
+          const data = await productService.fetchMetaProductsByCategoryAndBrand(foundCategory.id);
+          setMetaProducts(data);
+        } catch (error) {
+          console.error('Error fetching MetaProducts:', error);
+        } finally {
+          setIsLoading(false);
         }
       }
 
-      setCategoryTree(newCategoryTree);
-      console.log('newCatTree', newCategoryTree);
+      if (categoryStructure && categoryStructure.length > 0) {
+    const categorySlugs = joinedParams.split('/');
+    const newCategoryTree = [];
+
+categorySlugs.forEach((slug, index) => {
+  const currentCategory = findCategoryBySlug(slug, categoryStructure);
+  if (currentCategory) {
+    newCategoryTree.push({
+      name: currentCategory.name,
+      url: `${constructCategoryUrl(newCategoryTree)}/${currentCategory.slug}`,
+    });
+  }
+});
+
+        setCategoryTree(newCategoryTree);
+      }
+
+      setIsLoading(false);
     }
 
-    setIsLoading(false);
-  }
+    fetchData();
+  }, [foundCategory, joinedParams, categoryStructure]);
 
-  fetchData();
-}, [foundCategory, categorySlug, tempPathname, categoryStructure]);
+
+function constructCategoryUrl(categoryTree) {
+  let url = '';
+  for (let i = 0; i < categoryTree.length; i++) {
+    url += `/${categoryTree[i].url.split('/').pop()}`;
+  }
+  return url;
+}
+
 
 
   if (!categoryStructure || isLoading) {
@@ -86,7 +79,7 @@ useEffect(() => {
   }
 
   if (foundCategory) {
-    if (foundCategory.children && foundCategory.children.length > 0) {
+        if (foundCategory.children && foundCategory.children.length > 0) {
       return (
         <div>
           <BasicBreadcrumbs categoryTree={categoryTree} />
@@ -97,7 +90,7 @@ useEffect(() => {
     } else {
       return (
         <div>
-          <BasicBreadcrumbs categoryTree={categoryTree} />
+          <BasicBreadcrumbs categoryTree={categoryTree}/>
           <Typography variant="h1" sx={{textTransform: 'capitalize', mt: 5}}>{lastParam}</Typography>
           {metaProducts.length === 0 ? (
             <Typography variant="h6">This category doesn't have any products... yet</Typography>
@@ -111,17 +104,19 @@ useEffect(() => {
         </div>
       );
     }
-  } else {
-    const categorySlug = tempPathname.split('/')[tempPathname.split('/').length - 2];
+  } else if (depth >= 2 && depth <= 4) {
+    const pathSegments = tempPathname.split('/').filter(segment => segment.length > 0);
+    const categorySlug = pathSegments[pathSegments.length - 2];
+    const metaProductSlug = pathSegments[pathSegments.length - 1];
     return (
       <>
-      <BasicBreadcrumbs categoryTree={categoryTree} productName={productName} />
-      <SingleMetaProduct
-        categorySlug={categorySlug}
-        metaProductSlug={lastParam}
-        onProductNotFound={() => setIsProductNotFound(true)}
-        onProductNameUpdate={(name) => setProductName(name)}
-      />
+        <BasicBreadcrumbs categoryTree={categoryTree} productName={productName} />
+        <SingleMetaProduct
+          categorySlug={categorySlug}
+          metaProductSlug={metaProductSlug}
+          onProductNotFound={() => setIsProductNotFound(true)}
+          onProductNameUpdate={(name) => setProductName(name)}
+        />
       </>
     );
   }
@@ -129,9 +124,10 @@ useEffect(() => {
   if (isProductNotFound) {
     return (
       <>
-      <BasicBreadcrumbs categoryTree={categoryTree} />
-      <Viernulvier />;
+        <BasicBreadcrumbs categoryTree={categoryTree} />
+        <Viernulvier />
       </>
-      ) 
+    );
   }
 }
+

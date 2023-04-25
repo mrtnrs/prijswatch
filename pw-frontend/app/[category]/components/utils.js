@@ -4,9 +4,6 @@ export default function findCategoryBySlug(slug, categories) {
 
   for (const category of categories) {
     if (category.slug === slug) {
-      
-      console.log(category.slug);
-      console.log(slug);
       return category;
     }
     if (category.children) {

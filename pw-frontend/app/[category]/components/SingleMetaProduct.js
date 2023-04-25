@@ -28,6 +28,8 @@ export default function SingleMetaProduct({ categorySlug, metaProductSlug, onPro
   const [loading, setLoading] = useState(true);
   const categoryStructure = importedCategoryStructure.tree;
 
+  console.log('categorySlug', categorySlug);
+  console.log('metaproductslug', metaProductSlug);
 
   useEffect(() => {
   async function fetchMetaProduct() {
@@ -45,6 +47,7 @@ export default function SingleMetaProduct({ categorySlug, metaProductSlug, onPro
           setLoading(false);
         }
       } else {
+        console.log("res ok not ok");
         setMetaProduct(null);
       }
     } catch (error) {

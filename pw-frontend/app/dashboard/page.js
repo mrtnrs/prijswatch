@@ -9,7 +9,10 @@ import CustomIcon from '@/vercelFix/Icon'
 
 import AddWebshop from '@/components/AddWebshop'
 import { getAllWebshops, deleteWebshop } from '@/api/webshopService';
+import { updateSearchIndex } from '@/api/searchService';
 import { usePathname } from 'next/navigation';
+import { regenerateCategoryStructure } from '@/api/categoryService';
+import { categoryStructure } from '@/utils/categoryStructure';
 
 import { useContext } from 'react';
 import WebshopContext from '@/context/WebshopContext';
@@ -199,10 +202,34 @@ const handleStartStop = async (scraperId, isActive) => {
   }
 };
 
-
-
 const handleNewScraperBtn = () => {
   setDisplayAddScraperDialog(true);
+}
+
+// update search index
+
+const handleUpdateSearchIndex = async () => {
+  try {
+    const data = await updateSearchIndex();
+    Toast.success(data.message);
+  } catch (error) {
+    console.error(error);
+    Toast.error('Error updating search:', error);
+  }
+};
+
+// update category structure
+
+async function handleUpdateCatStructure() {
+  try {
+    await regenerateCategoryStructure();
+    await categoryStructure.updateTree();
+    // Add any additional actions required after updating the category structure
+    Toast.success('Category structure updated');
+  } catch (error) {
+    console.error('Error regenerating and updating category structure:', error);
+    Toast.error('Error updating category structure:', error);
+  }
 }
 
 
@@ -215,6 +242,16 @@ console.log(scrapers.length);
 return (
 
  <>
+  <Grid container spacing={6} className='match-height'>
+    <Grid item xs={12} md={12}>
+      <Button variant='contained' size='small' sx={{mr:5}} variant='contained' endIcon={<CustomIcon icon='mdi:refresh' />} onClick={handleUpdateSearchIndex}>
+        Generate Search Index
+      </Button>
+      <Button variant='contained' size='small' variant='contained' endIcon={<CustomIcon icon='mdi:refresh' />} onClick={handleUpdateCatStructure}>
+        Generate category structure
+      </Button>
+    </Grid>
+  </Grid>
  <ApexChartWrapper>
  <KeenSliderWrapper>
  <DialogEditUserInfo 

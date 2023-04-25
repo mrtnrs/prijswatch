@@ -15,6 +15,18 @@ router.get('/', async (req, res) => {
   }
 });
 
+router.post('/update-index', async (req, res) => {
+  try {
+    const miniSearchInstance = await ScraperManager.setupMiniSearch();
+    await ScraperManager.checkForChangesAndUpdateIndex(miniSearchInstance);
+    res.status(200).json({ message: 'Search index updated successfully.' });
+  } catch (error) {
+    console.error('Error updating search index:', error);
+    res.status(500).json({ message: 'Error updating search index.' });
+  }
+});
+
+
 
 module.exports = router;
 

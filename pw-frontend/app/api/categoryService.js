@@ -103,3 +103,23 @@ export const deleteCategory = async (categoryId) => {
     throw error;
   }
 };
+
+export const regenerateCategoryStructure = async () => {
+  try {
+    const headers = await createHeaders();
+    const response = await fetch(`${SERVER_URL}${API_URL}/regenerate`, {
+      method: 'POST',
+      headers,
+    });
+
+    if (!response.ok) {
+      throw new Error('Error regenerating category structure');
+    }
+
+    return true;
+  } catch (error) {
+    console.error('Error regenerating category structure:', error);
+    throw error;
+  }
+};
+

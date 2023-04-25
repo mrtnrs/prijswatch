@@ -21,6 +21,7 @@ async function buildCategoryTree(categoryId) {
 }
 
 async function buildFullCategoryTree() {
+  console.log('buildfullcat');
   try {
     const categories = await Category.findAll({ where: { parentId: null } });
     const categoryTree = await Promise.all(
@@ -65,6 +66,7 @@ exports.createCategory = async (req, res) => {
 };
 
 async function updateCategoryStructure() {
+  console.log('updatecatstruct');
   try {
     const categoryTree = await buildFullCategoryTree();
     const version = Date.now(); // Use a timestamp as the version
@@ -137,4 +139,17 @@ exports.getCategoryStructure = async (req, res) => {
     res.status(500).json({ message: 'Error fetching category structure' });
   }
 };
+
+// manual update cat structure
+
+exports.regenerateCategoryStructure = async (req, res) => {
+  try {
+    await updateCategoryStructure();
+    res.status(200).json({ message: 'Category structure regenerated successfully' });
+  } catch (error) {
+    console.error('Error regenerating category structure:', error);
+    res.status(500).json({ message: `Error regenerating category structure: ${error.message}` });
+  }
+};
+
 

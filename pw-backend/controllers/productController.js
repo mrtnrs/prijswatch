@@ -186,7 +186,7 @@ const products = await Product.findAll({
 
 exports.getMetaProductsByCategoryAndBrand = async (req, res) => {
   try {
-    const { category } = req.params;
+    const { categoryId } = req.params;
 
     const query = `
       SELECT
@@ -198,7 +198,7 @@ exports.getMetaProductsByCategoryAndBrand = async (req, res) => {
       FROM
         "MetaProducts"
       WHERE
-        "category" ILIKE :category
+        "categoryId" = :categoryId
       GROUP BY
         "brand"
       ORDER BY
@@ -206,20 +206,21 @@ exports.getMetaProductsByCategoryAndBrand = async (req, res) => {
     `;
 
     const metaProducts = await sequelize.query(query, {
-      replacements: { category: category },
+      replacements: { categoryId: categoryId },
       type: Sequelize.QueryTypes.SELECT,
     });
 
     res.status(200).json(metaProducts);
   } catch (error) {
     console.error('Error fetching MetaProducts grouped by brand:', error);
-  res.status(500).json({
-    message: 'Error fetching MetaProducts grouped by brand',
-    error: {
-      message: error.message,
-      stack: error.stack,
-    },
-  });
+    res.status(500).json({
+      message: 'Error fetching MetaProducts grouped by brand',
+      error: {
+        message: error.message,
+        stack: error.stack,
+      },
+    });
   }
 };
+
 

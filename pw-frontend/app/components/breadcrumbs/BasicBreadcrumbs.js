@@ -1,3 +1,4 @@
+// BasicBreadcrumbs.js
 import React from 'react';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Link from 'next/link';
@@ -10,7 +11,7 @@ const BasicBreadcrumbs = ({ categoryTree, productName }) => {
         <Typography color="inherit">Home</Typography>
       </Link>
       {categoryTree.map((category, index) => (
-        <Link key={index} href={`/${category.url}`} passHref>
+        <Link key={index} href={category.url} passHref>
           <Typography color="inherit">{category.name}</Typography>
         </Link>
       ))}

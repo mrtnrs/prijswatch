@@ -1,7 +1,7 @@
 FROM debian:bullseye as builder
 
 ENV PATH=/usr/local/node/bin:$PATH
-ARG NODE_VERSION=16.14.0
+ARG NODE_VERSION=19.5.0
 
 RUN apt-get update; apt install -y curl pkg-config build-essential && \
     curl -sL https://github.com/nodenv/node-build/archive/master.tar.gz | tar xz -C /tmp/ && \
@@ -15,6 +15,8 @@ RUN mkdir /app
 WORKDIR /app
 
 COPY . .
+
+ENV npm_config_cache /app/.npm
 
 RUN npm install
 
