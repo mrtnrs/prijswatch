@@ -37,6 +37,15 @@ const Typography = theme => {
       letterSpacing: '0.15px',
       color: theme.palette.text.secondPrimary
     },
+    logoStyle: {
+      fontWeight: 600,
+      textShadow: "0px 3px 2px rgb(0 0 0 / 19%)",
+      color: theme.palette.text.primary,
+      fontSize: '20px',
+      [theme.breakpoints.up('md')]: {
+        fontSize: '28px', // Maximum font size for screens larger than 'lg' breakpoint
+      }
+    },
     subtitle2: {
       letterSpacing: '0.1px',
       fontSize: '0.8rem',

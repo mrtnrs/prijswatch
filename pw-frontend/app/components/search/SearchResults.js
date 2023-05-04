@@ -18,6 +18,7 @@ const IMG_SERVER = process.env.NEXT_PUBLIC_IMG_SERVER;
 
 const SearchResults = ({ searchResults, queryLength, isLoading }) => {
 
+
   const theme = useTheme();
   const mode = theme.palette.mode;
 
@@ -25,7 +26,7 @@ const SearchResults = ({ searchResults, queryLength, isLoading }) => {
     <Box sx={{ flexGrow: 1, height: '100%', position: 'absolute', right: 0, left: 0 }}>
     <Grid container spacing={2} sx={{
     overflow: 'auto',
-    alignItems: 'flex-start', // Align grid items to the top
+    alignItems: 'stretch', // Align grid items to the top
   }}>
     {isLoading ? (
       <Grid
@@ -53,13 +54,17 @@ const SearchResults = ({ searchResults, queryLength, isLoading }) => {
               alignItems: 'flex-start',
               padding: '0',
               transition: 'all 1s ease-in-out',
+    backdropFilter: "blur(3px)",
+    backgroundColor: "rgba(255, 255, 255, 0.1)",
+    border: "1px solid rgba(255, 255, 255, 0.2)",
+    borderRadius: "10px",
+    boxShadow: "2px 2px 4px rgba(0, 0, 0, 0.25)",
               '&:hover': {
-                transform: 'scale(1.02)',
                 boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
               },
             }}
           >
-            <CardContent>
+            <CardContent sx={{ width: '100%', padding: '1rem !important'}} >
               <Grid container alignItems="flex-start">
                 <Grid item xs={4}>
                   {productUrl ? (
@@ -69,11 +74,14 @@ const SearchResults = ({ searchResults, queryLength, isLoading }) => {
                         alt={result.name}
                         style={{
                           width: '5rem',
+                          minWidth: '5rem',
                           height: '5rem',
                           borderRadius: '0.375rem',
                           objectFit: 'contain',
                           border: '1px solid',
+                          backgroundColor: 'white',
                           borderColor: 'primary.main',
+                          padding: '.1rem',
                         }}
                       />
                     </Link>
@@ -113,22 +121,19 @@ const SearchResults = ({ searchResults, queryLength, isLoading }) => {
                     </>
                   )}
                   {categoryUrl ? (
-                    <Link href={categoryUrl} style={{ textDecoration: 'none' }}>
+                    <Link href={categoryUrl} style={{ textDecoration: 'none', opacity: '.6' }}>
                       <Chip
                         label={result.category}
                         color="primary"
                         variant="outlined"
-                        icon={
-                          <CustomIcon
-                            icon="mdi:arrow-right-thin-circle-outline"
-                            fontSize={20}
-                          />
-                        }
                         clickable
                         sx={{
                           backgroundColor: 'transparent',
                           opacity: 0.7,
                           color: 'white',
+                          height: 'auto !important',
+                          paddingLeft: '4px',
+                          paddingRight: '4px',
                           borderColor: mode === 'light' ? 'white' : 'text.primary',
                           '&:hover': {
                             backgroundColor: 'primary.dark',
@@ -136,6 +141,8 @@ const SearchResults = ({ searchResults, queryLength, isLoading }) => {
                           },
                           '& .MuiChip-label': {
                             textDecoration: 'none',
+                            paddingLeft: '4px',
+                            paddingRight: '4px',
                           },
                         }}
                       />
@@ -147,7 +154,6 @@ const SearchResults = ({ searchResults, queryLength, isLoading }) => {
           </Card>
         </Fade>
       </Grid>
-
     );
       
   })

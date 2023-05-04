@@ -30,7 +30,7 @@ const AppBarContent = props => {
         userAppBarBranding(props)
       ) : (
         <StyledLink href='/'>
-          <Image src="/prijswatchlogo.png"  width={150}  height={40} />
+          <Typography className="text-gradient" variant="logoStyle" sx={{ textAlign: { lg: 'left' } }}>prijswatch</Typography>
         </StyledLink>
       )}
       {userAppBarContent ? userAppBarContent(props) : null}

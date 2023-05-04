@@ -7,7 +7,7 @@ function Navigation() {
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center">
           <div className="text-xl font-semibold text-gray-900">
-            <Link href="/"><Image src="prijswatchlogo.png" /></Link>
+            <Link href="/"><Typography className="text-gradient" variant="h1" sx={{ textAlign: { lg: 'left' }, maxWidth: '37rem' }}>Vind de beste producten</Typography></Link>
           </div>
           <ul className="flex space-x-4">
             <li>

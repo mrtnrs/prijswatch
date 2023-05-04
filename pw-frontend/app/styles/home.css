@@ -1,0 +1,14 @@
+.text-gradient {
+background: linear-gradient(to bottom, #fff, #9ca3af);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.fade-in {
+  opacity: 1;
+  transition: opacity 300ms linear;
+}
+
+.hidden {
+  opacity: 0;
+}

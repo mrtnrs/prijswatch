@@ -1,6 +1,6 @@
 'use client'
 import { useState } from 'react';
-
+import '@/styles/searchBar.css'
 
 import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -14,6 +14,7 @@ function SearchBar({ handleSearch, setSearchResults, searchQuery, setSearchQuery
   return (
        <div>
       <TextField
+        className="searchField"
         value={searchQuery}
         onChange={(e) => {
         setSearchQuery(e.target.value);
@@ -22,9 +23,7 @@ function SearchBar({ handleSearch, setSearchResults, searchQuery, setSearchQuery
         }}
         placeholder="Zoek een product..."
         sx={{
-          borderRadius: '10px',
-          background: 'rgba(255, 255, 255, 0.1)',
-          backdropFilter: 'blur(10px)',
+          borderRadius: '99999px',
           padding: '0 10px',
           '& .MuiInputBase-input': {
             color: 'white',
@@ -32,7 +31,14 @@ function SearchBar({ handleSearch, setSearchResults, searchQuery, setSearchQuery
           padding: 0,
           outline: '1px solid #ffffff1f',
           border: '1px solid black',
+          boxShadow: '2px 2px 4px rgba(0, 0, 0, 0.25)',
+           border: '1px solid rgba(255, 255, 255, 0.2)',
+          position: 'relative',
+          transition: 'transform 250ms',
+          background: 'rgba(255, 255, 255, 0.1)',
+          backdropFilter: 'blur(3px)',
           minWidth: { md: '20rem' },
+
         }}
         InputProps={{
           startAdornment: (
