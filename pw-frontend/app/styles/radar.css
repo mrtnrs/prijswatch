@@ -21,6 +21,18 @@ transform: rotate(0deg);
     z-index: -5;
 } 
 
+@media (max-width:600px)  {
+.panel {
+  scale: 1.7 !important;
+    width: 100% !important;
+    left: 0 !important;
+    top: 10rem !important;
+    height: 20rem !important;
+    overflow: hidden !important;
+}
+
+ }
+
 .panel::before,
 .panel::after {
   content: "";

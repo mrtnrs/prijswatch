@@ -38,7 +38,7 @@ const restoreSettings = () => {
   try {
     const storedData = window.localStorage.getItem('settings')
     if (storedData) {
-      settings = { ...JSON.parse(storedData), ...staticSettings }
+      settings = { ...initialSettings, ...JSON.parse(storedData) }
     } else {
       settings = initialSettings
     }
@@ -48,6 +48,7 @@ const restoreSettings = () => {
 
   return settings
 }
+
 
 // set settings in localStorage
 const storeSettings = settings => {
@@ -71,7 +72,7 @@ export default SettingsContext;
 
 export const SettingsProvider = ({ children, pageSettings }) => {
   // ** State
-  const [settings, setSettings] = useState({ ...initialSettings })
+  const [settings, setSettings] = useState(restoreSettings());
   const [categoryStructureFinn, setCategoryStructureFinn] = useState([]);
 
   console.log('categoryStructure', categoryStructure);
@@ -80,16 +81,14 @@ export const SettingsProvider = ({ children, pageSettings }) => {
   fetchCategoryTree();
 }, [categoryStructure]);
 
-  useEffect(() => {
-    const restoredSettings = restoreSettings()
+
+    useEffect(() => {
+    const restoredSettings = restoreSettings();
     if (restoredSettings) {
-      setSettings({ ...restoredSettings })
+      setSettings({ ...restoredSettings });
     }
-    if (pageSettings) {
-      setSettings({ ...settings, ...pageSettings })
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pageSettings])
+  }, []);
+
   useEffect(() => {
     if (settings.layout === 'horizontal' && settings.mode === 'semi-dark') {
       saveSettings({ ...settings, mode: 'light' })
@@ -97,7 +96,6 @@ export const SettingsProvider = ({ children, pageSettings }) => {
     if (settings.layout === 'horizontal' && settings.appBar === 'hidden') {
       saveSettings({ ...settings, appBar: 'fixed' })
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [settings.layout])
 
 const fetchCategoryTree = async () => {

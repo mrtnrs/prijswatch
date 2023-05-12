@@ -23,10 +23,16 @@ const SearchResults = ({ searchResults, queryLength, isLoading }) => {
   const mode = theme.palette.mode;
 
   return (
-    <Box sx={{ flexGrow: 1, height: '100%', position: 'absolute', right: 0, left: 0 }}>
+    <Box sx={{ flexGrow: 1, position: 'absolute', right: 0, left: 0, top: 0 }}>
     <Grid container spacing={2} sx={{
-    overflow: 'auto',
+    overflow: {xs: 'scroll !important', md: 'auto'},
     alignItems: 'stretch', // Align grid items to the top
+...(searchResults.length > 0
+          ? {
+              maxHeight: { xs: '20rem', md: '100%' },
+              borderBottom: { xs: '1px solid black', md: 'none' },
+            }
+          : {}),
   }}>
     {isLoading ? (
       <Grid

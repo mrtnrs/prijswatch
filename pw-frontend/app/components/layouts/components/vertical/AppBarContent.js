@@ -15,6 +15,10 @@ import ShortcutsDropdown from '@/core/layouts/components/shared-components/Short
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useAuth } from '@/context/AuthContext';
 
+import { styled, useTheme } from '@mui/material/styles'
+import Link from 'next/link';
+import Typography from '@mui/material/Typography';
+
 const notifications = [
   {
     meta: 'Today',
@@ -24,6 +28,12 @@ const notifications = [
     subtitle: 'Register to set up'
   }
 ]
+
+const StyledLink = styled(Link)(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  textDecoration: 'none',
+}))
 
 const AppBarContent = props => {
   // ** Props
@@ -47,6 +57,9 @@ const AppBarContent = props => {
         ) : null}
         <Autocomplete hidden={hidden} settings={settings} />
       </Box>
+              <StyledLink href='/'>
+          <Typography variant="logoStyle" sx={{ textAlign: { lg: 'left' } }}>prijswatch</Typography>
+        </StyledLink>
       <Box className='actions-right' sx={{ display: 'flex', alignItems: 'center' }}>
         {/* <LanguageDropdown settings={settings} saveSettings={saveSettings} /> */}
         <ModeToggler settings={settings} saveSettings={saveSettings} />

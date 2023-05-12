@@ -255,7 +255,7 @@ const NoResult = ({ value, setOpenDialog }) => {
 
 const DefaultSuggestions = ({ setOpenDialog }) => {
   return (
-    <Grid container spacing={6} sx={{ ml: 0 }}>
+    <Grid container spacing={6} sx={{ ml: 0, display: 'none' }}>
       {defaultSuggestionsData.map((item, index) => (
         <Grid item xs={12} sm={6} key={index}>
           <Typography component='p' variant='overline' sx={{ lineHeight: 1.25, color: 'text.disabled' }}>

@@ -69,6 +69,8 @@ const LayoutAppBar = props => {
       position={appBar === 'fixed' ? 'sticky' : 'static'}
       {...userAppBarProps}
     >
+    
+
       <Toolbar
         className='navbar-content-container'
         sx={{
@@ -78,7 +80,9 @@ const LayoutAppBar = props => {
           })
         }}
       >
+
         {(userAppBarContent && userAppBarContent(props)) || null}
+
       </Toolbar>
     </AppBar>
   )

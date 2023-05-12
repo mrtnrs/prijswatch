@@ -3,10 +3,10 @@ const DefaultPalette = (mode, skin) => {
   const whiteColor = '#FFF'
   const lightColor = '76, 78, 100'
   const darkColor = '244, 244, 248'
-  const secondLightColor = 'red'
+  const secondLightColor = '#f4f4f4'
   const secondDarkColor = '148, 163, 184'
   const mainColor = mode === 'light' ? lightColor : darkColor
-  const secondMainColor = mode === 'light' ? secondLightColor : secondDarkColor
+  const secondMainColor = mode === 'light' ? `rgb(${lightColor})` : whiteColor
 
 
   const defaultBgColor = () => {
@@ -19,6 +19,17 @@ const DefaultPalette = (mode, skin) => {
     } else return `rgb(15, 23, 42)`
   }
 
+const rgbaColor = (color, opacity) => {
+  if (!color.startsWith('#')) {
+    color = '#' + color;
+  }
+  const r = parseInt(color.slice(1, 3), 16);
+  const g = parseInt(color.slice(3, 5), 16);
+  const b = parseInt(color.slice(5, 7), 16);
+  return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+};
+
+
   return {
     customColors: {
       dark: darkColor,
@@ -29,7 +40,9 @@ const DefaultPalette = (mode, skin) => {
       bodyBg: mode === 'light' ? '#F7F7F9' : `rgb(15, 23, 42)`,
       trackBg: mode === 'light' ? '#F2F2F4' : '#41435C',
       tooltipBg: mode === 'light' ? '#262732' : '#464A65',
-      tableHeaderBg: mode === 'light' ? '#F5F5F7' : '#3A3E5B'
+      tableHeaderBg: mode === 'light' ? '#F5F5F7' : '#3A3E5B',
+      secondMain: secondMainColor,
+      rgba: rgbaColor,
     },
     mode: mode,
     common: {
@@ -93,6 +106,7 @@ const DefaultPalette = (mode, skin) => {
       secondary: `rgba(${mainColor}, 0.6)`,
       disabled: `rgba(${mainColor}, 0.38)`,
       secondPrimary: `rgba(${secondMainColor}, 1)`,
+      primaryRGBA: mode === 'light' ? `rgba(0, 0, 0, .5)` : `rgba(255, 255, 255, .5)`,
     },
     divider: `rgba(${mainColor}, 0.12)`,
     background: {

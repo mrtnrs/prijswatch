@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import Image from 'next/image';
 import Typography from '@mui/material/Typography';
+import { useTheme } from '@mui/material/styles'
 
 // Import Swiper
 import Swiper, { Navigation } from 'swiper';
@@ -8,6 +9,9 @@ import 'swiper/swiper.min.css';
 Swiper.use([Navigation]);
 
 export default function Carousel() {
+
+  const theme = useTheme();
+
   useEffect(() => {
     const carousel = new Swiper('.carousel', {
       breakpoints: {
@@ -48,7 +52,11 @@ export default function Carousel() {
 
   return (
     <>
-      <Typography className='text-gradient' variant="h4" style={{ marginTop: 50, width: '100%', marginBottom: 20, fontWeight: 600 }}>Onlangs gezakt in prijs</Typography>
+      <Typography 
+      className={theme.palette.mode === 'light' ? 'text-gradient-light' : 'text-gradient'} 
+      sx={{ textAlign: {xs: 'center', md: 'left'}, marginBottom: {xs: '0', md: '20px'}}} 
+      variant="h4" 
+      style={{ marginTop: 50, width: '100%', fontWeight: 600 }}>Onlangs gezakt in prijs</Typography>
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         <div className="py-12 md:py-20">
           {/* Section header */}

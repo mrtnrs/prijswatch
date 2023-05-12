@@ -68,15 +68,17 @@ const SlidingImages = () => {
     <Box
       sx={{
         position: 'relative',
-        width: '27rem',
-        height: '33rem',
+        width: { xs: '100%', md: '27rem'},
+        height: { xs: '20rem', md: '33rem'},
         borderRadius: 1,
         overflow: 'hidden',
         margin: '0 auto',
-        marginTop: '-20%',
+        height: '100%',
         paddingLeft: '4%',
         opacity: isLoaded ? 1 : 0,
         transition: 'opacity 1s',
+        scale: { xs: '1', md: '1'},
+
       }}
     >
       {images.map((image, index) => {

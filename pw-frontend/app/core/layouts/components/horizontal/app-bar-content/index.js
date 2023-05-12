@@ -26,13 +26,9 @@ const AppBarContent = props => {
 
   return (
     <Box sx={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-      {userAppBarBranding ? (
-        userAppBarBranding(props)
-      ) : (
         <StyledLink href='/'>
-          <Typography className="text-gradient" variant="logoStyle" sx={{ textAlign: { lg: 'left' } }}>prijswatch</Typography>
+          <Typography variant="logoStyle" sx={{ textAlign: { lg: 'left' } }}>prijswatch</Typography>
         </StyledLink>
-      )}
       {userAppBarContent ? userAppBarContent(props) : null}
     </Box>
   )

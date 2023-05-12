@@ -6,10 +6,12 @@ import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
 import CustomIcon from '@/vercelFix/Icon'
 import IconButton from '@mui/material/IconButton';
+import { useTheme } from '@mui/material/styles'
 
 
 function SearchBar({ handleSearch, setSearchResults, searchQuery, setSearchQuery, setIsLoading, ...props}) {
 
+  const theme = useTheme();
 
   return (
        <div>
@@ -26,7 +28,7 @@ function SearchBar({ handleSearch, setSearchResults, searchQuery, setSearchQuery
           borderRadius: '99999px',
           padding: '0 10px',
           '& .MuiInputBase-input': {
-            color: 'white',
+             color: theme.palette.customColors.main,
           },
           padding: 0,
           outline: '1px solid #ffffff1f',

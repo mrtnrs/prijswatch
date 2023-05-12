@@ -4,11 +4,36 @@ background: linear-gradient(to bottom, #fff, #9ca3af);
     -webkit-text-fill-color: transparent;
 }
 
+.text-gradient-light {
+      background: linear-gradient(to bottom, #23255a, #56585d);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
 .fade-in {
-  opacity: 1;
+   display: flex !important;
+ opacity: 1;
   transition: opacity 300ms linear;
 }
 
 .hidden {
   opacity: 0;
+  display: none;
+}
+
+.flexMe {
+      justify-content: center;
+    align-items: center;
+    display: flex;
+    flex-direction: column !important;
+}
+
+.imageResponsive {
+    width: 54vw;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: auto;
+    margin-right: auto;
 }

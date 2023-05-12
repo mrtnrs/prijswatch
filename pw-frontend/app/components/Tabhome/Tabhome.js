@@ -9,14 +9,17 @@ import { styled } from '@mui/material/styles'
 import Typography from '@mui/material/Typography'
 import MuiTabList from '@mui/lab/TabList'
 import Grid from '@mui/material/Grid'
+import { useTheme } from '@mui/material/styles'
 
 // Styled TabList component
 const TabList = styled(MuiTabList)(({ theme }) => ({
       backdropFilter: "blur(3px)",
-    backgroundColor: "rgba(255, 255, 255, 0.1)",
-    border: "1px solid rgba(255, 255, 255, 0.1)",
+    backgroundColor: theme.palette.customColors.rgba(theme.palette.mode === 'light' ? '#000000' : '#ffffff', .12),
+border: `1px solid ${theme.palette.customColors.rgba(
+      theme.palette.mode === 'light' ? '#8b8b8b' : '#8b8888',
+      0.25
+    )}`,
     borderRadius: "100px",
-    boxShadow: "2px 2px 2px rgba(0, 0, 0, 0.1)",
     cursor: "pointer",
     minHeight: 'unset',
     padding: "3px 15px",
@@ -25,9 +28,14 @@ const TabList = styled(MuiTabList)(({ theme }) => ({
     display: 'none'
   },
   '& .Mui-selected': {
-    color: 'white !important',
+    color: `${theme.palette.customColors.secondMain} !important`,
+    backgroundColor: theme.palette.customColors.rgba(theme.palette.mode === 'light' ? '#ffffff' : '#1b1b1b', .62),
     borderRadius: "1000px !important",
-    border: '1px solid #ffffffa6 !important',
+    border: `1px solid ${theme.palette.customColors.rgba(
+      theme.palette.mode === 'light' ? '#5f5d5d' : '#8b8888',
+      .6
+    )} !important`,
+    boxShadow: "0px 2px 2px rgba(0, 0, 0, 0.1)",
   },
   '& .MuiTab-root': {
     minWidth: 110,
@@ -38,7 +46,6 @@ const TabList = styled(MuiTabList)(({ theme }) => ({
     minHeight: 'unset',
     border: 'none',
     textTransform: 'capitalize',
-    boxShadow: '2px 2px 2px rgba(0, 0, 0, 0.1)',
     cursor: 'pointer'
   }
 }))
@@ -49,7 +56,8 @@ const NewTabPanel = styled(TabPanel)(({ theme }) => ({
 
 const Tabhome = () => {
   // ** State
-  const [value, setValue] = useState('1')
+  const [value, setValue] = useState('1');
+  const theme = useTheme();
 
   const handleChange = (event, newValue) => {
     setValue(newValue)
@@ -57,9 +65,11 @@ const Tabhome = () => {
 
   return (
     <>
-    <Typography className='text-gradient' variant="h4" style={{ marginTop: 50, width: '100%', marginBottom: 20, fontWeight: 600 }}>Populaire categorieën</Typography>
+    <Typography
+    className={theme.palette.mode === 'light' ? 'text-gradient-light' : 'text-gradient'}
+    variant="h4" sx={{ textAlign: {xs: 'center', md: 'left'}}} style={{ marginTop: 50, width: '100%', marginBottom: 20, fontWeight: 600 }}>Populaire categorieën</Typography>
     <TabContext value={value}>
-      <TabList onChange={handleChange} aria-label='customized tabs example'>
+      <TabList onChange={handleChange} aria-label='customized tabs example' sx={{ margin: {xs: '0 auto', md: 'unset'} }}>
         <Tab value='1' label='Entertainment' />
         <Tab value='2' label='Huishouden' />
       </TabList>

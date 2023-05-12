@@ -1,12 +1,15 @@
+import { useContext } from 'react';
+import SettingsContext from '@/vercelFix/context/SettingsContext';
+
 // ** MUI Imports
 import IconButton from '@mui/material/IconButton'
 
 // ** Icon Imports
 import CustomIcon from '@/vercelFix/Icon'
 
-const ModeToggler = props => {
-  // ** Props
-  const { settings, saveSettings } = props
+const ModeToggler = () => {
+  // ** Access context
+  const { settings, saveSettings } = useContext(SettingsContext);
 
   const handleModeChange = mode => {
     saveSettings({ ...settings, mode: mode })

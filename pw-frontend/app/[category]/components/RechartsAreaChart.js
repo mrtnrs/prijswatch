@@ -18,7 +18,7 @@ import DatePicker from 'react-datepicker'
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
 
 // ** Icon Imports
-import Icon from '@/components/Icon'
+import CustomIcon from '@/vercelFix/Icon'
 
 const data = [
   {
@@ -113,7 +113,7 @@ const CustomTooltip = data => {
           data.payload.map(i => {
             return (
               <Box sx={{ display: 'flex', alignItems: 'center', '& svg': { color: i.fill, mr: 2.5 } }} key={i.dataKey}>
-                <Icon icon='mdi:circle' fontSize='0.6rem' />
+                <CustomIcon icon='mdi:circle' fontSize='0.6rem' />
                 <Typography variant='body2'>{`${i.dataKey} : ${i.payload[i.dataKey]}`}</Typography>
               </Box>
             )
@@ -144,12 +144,12 @@ const RechartsAreaChart = ({ direction }) => {
         InputProps={{
           startAdornment: (
             <InputAdornment position='start'>
-              <Icon icon='mdi:bell-outline' />
+              <CustomIcon icon='mdi:bell-outline' />
             </InputAdornment>
           ),
           endAdornment: (
             <InputAdornment position='end'>
-              <Icon icon='mdi:chevron-down' />
+              <CustomIcon icon='mdi:chevron-down' />
             </InputAdornment>
           )
         }}
@@ -189,7 +189,7 @@ const RechartsAreaChart = ({ direction }) => {
       <CardContent>
         <Box sx={{ display: 'flex', mb: 4 }}>
           <Box sx={{ mr: 6, display: 'flex', alignItems: 'center', '& svg': { mr: 1.5, color: 'rgb(115, 103, 240)' } }}>
-            <Icon icon='mdi:circle' fontSize='0.75rem' />
+            <CustomIcon icon='mdi:circle' fontSize='0.75rem' />
             <Typography variant='body2'>Click</Typography>
           </Box>
           <Box
@@ -200,17 +200,17 @@ const RechartsAreaChart = ({ direction }) => {
               '& svg': { mr: 1.5, color: 'rgba(115, 103, 240, .5)' }
             }}
           >
-            <Icon icon='mdi:circle' fontSize='0.75rem' />
+            <CustomIcon icon='mdi:circle' fontSize='0.75rem' />
             <Typography variant='body2'>Sales</Typography>
           </Box>
           <Box sx={{ display: 'flex', alignItems: 'center', '& svg': { mr: 1.5, color: 'rgba(115, 103, 240, .2)' } }}>
-            <Icon icon='mdi:circle' fontSize='0.75rem' />
+            <CustomIcon icon='mdi:circle' fontSize='0.75rem' />
             <Typography variant='body2'>Visits</Typography>
           </Box>
         </Box>
-        <Box sx={{ height: 350 }}>
-          <ResponsiveContainer>
-            <AreaChart height={350} data={data} style={{ direction }} margin={{ left: -20 }}>
+        <Box sx={{ height: 350, width: "100%" }}>
+          <ResponsiveContainer sx={{width: '100%'}}>
+            <AreaChart height={350} width={100} data={data} style={{ direction }} margin={{ left: -20 }}>
               <CartesianGrid />
               <XAxis dataKey='name' reversed={direction === 'rtl'} />
               <YAxis orientation={direction === 'rtl' ? 'right' : 'left'} />

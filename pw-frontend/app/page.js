@@ -1,5 +1,6 @@
 // app/page.js
 'use client'
+import { useMediaQuery } from '@mui/material';
 import { fetchProducts } from '../lib/api';
 import Link from 'next/link';
 import Image from 'next/image'
@@ -38,7 +39,7 @@ const SERVER_URL = process.env.NEXT_PUBLIC_API_SERVER_URL;
 import Spinner from '@/components/spinner'
 import CustomIcon from '@/vercelFix/Icon'
 
-
+import { useTheme } from '@mui/material/styles'
 import Scanner from '@/components/scanner/Scanner';
 import '@/styles/home.css';
 
@@ -85,7 +86,9 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
   const [showSlidingImage, setShowSlidingImage] = useState(true);
   const [isReady, setIsReady] = useState(false);
-
+  const theme = useTheme();
+  const isMid = useMediaQuery(theme => theme.breakpoints.down('lg'));
+  // const isMobile = useMediaQuery((theme) => theme.breakpoints.down('md'));
   useEffect(() => {
   const timer = setTimeout(() => {
     setIsReady(true);
@@ -145,6 +148,7 @@ export default function Home() {
 
 
 
+
   return (
 
    <>
@@ -152,12 +156,21 @@ export default function Home() {
    <Container maxWidth="nm">
       {/* Hero Section */}
 
-   <Grid container spacing={12} alignItems="center" justifyContent="center" style={{ marginTop: 50 }} sx={{ minHeight: "40rem"}}>
+   <Grid container spacing={12}  alignItems="center" justifyContent="center" style={{ marginTop: 0 }} sx={{ minHeight: { xs: 'auto', md: "40rem"}, marginLeft: { xs: '0', md: '0'}, width: '100%'}}>
     {/* Typography and SearchBar */}
-   <Grid item xs={12} lg={6} style={{ textAlign: 'center' }}>
-   <Typography className="text-gradient" variant="h1" sx={{ textAlign: { lg: 'left' }, maxWidth: '37rem'}}>Vind de beste producten</Typography>
-   <Typography className="text-gradient" variant="h1" sx={{ textAlign: { lg: 'left' }, maxWidth: '37rem', mb: 5 }}>aan de laagste prijzen</Typography>
-   <Typography variant="subtitle1" sx={{ textAlign: { lg: 'left' }, mt:2, maxWidth: '28rem', mb: 10  }}>Vergelijk prijzen in een oogwenk, zie hoe de prijzen evolueren
+   <Grid item xs={12} md={12} lg={6} order={{ xs: 2, md: 2, lg: 1 }} 
+   sx={{ textAlign: 'center', paddingTop: { xs: '0 !important', md: '3rem' }, paddingLeft: { xs: '0 !important', md: "3rem"} }}
+   className={isMid ? 'flexMe' : ''}
+   >
+   <Typography 
+   className={theme.palette.mode === 'light' ? 'text-gradient-light' : 'text-gradient'}
+   variant="h1" 
+   sx={{ textAlign: { lg: 'left' }, maxWidth: '37rem'}}>
+   Vind de beste producten</Typography>
+   <Typography
+   className={theme.palette.mode === 'light' ? 'text-gradient-light' : 'text-gradient'}
+  variant="h1" sx={{ textAlign: { lg: 'left' }, maxWidth: '37rem', mb: 5 }}>aan de laagste prijzen</Typography>
+   <Typography variant="subtitle1" sx={{ textAlign: { lg: 'left' }, mt:2, maxWidth: '28rem', mb: {xs: 0, lg: 10 }  }}>Vergelijk prijzen in een oogwenk, zie hoe de prijzen evolueren
    en krijg meldingen bij kortingen en prijsdalingen!</Typography>
    <Box sx={{ textAlign: { md: 'left' }, mt: 5 }}>
    <SearchBar 
@@ -167,26 +180,40 @@ export default function Home() {
    setSearchQuery={setSearchQuery}
    setIsLoading={setIsLoading} />
    </Box>
-   <Box sx={{mt: 5, ml: 0}}   className={`flex mt-12 items-center space-x-4 md:space-x-6 ${
-    isReady ? 'fade-in' : 'hidden'
-  }`} data-aos="fade-right" data-aos-delay="400">
+<Box
+  sx={{
+    mt: 5,
+    ml: 0,
+    justifyContent: { xs: "center", md: "flex-start" },
+    marginTop: { xs: "1.3rem !important" },
+    scale: { xs: "0.8 !important", md: "1" },
+    transformOrigin: { xs: "center", md: "center", lg: "left" },
+    visibility: isReady ? "visible" : "hidden",
+    transition: "visibility 0.3s, opacity 0.3s",
+    opacity: isReady ? 1 : 0,
+  }}
+  className={`flex mt-12 items-center space-x-4 md:space-x-6`}
+  data-aos="fade-right"
+  data-aos-delay="400"
+>
+
                 <div>
-                  <div className="font-cabinet-grotesk text-2xl font-extrabold text-left">1700</div>
-                  <div className="text-gray-500">Producten</div>
+                  <Box className="font-cabinet-grotesk text-2xl font-extrabold text-left" sx={{ textAlign: {xs: 'center !important', md: 'left'}}}>1700</Box>
+                  <Box className="text-gray-500" sx={{ textAlign: {xs: 'center !important', md: 'left'}}}>Producten</Box>
                 </div>
                 <div>
                   🔘
                   </div>
                 <div>
-                  <div className="font-cabinet-grotesk text-2xl font-extrabold text-left">12</div>
-                  <div className="text-gray-500">Webshops</div>
+                  <Box className="font-cabinet-grotesk text-2xl font-extrabold text-left" sx={{ textAlign: {xs: 'center !important', md: 'left'}}}>12</Box>
+                  <Box className="text-gray-500" sx={{ textAlign: {xs: 'center !important', md: 'left'}}}>Webshops</Box>
                 </div>
                    <div>
                   🔘
                   </div>
                 <div>
-                  <div className="font-cabinet-grotesk text-2xl font-extrabold text-left">+12k</div>
-                  <div className="text-gray-500">Prijsdalingen</div>
+                  <Box className="font-cabinet-grotesk text-2xl font-extrabold text-left" sx={{ textAlign: {xs: 'center !important', md: 'left'}}}>+12k</Box>
+                  <Box className="text-gray-500" sx={{ textAlign: {xs: 'center !important', md: 'left'}}}>Prijsdalingen</Box>
                 </div>
               </Box>
 
@@ -196,9 +223,15 @@ export default function Home() {
 
 
     {/* Search results */}
-   <Grid item xs={12} lg={6} order={{ xs: 2, lg: 1 }} sx={{ position: 'relative', pt: 0, alignSelf: "flex-start" }}>
+   <Grid item xs={12} md={12} lg={6} 
+   order={{ xs: 1, md: 1, lg: 2 }} 
+   sx={{ position: 'relative', height: {lg: '31rem', xs: '20rem'}, pt: '0 !important', alignSelf: "flex-start", paddingLeft: { xs: '0 !important', md: "3rem"} }}
 
-   <div className="container" style={{marginTop: "8%"}}>
+   >
+
+   <div className="container" style={{height: '100%', marginTop: {xs: "8%", md: "5%"}, '& > div:first-of-type': { marginTop: '8%' }}}
+   className={isMid ? 'imageResponsive container' : 'container'}
+   >
    {showSlidingImage && <SlidingImage />}
     <Scanner />
     </div>
