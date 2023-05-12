@@ -264,7 +264,7 @@ useEffect(() => {
     const hasSingleDataPoint = products.every(
       (product) => product.prices.length === 1
     );
-  // TERUZETTEN  setSingleDataPoint(hasSingleDataPoint);
+ setSingleDataPoint(hasSingleDataPoint);
   }, [products]);
 
 useEffect(() => {
@@ -294,23 +294,19 @@ useEffect(() => {
 //   return products.filter((product) => selectedWebshops.has(product.webshopId));
 // }, [products, selectedWebshops]);
 
-
 const createSeriesArray = (products) => {
-  let webshops = {};
-
-  const series = products.map((product) => {
-    if (!webshops[product.webshop.name]) {
-      webshops[product.webshop.name] = [];
-    }
-
+  return products.map((product) => {
     const productData = product.prices.map((price) => {
+      const date = new Date(price.createdAt);
+      const day = String(date.getDate()).padStart(2, '0');
+      const month = String(date.getMonth() + 1).padStart(2, '0'); // January is 0!
+      const year = date.getFullYear().toString().substr(-2);
+
       return {
-        x: new Date(price.createdAt),
+        x: `${day}/${month}/${year}`,
         y: price.value,
       };
     });
-
-    webshops[product.webshop.name].push(...productData);
 
     return {
       name: product.name,
@@ -318,16 +314,6 @@ const createSeriesArray = (products) => {
       data: productData,
     };
   });
-
-  for (const webshop in webshops) {
-    series.push({
-      name: webshop,
-      data: webshops[webshop],
-      webshop,
-    });
-  }
-
-  return series;
 };
 
 
@@ -358,33 +344,33 @@ const resetFilter = () => {
 
 
 
-   // const series = createSeriesArray(products);
+   const series = createSeriesArray(products);
   // console.log('series: ', series)
 
-    const series = [
-  {
-    name: "Playstation 5 console Standard wit",
-    webshop: "Dreamland", 
-    data: [
-      { x: "2023-01-01", y: 100 },
-      { x: "2023-01-15", y: 120 },
-      { x: "2023-02-01", y: 90 },
-      { x: "2023-02-15", y: 150 },
-      { x: "2023-03-01", y: 170 },
-    ],
-  },
-  {
-    name: "Product 2",
-    webshop: "Coolblue",
-    data: [
-      { x: "2023-01-01", y: 80 },
-      { x: "2023-01-15", y: 110 },
-      { x: "2023-02-01", y: 130 },
-      { x: "2023-02-15", y: 140 },
-      { x: "2023-03-01", y: 190 },
-    ],
-  },
-];
+//     const series = [
+//   {
+//     name: "Playstation 5 console Standard wit",
+//     webshop: "Dreamland", 
+//     data: [
+//       { x: "2023-01-01", y: 100 },
+//       { x: "2023-01-15", y: 120 },
+//       { x: "2023-02-01", y: 90 },
+//       { x: "2023-02-15", y: 150 },
+//       { x: "2023-03-01", y: 170 },
+//     ],
+//   },
+//   {
+//     name: "Product 2",
+//     webshop: "Coolblue",
+//     data: [
+//       { x: "2023-01-01", y: 80 },
+//       { x: "2023-01-15", y: 110 },
+//       { x: "2023-02-01", y: 130 },
+//       { x: "2023-02-15", y: 140 },
+//       { x: "2023-03-01", y: 190 },
+//     ],
+//   },
+// ];
 
 
 
@@ -532,7 +518,7 @@ const resetFilter = () => {
   {webshops.map((webshop) => (
     <MenuItem key={webshop.id}>
       <ListItemAvatar>
-        <Avatar src={`/webshoplogos/${webshop.name}logo.webp`} alt={webshop.name} sx={{ width: 34, height: 34 }} />
+        <Avatar src={`/webshoplogos/${webshop.name.toLowerCase()}logo.webp`} alt={webshop.name} sx={{ width: 34, height: 34 }} />
       </ListItemAvatar>
       <ListItemText primary={webshop.name} />
       <Switch

@@ -40,7 +40,7 @@ const CustomLegend = ({ series, children }) => {
             fontSize: '.8rem' }}
           >
           <Image 
-            src={`/webshoplogos/${webshop}logo.webp`} 
+            src={`/webshoplogos/${webshop.toLowerCase()}logo.webp`} 
             width={100} 
             height={100}
             style={{ borderRadius: "50%", maxWidth: "2rem", marginRight: '.3rem' }} /> {webshop}
