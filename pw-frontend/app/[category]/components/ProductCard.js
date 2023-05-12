@@ -38,9 +38,10 @@ const ProductCard = ({
   const isMobile = useMediaQuery((theme) => theme.breakpoints.down('md'));
   const isMid = useMediaQuery(theme => theme.breakpoints.between('md', 'lg'));
   const isUp = useMediaQuery(theme => theme.breakpoints.up('lg'));
+  const isDown = useMediaQuery(theme => theme.breakpoints.down('sm'));
   const theme = useTheme();
 
-  const logoSrc = useMemo(() => `/webshoplogos/${webshopNaam}logo.webp`, [webshopNaam]);
+  const logoSrc = useMemo(() => `/webshoplogos/${webshopNaam.toLowerCase()}logo.webp`, [webshopNaam]);
 
   const translate = (key) => {
   const translations = {
@@ -190,6 +191,7 @@ const metadataArray = Object.entries(metadataObject);
       width: '100%',
       overflow: 'visible',
       height: '100%',
+      maxWidth: isDown ? '90vw' : 'unset',
     }} className='product' data-price={price} >
       <CardMedia sx={{ 
         height: isMobile ? 'auto' : '100%',
@@ -258,25 +260,33 @@ const metadataArray = Object.entries(metadataObject);
           flexGrow: 1, 
           display: "flex", 
           justifyContent: isMobile ? "center" : "flex-start", 
-          alignItems: "center", 
-          width: '70%', minWidth: '70%', maxWidth: '70%'}}>
+          alignItems: isDown ? 'flex-start' : "center",
+          flexDirection: isDown ? 'column' : 'row', 
+          width: isDown ? '50%' : '70%', minWidth: isDown ? '50%' : '70%', maxWidth: '70%'}}>
         <Typography variant='h6' sx={{ 
         fontWeight: 600,
         lineHeight: '20px',
         fontSize: ".8rem",
         minWidth: '62%',
-        width: '62%',
+        width: isDown ? '100%' : '62%',
         marginRight: '5px',
         paddingTop: '5px',
-        paddingBottom: '5px' }}>
-          {name}
+        paddingBottom: '5px',
+
+        maxHeight: isDown ? '3.1rem' : 'unset',
+  overflow: isDown ? 'hidden' : 'unset',
+
+
+         }}>
+          {name.length > 46 ? `${name.substring(0, 46)}...` : name}
         </Typography>
         <Typography component='div' variant='body2' sx={{     marginBottom: "0",
     maxHeight: "100%",
     overflow: "scroll",
+    width: isDown ? "100%" : 'unset',
     paddingTop: "0.3rem",
     borderBottom: "0.3rem solid #80808000" }}>
-  <div>
+  <Box sx={{ display: isDown ? 'flex' : 'block'}}>
     {metadataArray.map(([key, value], index) => (
       <CustomChip
         key={index}
@@ -291,7 +301,7 @@ const metadataArray = Object.entries(metadataObject);
         }}
       />
     ))}
-  </div>
+  </Box>
 
         </Typography>
 

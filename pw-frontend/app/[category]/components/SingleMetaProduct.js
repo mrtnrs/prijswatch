@@ -117,6 +117,7 @@ function SingleMetaProduct({ categorySlug, metaProductSlug, onProductNotFound, o
 
   const theme = useTheme();
   const isUp = useMediaQuery(theme => theme.breakpoints.up('sm'));
+  const isDown = useMediaQuery(theme => theme.breakpoints.down('sm'));
 
   const sortProducts = (order) => {
     const sorted = [...products].sort((a, b) => {
@@ -403,7 +404,7 @@ const resetFilter = () => {
   }
 
   return (
-    <Container sx={{ mt:'4rem', pl: 0, mb: '10rem'}}>
+    <Container sx={{ mt:{xs: '1rem', md: '4rem'}, pl: 0, mb: '10rem'}}>
     <Box sx={{ flexGrow: 1,             background:"radial-gradient(141.61% 141.61% at 29.14% -11.49%, rgba(203, 213, 225, 0.15) 0%, rgba(203, 213, 225, 0) 57.72%)",
             "--tw-border-opacity": "1",
             borderColor: "rgb(31 41 55/var(--tw-border-opacity))",
@@ -414,7 +415,8 @@ const resetFilter = () => {
       <Grid container spacing={2}>
         <Grid item xs={12} md={4} lg={4}>
           <Box sx={{ position: 'relative'}}>
-          <Typography variant="h4" sx={{ fontWeight: '600'}}>{metaProduct.name}           <Box sx={{    
+          <Typography variant="h4" sx={{ fontWeight: '600'}}>{metaProduct.name}           
+          <Box sx={{    
             display: "block",
             right: "0",
             position: "absolute",
@@ -437,13 +439,14 @@ const resetFilter = () => {
               style={{ borderRadius: "25px",
     padding: "1rem",
     backgroundColor: "white",
-    maxWidth: "18rem",
-    marginTop: "2rem"}} />
+    maxWidth: isDown ? '10rem' : "18rem",
+    marginTop: "2rem",
+    margin: isDown ? "1.3rem auto" : "unset" }} />
             )}
             <p>{metaProduct.description}</p>
 
-            <Box sx={{ display: { xs: "block", md: "none !important" }}}>
-              <Button onClick={() => setShowGraph(!showGraph)} sx={{ marginTop: "1rem", border: 'none !important', color: (theme) => (theme.palette.mode === 'light' ? '#BFBFD5' : '#57596C'),}}>
+            <Box sx={{ display: { xs: "flex", md: "none !important" }}}>
+              <Button onClick={() => setShowGraph(!showGraph)} sx={{margin: '0 auto', border: 'none !important', color: (theme) => (theme.palette.mode === 'light' ? '#BFBFD5' : '#57596C'),}}>
                 <CustomIcon icon='mdi:chart-line' /> {showGraph ? "Verberg prijsgrafiek" : "Toon prijsgrafiek"}
               </Button>
             </Box>
@@ -452,7 +455,7 @@ const resetFilter = () => {
 
           </Box>
         </Grid>
-        {(showGraph || isUp) &&( <Grid item xs={12} md={8} lg={8} sx={{maxHeight: '430px', position: 'relative', marginTop: {xs: '2rem', md: 'unset'}}}>
+        {(showGraph || isUp) && ( <Grid item xs={12} md={8} lg={8} sx={{maxHeight: '430px', position: 'relative', marginTop: {xs: '2rem', md: 'unset'}}}>
         {singleDataPoint && (
           <Box
             sx={{
@@ -491,7 +494,7 @@ const resetFilter = () => {
     border: "1px solid rgba(255, 255, 255, 0.1)",
     borderRadius: "12px",
     boxShadow: theme.palette.mode === 'light' ? "0px 5px 10px rgba(0, 0, 0, .15) " : "2px 2px 2px rgba(0, 0, 0, 0.1)",
-    padding: "5px 10px",
+    padding: isDown ? '0px 5px' : "5px 10px",
     marginTop: "2rem",
     marginBottom: "2rem",
     alignItems: "center" }}>
@@ -500,7 +503,7 @@ const resetFilter = () => {
 </Button>
 
     <Button onClick={handleWebshopClick} sx={{ border: 'none !important', color: (theme) => (theme.palette.mode === 'light' ? '#BFBFD5' : '#57596C'), }}>
-  <CustomIcon icon='mdi:filter-outline' /> Filter Webshops
+  <CustomIcon icon='mdi:filter-outline' /> {isDown ? '' : 'Filter Webshops'}
 </Button>
 {selectedWebshops.size < webshops.length && (
   <Chip
