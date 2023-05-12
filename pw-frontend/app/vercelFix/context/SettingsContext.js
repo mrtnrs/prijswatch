@@ -36,7 +36,7 @@ const staticSettings = {
 const restoreSettings = () => {
   let settings = null
   try {
-    const storedData = window.localStorage.getItem('settings')
+    const storedData = typeof window !== 'undefined' ? window.localStorage.getItem('settings') : null
     if (storedData) {
       settings = { ...initialSettings, ...JSON.parse(storedData) }
     } else {
@@ -52,6 +52,8 @@ const restoreSettings = () => {
 
 // set settings in localStorage
 const storeSettings = settings => {
+  if (typeof window === 'undefined') return;
+
   const initSettings = Object.assign({}, settings)
   delete initSettings.appBar
   delete initSettings.footer
