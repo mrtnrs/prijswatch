@@ -3,6 +3,15 @@ const path = require('path');
 const { Category, Product, MetaProduct } = require('../models');
 const slugify = require('slugify');
 
+let CATEGORY_STRUCTURE = '';
+
+if(process.env.ENVIRONMENT === "production"){
+  CATEGORY_STRUCTURE = '/var/data/categoryStructure.json';
+} else {
+  CATEGORY_STRUCTURE = path.resolve(__dirname, '../categoryStructure.json');
+}
+
+
 // The recursive function for building the category tree
 async function buildCategoryTree(categoryId) {
   console.log("buildCategoryTree");
@@ -74,8 +83,7 @@ async function updateCategoryStructure() {
       version,
       tree: categoryTree,
     };
-    const filePath = path.resolve(__dirname, '../categoryStructure.json');
-    fs.writeFileSync(filePath, JSON.stringify(categoryData, null, 2), 'utf8');
+    fs.writeFileSync(CATEGORY_STRUCTURE, JSON.stringify(categoryData, null, 2), 'utf8');
   } catch (error) {
     console.error('Error updating category structure:', error);
     throw error;
@@ -129,10 +137,9 @@ exports.deleteCategory = async (req, res) => {
 
 exports.getCategoryStructure = async (req, res) => {
   try {
-    const filePath = path.resolve(__dirname, '../categoryStructure.json');
-    const data = fs.readFileSync(filePath, 'utf8');
+    const data = fs.readFileSync(CATEGORY_STRUCTURE, 'utf8');
     const categoryStructure = JSON.parse(data);
-    console.log('filePath:', filePath);
+    console.log('filePath:', CATEGORY_STRUCTURE);
     console.log('categoryStructure:', categoryStructure);
     res.status(200).json(categoryStructure);
   } catch (error) {

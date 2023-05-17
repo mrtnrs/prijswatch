@@ -3,9 +3,12 @@
 app = "pwbackend"
 kill_signal = "SIGINT"
 kill_timeout = 5
-mounts = []
 primary_region = "ams"
 processes = []
+
+[[mounts]]
+  source = "json_storage"
+  destination = "/var/data"
 
 [env]
   PORT = "8080"

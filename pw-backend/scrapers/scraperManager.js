@@ -9,7 +9,14 @@ const fs = require('fs');
 const MiniSearch = require('minisearch');
 const path = require('path');
 
-const INDEX_FILE = path.join(__dirname, 'searchIndex.json')
+let INDEX_FILE = '';
+
+if(process.env.ENVIRONMENT === "production"){
+  INDEX_FILE = '/var/data/searchIndex.json';
+} else {
+  INDEX_FILE = path.join(__dirname, 'searchIndex.json');
+}
+
 
 function chunkArray(array, size) {
   const result = [];
@@ -301,7 +308,7 @@ async search(query) {
       if (currentTime >= nextRun) {
         try {
           console.log('running scraper');
-          await scraperController.runScraper({ params: { id } }, null, false);
+          await scraperController.runScraper({ params: { id } }, null);
           await Scraper.update(
             { lastRun: currentTime },
             { where: { id: id } }
@@ -322,7 +329,11 @@ async search(query) {
       const miniSearchInstance = await ScraperManager.setupMiniSearch();
       await ScraperManager.checkForChangesAndUpdateIndex(miniSearchInstance);
     }
-    res.status(200).json({ message: "Scraper saved successfully" });
+    if (res) {
+      res.status(200).json({ message: "Scraper saved successfully" });
+    } else {
+      console.log("Scraper saved successfully");
+    }
   }
 
 

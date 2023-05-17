@@ -35,7 +35,6 @@ exports.runScraper = async (req, res, saveData = true) => {
   const scraperId = req.params.id;
   console.log(scraperId);
   const scraperSettings = await Scraper.findByPk(scraperId);
-  console.log(scraperSettings);
   if (!scraperSettings) {
     console.log('no scraperSettings');
     return res.status(404).json({ message: "Scraper not found sc 20" });
@@ -60,14 +59,21 @@ exports.runScraper = async (req, res, saveData = true) => {
     data: []
   };
 
+  console.log('runScraper line 62');
+
   try {
+    console.log('controllers/scraperController runScraper()');
     const scrapedData = await scraperInstance.scrape(); // Run the scraper
     const errorList = scraperInstance.errors || [];
+    console.log('saveData - scraperController.js line 68');
+    console.log(saveData);
     if (saveData) {
       const category = await Category.findByPk(scraperSettings.settings.category);
+      console.log('saveData - scraperController.js line 72');
       const savedProducts = await Promise.all(
         scrapedData.map(async (data) => {
           try {
+            console.log('runScraper line 71');
             const { price, ...productData } = data;
             productData.webshopId = scraperSettings.webshopId;
             productData.categoryId = scraperSettings.settings.category;
@@ -78,6 +84,8 @@ exports.runScraper = async (req, res, saveData = true) => {
               return null;
             }
 
+            console.log('runScraper line 82', productData.url);
+
             const product = await productController.createOrUpdateProduct(productData); // Save the product
 
             // Fetch the last price associated with the product
@@ -86,8 +94,15 @@ exports.runScraper = async (req, res, saveData = true) => {
               order: [["createdAt", "DESC"]],
             });
 
+
+
             totalProducts++;
             console.log(totalProducts);
+
+            console.log('last price associated with product: ', lastPrice);
+            console.log('scraped price: ', price.value);
+            console.log('typeof last price associated with product: ', typeof lastPrice);
+            console.log('typeof scraped price: ', typeof price.value);
 
             if (!lastPrice || lastPrice.value !== price.value) {
               changedProducts++;

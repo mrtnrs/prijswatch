@@ -6,7 +6,6 @@ async function fetchMetaProducts() {
     attributes: ['name', 'description', 'imageUrl', 'slug', 'brand', 'category'],
   });
   const metaProductsJSON = metaProducts.map((mp) => mp.toJSON());
-  console.log(metaProductsJSON);
   return metaProducts.map((mp) => mp.toJSON());
 }
 

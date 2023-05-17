@@ -7,10 +7,6 @@ const db = require('./models');
 const cors = require('cors');
 const rateLimit = require('express-rate-limit');
 
-console.log('kaka');
-console.log(db.ScraperError);
-console.log('Expected table name:', db.ScraperError.getTableName());
-
 // const passport = require('passport');
 // const session = require('express-session');
 // const passportConfig = require('./passportConfig');

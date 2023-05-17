@@ -3,12 +3,15 @@ const { Op } = require('sequelize');
 
 
 exports.createOrUpdateProduct = async (productData) => {
+  console.log('check to create or update product');
   const existingProduct = await Product.findOne({ where: { url: productData.url } });
 
   if (existingProduct) {
+    console.log('product bestaat al');
     await existingProduct.update(productData);
     return existingProduct;
   } else {
+    console.log('nieuw product maken');
     const newProduct = await Product.create(productData);
     return newProduct;
   }
