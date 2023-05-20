@@ -99,15 +99,17 @@ const navigation = () => {
     {
       icon: 'mdi:controller',
       title: 'Gaming',
+      path: '/gaming/',
       children: [
         {
           title: 'Console',
           icon: 'mdi:credit-card-outline',
+          path: '/gaming/console',
           children: [
             {
               title: 'Playstation',
               icon: 'mdi:sony-playstation',
-              path: '/ui/cards/basic'
+              path: '/gaming/console/playstation'
             },
             {
               title: 'Xbox',
@@ -124,7 +126,7 @@ const navigation = () => {
                 {
           title: 'VR',
           icon: 'mdi:safety-goggles',
-          path: '/ui/typography'
+          path: '/gaming/vr'
         },
         {
           title: 'Gaming accessoires',

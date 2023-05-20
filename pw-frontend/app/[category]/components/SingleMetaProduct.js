@@ -113,11 +113,23 @@ function SingleMetaProduct({ categorySlug, metaProductSlug, onProductNotFound, o
   const [maxPrice, setMaxPrice] = useState(0);
 
   const [sliderValue, setSliderValue] = useState([minPrice, maxPrice]);
+  const [seriesLoading, setSeriesLoading] = useState(true);
+  const [series, setSeries] = useState([]);
 
 
   const theme = useTheme();
   const isUp = useMediaQuery(theme => theme.breakpoints.up('sm'));
   const isDown = useMediaQuery(theme => theme.breakpoints.down('sm'));
+
+  useEffect(() => {
+    if(isUp) {
+      console.log('IS UP');
+      setShowGraph(true);
+    } else {
+      console.log('IS DOWN');
+      setShowGraph(false);
+    }
+  }, [isUp]);
 
   const sortProducts = (order) => {
     const sorted = [...products].sort((a, b) => {
@@ -227,20 +239,20 @@ useEffect(() => {
 }, [categorySlug, metaProductSlug, onProductNotFound]);
 
 
-  useEffect(() => {
-    if (metaProduct && metaProduct.id) {
-      async function fetchProductsData() {
-        try {
-          const data = await productService.fetchProducts(metaProduct.id);
-          setProducts(data);
-        } catch (error) {
-          console.error('Error fetching products:', error);
-        }
-      }
+  // useEffect(() => {
+  //   if (metaProduct && metaProduct.id) {
+  //     async function fetchProductsData() {
+  //       try {
+  //         const data = await productService.fetchProducts(metaProduct.id);
+  //         setProducts(data);
+  //       } catch (error) {
+  //         console.error('Error fetching products:', error);
+  //       }
+  //     }
 
-      fetchProductsData();
-    }
-  }, [metaProduct]);
+  //     fetchProductsData();
+  //   }
+  // }, [metaProduct]);
 
 useEffect(() => {
   if (metaProduct && metaProduct.id) {
@@ -249,6 +261,12 @@ useEffect(() => {
         const data = await productService.fetchProducts(metaProduct.id);
         setProducts(data);
         setSortedProducts(data); // also update sortedProducts
+        const processedData = createSeriesArray(data);
+            setSeries(processedData);
+
+        // Set the loading state to false
+        setSeriesLoading(false);
+
       } catch (error) {
         console.error('Error fetching products:', error);
       }
@@ -296,7 +314,7 @@ useEffect(() => {
 
 const createSeriesArray = (products) => {
   return products.map((product) => {
-    const productData = product.prices.map((price) => {
+    const productData = product.prices.slice().reverse().map((price) => { // Reverse the prices array
       const date = new Date(price.createdAt);
       const day = String(date.getDate()).padStart(2, '0');
       const month = String(date.getMonth() + 1).padStart(2, '0'); // January is 0!
@@ -344,7 +362,8 @@ const resetFilter = () => {
 
 
 
-   const series = createSeriesArray(products);
+   
+   console.log('series: ', series);
   // console.log('series: ', series)
 
 //     const series = [
@@ -441,7 +460,7 @@ const resetFilter = () => {
 
           </Box>
         </Grid>
-        {(showGraph || isUp) && ( <Grid item xs={12} md={8} lg={8} sx={{maxHeight: '430px', position: 'relative', marginTop: {xs: '2rem', md: 'unset'}}}>
+        {(showGraph || isUp) && !seriesLoading && ( <Grid item xs={12} md={8} lg={8} sx={{maxHeight: '430px', position: 'relative', marginTop: {xs: '2rem', md: 'unset'}}}>
         {singleDataPoint && (
           <Box
             sx={{

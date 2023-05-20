@@ -68,7 +68,7 @@ const getProductsForMetaProduct = async (metaProductId) => {
 exports.getProductsForMetaProductHandler = async (req, res) => {
   try {
     const products = await getProductsForMetaProduct(req.params.metaProductId);
-    console.log(products);
+    // console.log(products);
     res.status(200).json(products);
   } catch (error) {
     console.log(error);
@@ -164,7 +164,6 @@ const products = await Product.findAll({
       {
         model: Price,
         as: 'prices',
-        limit: 1,
         order: [['createdAt', 'DESC']],
       },
     ],

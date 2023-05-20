@@ -46,7 +46,7 @@ router.post('/save', authenticateUser('admin'), async (req, res) => {
 router.post('/run-once/:id', authenticateUser('admin'), async (req, res) => {
   try {
     const scraperId = req.params.id;
-    console.log(scraperId);
+    // console.log(scraperId);
     // Pass the request and response objects to runScraper
     await scraperController.runScraper(req, res);
     // Call matchUnlinkedProducts after running the scraper
