@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback, useMemo, useContext } from 'react';
 import ProductGrid from './ProductGrid';
 
 import findCategoryBySlug from './utils';
@@ -39,6 +39,7 @@ import Slider from '@mui/material/Slider';
 import { styled } from '@mui/system';
 
 import CustomLegend from './CustomLegend';
+import MetaContext from '@/context/MetaContext';
 
 // Dynamic metadata
 
@@ -120,6 +121,7 @@ function SingleMetaProduct({ categorySlug, metaProductSlug, onProductNotFound, o
   const [sliderValue, setSliderValue] = useState([minPrice, maxPrice]);
   const [seriesLoading, setSeriesLoading] = useState(true);
   const [series, setSeries] = useState([]);
+  const { setMeta } = useContext(MetaContext);
 
 
   const theme = useTheme();
@@ -353,6 +355,24 @@ const resetFilter = () => {
   setSelectedWebshops(new Set(webshops.map(webshop => webshop.id)));
 };
 
+useEffect(() => {
+  if (metaProduct) {
+    setMeta({ 
+      title: `Koop de ${metaProduct.name} van ${metaProduct.brand} aan de beste prijs - prijs.watch`,
+      description: `Vergelijk prijzen voor ${metaProduct.name} op prijs.watch. Vind de laagste prijs uit verschillende webshops.`,
+      ogTitle: `${metaProduct.name} voor de beste prijs - prijs.watch`,
+      ogDescription: `Vergelijk prijzen voor ${metaProduct.name} op prijs.watch. Vind de laagste prijs uit verschillende webshops. Prijs varieert van €${minPrice} tot €${maxPrice}.`,
+      ogImage: `${IMG_SERVER}${metaProduct.imageUrl}`,
+      ogUrl: window.location.href,
+      ogType: 'product',
+      productPriceAmount: `${minPrice}-${maxPrice}`,
+      productPriceCurrency: 'EUR',
+      ogSiteName: 'prijs.watch',
+      keywords: `${metaProduct.name}, ${metaProduct.brand}, prijs vergelijken, beste prijs, webshops`,
+    });
+    }
+  }, [metaProduct]);
+
    
    console.log('series: ', series);
 
@@ -373,34 +393,7 @@ const resetFilter = () => {
 
   return (
     <>
-    {metaProduct && (
-      <head>
 
-        <title>{`Koop de ${metaProduct.brand} ${metaProduct.name} aan de beste prijs - prijs.watch`}</title>
-        <meta name="description" content={`Vergelijk prijzen voor ${metaProduct.name} op prijs.watch. Vind de laagste prijs uit verschillende webshops.`} />
-
-        {/* OpenGraph tags */}
-        <meta property="og:title" content={`${metaProduct.name} voor de beste prijs - prijs.watch`} />
-        <meta property="og:description" content={`Vergelijk prijzen voor ${metaProduct.name} op prijs.watch. Vind de laagste prijs uit verschillende webshops. Prijs varieert van €${minPrice} tot €${maxPrice}.`} />
-        <meta property="og:image" content={`${IMG_SERVER}${metaProduct.imageUrl}`} />
-        <meta property="og:url" content={window.location.href} />
-        <meta property="og:type" content="product" />
-        <meta property="product:price:amount" content={`${minPrice}-${maxPrice}`} />
-        <meta property="product:price:currency" content="EUR" />
-        <meta property="og:site_name" content="prijs.watch" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={`Koop de ${metaProduct.brand} ${metaProduct.name} aan de beste prijs - prijs.watch`} />
-        <meta name="twitter:description" content={`Vergelijk prijzen voor de ${metaProduct.name} op prijs.watch. Vind de laagste prijs uit verschillende webshops. De prijs varieert van €${minPrice} tot €${maxPrice}.`} />
-        <meta name="twitter:image" content={`${IMG_SERVER}${metaProduct.imageUrl}`} />
-
-
-        {/* Additional metadata */}
-        <meta name="keywords" content={`${metaProduct.name}, ${metaProduct.brand}, prijs vergelijken, beste prijs, webshops`} />
-
-        {/* To add: retailers; product availability */}
-
-      </head>
-    )}
     <Container sx={{ mt:{xs: '1rem', md: '4rem'}, pl: 0, mb: '10rem'}}>
     <Box sx={{ flexGrow: 1,             background:"radial-gradient(141.61% 141.61% at 29.14% -11.49%, rgba(203, 213, 225, 0.15) 0%, rgba(203, 213, 225, 0) 57.72%)",
             "--tw-border-opacity": "1",

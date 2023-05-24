@@ -4,7 +4,7 @@ import { fetchProducts } from '../lib/api';
 import Link from 'next/link';
 import Image from 'next/image'
 
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 
 // MUI
 import Box from '@mui/material/Box'
@@ -41,6 +41,7 @@ import CustomIcon from '@/vercelFix/Icon'
 import { useTheme } from '@mui/material/styles'
 import Scanner from '@/components/scanner/Scanner';
 import '@/styles/home.css';
+import MetaContext from '@/context/MetaContext';
 
 // app/page.js
 // ...
@@ -87,6 +88,8 @@ export default function Home() {
   const [isReady, setIsReady] = useState(false);
   const theme = useTheme();
   const isMid = useMediaQuery(theme => theme.breakpoints.down('lg'));
+  const { setMeta } = useContext(MetaContext);
+
   // const isMobile = useMediaQuery((theme) => theme.breakpoints.down('md'));
   useEffect(() => {
   const timer = setTimeout(() => {
@@ -145,7 +148,22 @@ export default function Home() {
 
   const session = false;
 
-
+  useEffect(() => {
+    setMeta({ 
+      title: 'Prijs.Watch | Home',
+      description: 'Vind de laagste prijzen uit verschillende webshops op prijs.watch. Vergelijk prijzen voor diverse producten en merken.',
+      ogTitle: 'Prijs.Watch - De beste prijzen op één plek',
+      ogDescription: 'Vergelijk prijzen voor diverse producten en merken op prijs.watch. Vind de laagste prijs uit verschillende webshops.',
+      ogUrl: window.location.href,
+      ogType: 'website',
+      ogSiteName: 'prijs.watch',
+      twitterCard: 'summary_large_image',
+      twitterTitle: 'Prijs.Watch - De beste prijzen op één plek',
+      twitterDescription: 'Vind de laagste prijzen uit verschillende webshops op prijs.watch. Vergelijk prijzen voor diverse producten en merken.',
+      twitterSite: '@prijs_watch',
+      keywords: 'prijs vergelijken, beste prijs, webshops, diverse producten, diverse merken',
+    });
+  }, []);
 
 
   return (

@@ -12,11 +12,15 @@ import ReactHotToast from '@/core/react-hot-toast'
 import { GoogleAnalytics } from "nextjs-google-analytics";
 import { categoryStructure } from '@/utils/categoryStructure';
 
+import { MetaProvider } from '@/context/MetaContext';
+import MetaWrapper from '@/context/MetaWrapper';
+
 export default function RootLayout({ Component, pageProps, children, session }) {
 
   return (
     <AuthProvider>
       <SettingsProvider>
+      <MetaProvider>
             <SettingsConsumer>
               {({ settings }) => {
                 return (
@@ -24,6 +28,7 @@ export default function RootLayout({ Component, pageProps, children, session }) 
                   <html>
                   <meta property="og:locale" content="nl_BE" />
                   <meta name="robots" content="index,follow" />
+                  <MetaWrapper />
                   <body>
                   <GoogleAnalytics trackPageViews />
                     <UserLayout>{children}</UserLayout>
@@ -36,6 +41,7 @@ export default function RootLayout({ Component, pageProps, children, session }) 
                 )
               }}
           </SettingsConsumer>
+          </MetaProvider>
       </SettingsProvider>
     </AuthProvider>
   )

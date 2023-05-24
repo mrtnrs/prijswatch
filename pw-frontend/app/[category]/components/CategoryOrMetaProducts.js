@@ -84,11 +84,12 @@ function constructCategoryUrl(categoryTree) {
         <div>
           <BasicBreadcrumbs categoryTree={categoryTree} />
           <Typography variant="h1">{lastParam}</Typography>
-          <ChildCategories categories={foundCategory.children} />
+          <ChildCategories categories={foundCategory.children} catName={lastParam} />
         </div>
       );
     } else {
       return (
+        <>
         <div>
           <BasicBreadcrumbs categoryTree={categoryTree}/>
           <Typography variant="h1" sx={{textTransform: 'capitalize', mt: 5}}>{lastParam}</Typography>
@@ -102,6 +103,7 @@ function constructCategoryUrl(categoryTree) {
             />
           )}
         </div>
+        </>
       );
     }
   } else if (depth >= 2 && depth <= 4) {

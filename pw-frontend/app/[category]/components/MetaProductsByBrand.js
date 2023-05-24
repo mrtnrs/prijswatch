@@ -1,7 +1,9 @@
 // components/MetaProductsByBrand.js
 import {
     useMemo,
-    useState
+    useState,
+    useContext,
+    useEffect,
 } from 'react';
 import {
     Box,
@@ -18,10 +20,9 @@ import BrandToggleButtons from './BrandToggleButtons'
 import { Fade } from '@mui/material';
 import { getProductUrl, getCategoryPath } from '@/core/utils/get-product-url';
 import { usePathname } from 'next/navigation';
+import MetaContext from '@/context/MetaContext';
 
 const IMG_SERVER = process.env.NEXT_PUBLIC_IMG_SERVER;
-
-
 
 const MetaProductsByBrand = ({
     metaProducts,
@@ -29,6 +30,7 @@ const MetaProductsByBrand = ({
     categoryStructure
 }) => {
    
+   const { setMeta } = useContext(MetaContext);
     console.log('metaProducts: ', metaProducts);
     const locatie = usePathname();
     const sortedMetaProducts = useMemo(() => {
@@ -58,10 +60,28 @@ const MetaProductsByBrand = ({
 
     const [selectedBrands, setSelectedBrands] = useState([]);
     const categoryPath = getCategoryPath(category.slug, categoryStructure);
-    
 
-    return ( <
-        div > 
+
+    useEffect(() => {
+  if (metaProducts) {
+    setMeta({ 
+      title: `${category.name} van verschillende merken - prijs.watch`,
+      description: `Vergelijk prijzen voor ${category.name} op prijs.watch. Vind de laagste prijs uit verschillende webshops.`,
+      ogTitle: `${category.name} voor de beste prijs - prijs.watch`,
+      ogDescription: `Vergelijk prijzen voor ${category.name} op prijs.watch. Vind de laagste prijs uit verschillende webshops.`,
+      ogUrl: window.location.href,
+      ogType: 'product',
+      ogSiteName: 'prijs.watch',
+      keywords: `${category.name}, prijs vergelijken, beste prijs, webshops`,
+    });
+    }
+  }, [metaProducts]);
+
+
+    return ( 
+
+        <>
+        <div> 
           <BrandToggleButtons
             brands={uniqueBrands}
             setSelectedBrands={setSelectedBrands}
@@ -210,8 +230,8 @@ const MetaProductsByBrand = ({
             ))
         }
 
-        <
-        /div>
+        </div>
+        </>
     );
 };
 
