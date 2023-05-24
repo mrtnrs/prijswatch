@@ -11,10 +11,10 @@ import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
 
 // ** Icon Imports
-import Icon from '@/components/Icon'
+import CustomIcon from '@/vercelFix/Icon'
 
 // ** Third Party Components
-import { Toast } from './core/CustomHotToast';
+import { Toast } from '@/core/CustomHotToast';
 import { useDropzone } from 'react-dropzone'
 
 // Styled component for the upload image inside the dropzone area
@@ -63,7 +63,7 @@ const FileUploaderRestrictions = () => {
     if (file.type.startsWith('image')) {
       return <img width={38} height={38} alt={file.name} src={URL.createObjectURL(file)} />
     } else {
-      return <Icon icon='mdi:file-document-outline' />
+      return <CustomIcon icon='mdi:file-document-outline' />
     }
   }
 
@@ -87,7 +87,7 @@ const FileUploaderRestrictions = () => {
         </div>
       </div>
       <IconButton onClick={() => handleRemoveFile(file)}>
-        <Icon icon='mdi:close' fontSize={20} />
+        <CustomIcon icon='mdi:close' fontSize={20} />
       </IconButton>
     </ListItem>
   ))

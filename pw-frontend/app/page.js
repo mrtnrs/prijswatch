@@ -1,4 +1,3 @@
-// app/page.js
 'use client'
 import { useMediaQuery } from '@mui/material';
 import { fetchProducts } from '../lib/api';
@@ -19,7 +18,7 @@ import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
 import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { categoryStructure } from '@/utils/categoryStructure';
 
 import { styled } from '@mui/system';

@@ -32,7 +32,7 @@ body {
 
 .popularCat {
    width: calc(33.33% - 0.69em);
-       background-color: #1e1e1e;
+    background-color: #1e1e1e;
     border-radius: 10px;
     box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.25);
     cursor: pointer;

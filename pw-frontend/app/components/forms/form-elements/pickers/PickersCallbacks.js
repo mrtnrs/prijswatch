@@ -5,7 +5,7 @@ import { useState } from 'react'
 import Box from '@mui/material/Box'
 
 // ** Third Party Imports
-import { Toast } from './core/CustomHotToast';
+import { Toast } from '@/core/CustomHotToast';
 
 import DatePicker from 'react-datepicker'
 

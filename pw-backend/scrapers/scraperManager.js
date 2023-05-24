@@ -303,7 +303,14 @@ async search(query) {
       const { interval, lastRun, id } = scraper;
       const intervalInMinutes = ScraperManager.intervalToMinutes(interval);
       const currentTime = new Date();
-      const nextRun = new Date(lastRun.getTime() + intervalInMinutes * 60 * 1000);
+      
+      let nextRun;
+      if (lastRun) {
+        nextRun = new Date(lastRun.getTime() + intervalInMinutes * 60 * 1000);
+      } else {
+        nextRun = currentTime;  // If no lastRun is set, set nextRun to the current time so it will run immediately
+      }
+
       console.log('calculating if needs to run');
       if (currentTime >= nextRun) {
         try {

@@ -6,6 +6,7 @@ const Layout = ({ children }) => {
     <div className="layout">
       <header className="header">
         {/* Your header content goes here */}
+      <p>Header</p>
       </header>
       <nav className="nav">
         {/* Your navigation content goes here */}
@@ -13,6 +14,7 @@ const Layout = ({ children }) => {
       <main className="main">{children}</main>
       <footer className="footer">
         {/* Your footer content goes here */}
+       <p>Footer</p>
       </footer>
     </div>
   );

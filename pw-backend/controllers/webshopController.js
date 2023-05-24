@@ -4,7 +4,6 @@ const { Webshop, Scraper } = require("../models");
 
 exports.createWebshop = async (req, res) => {
   const webshopData = req.body;
-  console.log('creating..');
   try {
     const webshop = await Webshop.create(webshopData);
     return res.status(201).json({ message: "Webshop created", webshop });

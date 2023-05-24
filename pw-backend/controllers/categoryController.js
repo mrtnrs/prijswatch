@@ -61,7 +61,7 @@ exports.createCategory = async (req, res) => {
 
     const newCategory = await Category.create({
       name: name,
-      slug: slugify(name, { lower: true }),
+      slug: slugify(name, { lower: true, remove: /[*+~.()'"!:@]/g }),
       parentId: parentId || null, // Update the property name here
     });
 

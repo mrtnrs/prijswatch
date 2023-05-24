@@ -1,4 +1,4 @@
-const { Product, MetaProduct, Price, Webshop, sequelize, Sequelize } = require('../models');
+const { Product, MetaProduct, Category, Price, Webshop, sequelize, Sequelize } = require('../models');
 const { Op } = require('sequelize');
 
 
@@ -76,11 +76,14 @@ exports.getProductsForMetaProductHandler = async (req, res) => {
   }
 };
 
-exports.getMetaProductBySlug = async (category, slug) => {
+exports.getMetaProductBySlug = async (categorySlug, productSlug) => {
+
+  const categorIE = await Category.findOne({ where: { slug: categorySlug } });
+
   const metaProduct = await MetaProduct.findOne({
     where: {
-      category: { [Op.iLike]: category },
-      slug: slug
+      categoryId: categorIE.id,
+      slug: productSlug
     }
   });
   return metaProduct;
@@ -89,6 +92,7 @@ exports.getMetaProductBySlug = async (category, slug) => {
 exports.getMetaProductBySlugHandler = async (req, res) => {
   try {
     const { category, slug } = req.params;
+    console.log('CATEGORY: ', category);
     const metaProduct = await exports.getMetaProductBySlug(category, slug);
     res.status(200).json(metaProduct);
   } catch (error) {
@@ -164,14 +168,14 @@ const products = await Product.findAll({
       {
         model: Price,
         as: 'prices',
-        order: [['createdAt', 'DESC']],
+        order: [['createdAt', 'ASC']],
       },
     ],
   });
 
     // Format the products with the latest price
     const formattedProducts = products.map((product) => {
-      const latestPrice = product.prices[0];
+      const latestPrice = product.prices[product.prices.length - 1];
       return {
         ...product.toJSON(),
         latestPrice: latestPrice ? latestPrice.value : null,

@@ -51,7 +51,7 @@ import FormGroup from '@mui/material/FormGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
 
 // ** Icon Imports
-import Icon from '@/components/Icon'
+import CustomIcon from '@/vercelFix/Icon'
 
 const CheckboxesCustomIcons = () => {
   return (
@@ -62,8 +62,8 @@ const CheckboxesCustomIcons = () => {
           <Checkbox
             defaultChecked
             name='size-small'
-            checkedIcon={<Icon icon='mdi:heart' fontSize={24} />}
-            icon={<Icon icon='mdi:heart-outline' fontSize={24} />}
+            checkedIcon={<CustomIcon icon='mdi:heart' fontSize={24} />}
+            icon={<CustomIcon icon='mdi:heart-outline' fontSize={24} />}
           />
         }
       />
@@ -73,8 +73,8 @@ const CheckboxesCustomIcons = () => {
           <Checkbox
             defaultChecked
             name='size-small'
-            checkedIcon={<Icon icon='mdi:star' fontSize={24} />}
-            icon={<Icon icon='mdi:star-outline' fontSize={24} />}
+            checkedIcon={<CustomIcon icon='mdi:star' fontSize={24} />}
+            icon={<CustomIcon icon='mdi:star-outline' fontSize={24} />}
           />
         }
       />
@@ -270,7 +270,7 @@ import FormGroup from '@mui/material/FormGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
 
 // ** Icon Imports
-import Icon from '@/components/Icon'
+import CustomIcon from '@/vercelFix/Icon'
 
 const CheckboxesSizes = () => {
   return (
@@ -281,8 +281,8 @@ const CheckboxesSizes = () => {
           <Checkbox
             defaultChecked
             name='size-small'
-            icon={<Icon icon='mdi:checkbox-blank-outline' fontSize={20} />}
-            checkedIcon={<Icon icon='mdi:checkbox-marked' fontSize={20} />}
+            icon={<CustomIcon icon='mdi:checkbox-blank-outline' fontSize={20} />}
+            checkedIcon={<CustomIcon icon='mdi:checkbox-marked' fontSize={20} />}
           />
         }
       />

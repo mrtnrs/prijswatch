@@ -12,7 +12,7 @@ import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
 
 // ** Icon Imports
-import Icon from '@/components/Icon'
+import CustomIcon from '@/vercelFix/Icon'
 
 // ** Third Party Imports
 import { useDropzone } from 'react-dropzone'
@@ -53,7 +53,7 @@ const FileUploaderMultiple = () => {
     if (file.type.startsWith('image')) {
       return <img width={38} height={38} alt={file.name} src={URL.createObjectURL(file)} />
     } else {
-      return <Icon icon='mdi:file-document-outline' />
+      return <CustomIcon icon='mdi:file-document-outline' />
     }
   }
 
@@ -77,7 +77,7 @@ const FileUploaderMultiple = () => {
         </div>
       </div>
       <IconButton onClick={() => handleRemoveFile(file)}>
-        <Icon icon='mdi:close' fontSize={20} />
+        <CustomIcon icon='mdi:close' fontSize={20} />
       </IconButton>
     </ListItem>
   ))

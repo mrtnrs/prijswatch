@@ -16,8 +16,11 @@ const createHeaders = async () => {
 };
 
 async function fetchMetaProduct(category, slug) {
+  console.log('HALLO');
+  console.log(category, slug);
   try {
   const response = await fetch(`${SERVER_URL}${API_URL}/${category}/${slug}/meta-product`);
+
   const metaProduct = await response.json();
   return metaProduct;
   } catch (error) {

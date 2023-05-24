@@ -10,7 +10,7 @@ import '@/core/configs/i18n'
 import { Toaster } from 'react-hot-toast'
 import ReactHotToast from '@/core/react-hot-toast'
 import { GoogleAnalytics } from "nextjs-google-analytics";
-
+// import Head from 'next/head';
 import { categoryStructure } from '@/utils/categoryStructure';
 
 // export const metadata = {
@@ -28,6 +28,8 @@ export default function RootLayout({ Component, pageProps, children, session }) 
                 return (
                   <ThemeComponent settings={settings}>
                   <html>
+                  <meta property="og:locale" content="nl_BE" />
+                  <meta name="robots" content="index,follow" />
 
                   <body>
                   <GoogleAnalytics trackPageViews />

@@ -40,6 +40,11 @@ import { styled } from '@mui/system';
 
 import CustomLegend from './CustomLegend';
 
+// Dynamic metadata
+
+
+
+
 const iOSBoxShadow =
   '0 3px 1px rgba(0,0,0,0.1),0 4px 8px rgba(0,0,0,0.13),0 0 0 1px rgba(0,0,0,0.02)';
 
@@ -120,6 +125,8 @@ function SingleMetaProduct({ categorySlug, metaProductSlug, onProductNotFound, o
   const theme = useTheme();
   const isUp = useMediaQuery(theme => theme.breakpoints.up('sm'));
   const isDown = useMediaQuery(theme => theme.breakpoints.down('sm'));
+
+  console.log('typeof window: ', typeof window);
 
   useEffect(() => {
     if(isUp) {
@@ -210,7 +217,9 @@ useEffect(() => {
 
   useEffect(() => {
   async function fetchMetaProduct() {
+    console.log('entering fetchMEtaProduct');
     try {
+      console.log('fetching priduct');
       const res = await fetch(`${SERVER_URL}/api/products/${categorySlug}/${metaProductSlug}/meta-product`);
       if (res.ok) {
         const data = await res.json();
@@ -238,21 +247,6 @@ useEffect(() => {
   fetchMetaProduct();
 }, [categorySlug, metaProductSlug, onProductNotFound]);
 
-
-  // useEffect(() => {
-  //   if (metaProduct && metaProduct.id) {
-  //     async function fetchProductsData() {
-  //       try {
-  //         const data = await productService.fetchProducts(metaProduct.id);
-  //         setProducts(data);
-  //       } catch (error) {
-  //         console.error('Error fetching products:', error);
-  //       }
-  //     }
-
-  //     fetchProductsData();
-  //   }
-  // }, [metaProduct]);
 
 useEffect(() => {
   if (metaProduct && metaProduct.id) {
@@ -314,7 +308,7 @@ useEffect(() => {
 
 const createSeriesArray = (products) => {
   return products.map((product) => {
-    const productData = product.prices.slice().reverse().map((price) => { // Reverse the prices array
+    const productData = product.prices.map((price) => { // Reverse the prices array
       const date = new Date(price.createdAt);
       const day = String(date.getDate()).padStart(2, '0');
       const month = String(date.getMonth() + 1).padStart(2, '0'); // January is 0!
@@ -359,39 +353,8 @@ const resetFilter = () => {
   setSelectedWebshops(new Set(webshops.map(webshop => webshop.id)));
 };
 
-
-
-
    
    console.log('series: ', series);
-  // console.log('series: ', series)
-
-//     const series = [
-//   {
-//     name: "Playstation 5 console Standard wit",
-//     webshop: "Dreamland", 
-//     data: [
-//       { x: "2023-01-01", y: 100 },
-//       { x: "2023-01-15", y: 120 },
-//       { x: "2023-02-01", y: 90 },
-//       { x: "2023-02-15", y: 150 },
-//       { x: "2023-03-01", y: 170 },
-//     ],
-//   },
-//   {
-//     name: "Product 2",
-//     webshop: "Coolblue",
-//     data: [
-//       { x: "2023-01-01", y: 80 },
-//       { x: "2023-01-15", y: 110 },
-//       { x: "2023-02-01", y: 130 },
-//       { x: "2023-02-15", y: 140 },
-//       { x: "2023-03-01", y: 190 },
-//     ],
-//   },
-// ];
-
-
 
 
 
@@ -409,6 +372,35 @@ const resetFilter = () => {
   }
 
   return (
+    <>
+    {metaProduct && (
+      <head>
+
+        <title>{`Koop de ${metaProduct.brand} ${metaProduct.name} aan de beste prijs - prijs.watch`}</title>
+        <meta name="description" content={`Vergelijk prijzen voor ${metaProduct.name} op prijs.watch. Vind de laagste prijs uit verschillende webshops.`} />
+
+        {/* OpenGraph tags */}
+        <meta property="og:title" content={`${metaProduct.name} voor de beste prijs - prijs.watch`} />
+        <meta property="og:description" content={`Vergelijk prijzen voor ${metaProduct.name} op prijs.watch. Vind de laagste prijs uit verschillende webshops. Prijs varieert van €${minPrice} tot €${maxPrice}.`} />
+        <meta property="og:image" content={`${IMG_SERVER}${metaProduct.imageUrl}`} />
+        <meta property="og:url" content={window.location.href} />
+        <meta property="og:type" content="product" />
+        <meta property="product:price:amount" content={`${minPrice}-${maxPrice}`} />
+        <meta property="product:price:currency" content="EUR" />
+        <meta property="og:site_name" content="prijs.watch" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={`Koop de ${metaProduct.brand} ${metaProduct.name} aan de beste prijs - prijs.watch`} />
+        <meta name="twitter:description" content={`Vergelijk prijzen voor de ${metaProduct.name} op prijs.watch. Vind de laagste prijs uit verschillende webshops. De prijs varieert van €${minPrice} tot €${maxPrice}.`} />
+        <meta name="twitter:image" content={`${IMG_SERVER}${metaProduct.imageUrl}`} />
+
+
+        {/* Additional metadata */}
+        <meta name="keywords" content={`${metaProduct.name}, ${metaProduct.brand}, prijs vergelijken, beste prijs, webshops`} />
+
+        {/* To add: retailers; product availability */}
+
+      </head>
+    )}
     <Container sx={{ mt:{xs: '1rem', md: '4rem'}, pl: 0, mb: '10rem'}}>
     <Box sx={{ flexGrow: 1,             background:"radial-gradient(141.61% 141.61% at 29.14% -11.49%, rgba(203, 213, 225, 0.15) 0%, rgba(203, 213, 225, 0) 57.72%)",
             "--tw-border-opacity": "1",
@@ -568,7 +560,9 @@ const resetFilter = () => {
 
 
   </Container>
+  </>
   );
 }
+
 
 export default React.memo(SingleMetaProduct);

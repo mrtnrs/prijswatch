@@ -1,5 +1,5 @@
 {
-  "version": 1682335611276,
+  "version": 1684867401003,
   "tree": [
     {
       "id": "236d2f38-caa7-4e16-927c-4efdebfeae89",
@@ -7,21 +7,6 @@
       "slug": "audio",
       "parentId": null,
       "children": []
-    },
-    {
-      "id": "43bb420f-c02f-4b43-b32c-20ad07dd123c",
-      "name": "Camera's",
-      "slug": "cameras",
-      "parentId": null,
-      "children": [
-        {
-          "id": "0a0d7013-5bc1-46ac-bce7-204c370d37eb",
-          "name": "Natuurcamera's",
-          "slug": "natuurcameras",
-          "parentId": "43bb420f-c02f-4b43-b32c-20ad07dd123c",
-          "children": []
-        }
-      ]
     },
     {
       "id": "54e267de-4d9a-4b4a-8cb2-2a5cfc2a2b71",
@@ -65,6 +50,29 @@
           "slug": "broodbakmachines",
           "parentId": "e5f68f41-5f16-4836-adde-462765e26389",
           "children": []
+        }
+      ]
+    },
+    {
+      "id": "facb8d6b-90a1-4dac-8fc8-7b7d1cf9a74a",
+      "name": "Beeld en Video",
+      "slug": "beeld-en-video",
+      "parentId": null,
+      "children": [
+        {
+          "id": "cf5272fb-d245-4e93-be6c-99eac69fc202",
+          "name": "Video",
+          "slug": "video",
+          "parentId": "facb8d6b-90a1-4dac-8fc8-7b7d1cf9a74a",
+          "children": [
+            {
+              "id": "47c96158-8076-4cc1-ab4d-1ab621b9eba1",
+              "name": "Action camera's",
+              "slug": "action-cameras",
+              "parentId": "cf5272fb-d245-4e93-be6c-99eac69fc202",
+              "children": []
+            }
+          ]
         }
       ]
     }

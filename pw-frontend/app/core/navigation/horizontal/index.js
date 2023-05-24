@@ -3,21 +3,22 @@ const navigation = () => {
     {
       icon: 'mdi:projector',
       title: 'Beeld & video',
+      path: '/beeld-en-video/',
       children: [
         {
           title: 'Video',
           icon: 'mdi:record-rec',
-          path: '/apps/email',
+          path: '/beeld-en-video/video/',
           children: [
             {
               title: "Action camera's",
               icon: 'mdi:camera-gopro',
-              path: '/apps/invoice/list'
+              path: '/beeld-en-video/video/action-cameras'
             },
             {
               title: 'Drones',
               icon: 'mdi:quadcopter',
-              path: '/apps/invoice/preview'
+              path: '/beeld-en-video/video/drones',
             }
           ]
         },

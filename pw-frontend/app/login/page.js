@@ -67,11 +67,6 @@ useEffect(() => {
   const [errorMessage, setErrorMessage] = useState('')
 
 
-
-
-
-
-
   const handleSubmit = async e => {
     e.preventDefault()
     setEmailError(false)
