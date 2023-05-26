@@ -810,7 +810,10 @@ async fetchProductData(page, containerSelector, productNameSelector, productPric
         // IN CASE OF PAGINATION
         // CHANGE FOR DIFFERENT WEBSHOPS
         try {
-          console.log('pagination activated');
+
+            if(nextPageSelector){
+
+            console.log('pagination activated');
             const lastPaginationItem = await page.$(nextPageSelector);
             console.log('fetching paginationItem');
             console.log('lastPaginationItem: ', lastPaginationItem);
@@ -831,6 +834,11 @@ async fetchProductData(page, containerSelector, productNameSelector, productPric
               hasNextPage = false;
               await page.close();
             }
+          } else {
+              currentUrl = null;
+              hasNextPage = false;
+              await page.close();
+          }
         } catch (error) {
           console.error('Error in main scrape function:', error);
           await page.close();

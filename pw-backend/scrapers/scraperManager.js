@@ -200,7 +200,7 @@ async search(query) {
 
       for (const scrapedProduct of unlinkedProductsBatch) {
         try {
-          const { sanitizedTitle, metadata } = await sanitizeTitleAndExtractMetadata(scrapedProduct.name, scrapedProduct, Product);
+          const { sanitizedTitle, metadata } = await sanitizeTitleAndExtractMetadata(scrapedProduct.name, scrapedProduct.categoryId, scrapedProduct, Product);
 
           if (!sanitizedTitle) {
             console.log('no sanitised title; skip');

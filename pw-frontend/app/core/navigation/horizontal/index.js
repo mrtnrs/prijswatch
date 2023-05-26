@@ -69,7 +69,29 @@ const navigation = () => {
         {
           title: 'Speakers',
           icon: 'mdi:speaker',
-          path: '/apps/email'
+          path: '/audio/speakers',
+          children: [
+            {
+              title: 'Bluetooth speakers',
+              path: '/audio/speakers/bluetooth-speakers',
+              icon: 'mdi:bluetooth-audio',
+            },
+            {
+              title: 'WiFi speakers',
+              path: '/audio/speakers/wifi-speakers',
+              icon: 'mdi:wifi-strength-2',
+            },
+            {
+              title: 'Smart speakers',
+              path: '/audio/speakers/smart-speakers',
+              icon: 'mdi:google-assistant',
+            },
+            {
+              title: 'Hifi speakers',
+              path: '/audio/speakers/hifi-speakers',
+              icon: 'mdi:speaker-multiple',
+            }
+          ]
         },
         {
           title: 'Koptelefoons',

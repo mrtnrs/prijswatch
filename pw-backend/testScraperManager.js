@@ -13,6 +13,39 @@ async function main() {
 
 main();
 
+// DELETE ALL PRODUCTS IN CATEGORY
+
+// const deleteProductsInCategory = async (categoryId) => {
+//   const { Category, MetaProduct, Product, Price } = require('./models');
+
+//   // Find all MetaProducts in the category
+//   const metaProducts = await MetaProduct.findAll({
+//     where: { categoryId },
+//   });
+
+//   // For each MetaProduct, find and delete associated Products and Prices
+//   for (const metaProduct of metaProducts) {
+//     const products = await Product.findAll({
+//       where: { metaProductId: metaProduct.id },
+//     });
+
+//     for (const product of products) {
+//       // Delete associated Prices
+//       await Price.destroy({ where: { productId: product.id } });
+//     }
+
+//     // Delete the Products
+//     await Product.destroy({ where: { metaProductId: metaProduct.id } });
+//   }
+
+//   // Delete the MetaProducts
+//   await MetaProduct.destroy({ where: { categoryId } });
+
+// };
+
+// // Call the function
+// deleteProductsInCategory('114b9201-567c-49b9-90ed-1b22a4e31c98');
+
 
 // const axios = require("axios");
 // const sharp = require("sharp");
